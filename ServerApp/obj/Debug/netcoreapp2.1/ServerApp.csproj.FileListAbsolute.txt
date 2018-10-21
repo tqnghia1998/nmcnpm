@@ -1,0 +1,14 @@
+E:\Project-CNPM\NMCNPM31_10\ServerApp\bin\Debug\netcoreapp2.1\ServerApp.deps.json
+E:\Project-CNPM\NMCNPM31_10\ServerApp\bin\Debug\netcoreapp2.1\ServerApp.runtimeconfig.json
+E:\Project-CNPM\NMCNPM31_10\ServerApp\bin\Debug\netcoreapp2.1\ServerApp.runtimeconfig.dev.json
+E:\Project-CNPM\NMCNPM31_10\ServerApp\bin\Debug\netcoreapp2.1\ServerApp.dll
+E:\Project-CNPM\NMCNPM31_10\ServerApp\bin\Debug\netcoreapp2.1\ServerApp.pdb
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.csprojAssemblyReference.cache
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.csproj.CoreCompileInputs.cache
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.RazorAssemblyInfo.cache
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.RazorAssemblyInfo.cs
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.AssemblyInfoInputs.cache
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.AssemblyInfo.cs
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.RazorTargetAssemblyInfo.cache
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.dll
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.pdb

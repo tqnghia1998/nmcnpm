@@ -1,0 +1,9 @@
+E:\Project-CNPM\NMCNPM31_10\DbModel\bin\Debug\netstandard2.0\DbModel.deps.json
+E:\Project-CNPM\NMCNPM31_10\DbModel\bin\Debug\netstandard2.0\DbModel.dll
+E:\Project-CNPM\NMCNPM31_10\DbModel\bin\Debug\netstandard2.0\DbModel.pdb
+E:\Project-CNPM\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.csprojAssemblyReference.cache
+E:\Project-CNPM\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.csproj.CoreCompileInputs.cache
+E:\Project-CNPM\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.AssemblyInfoInputs.cache
+E:\Project-CNPM\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.AssemblyInfo.cs
+E:\Project-CNPM\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.dll
+E:\Project-CNPM\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.pdb
