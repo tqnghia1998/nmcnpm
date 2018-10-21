@@ -40,6 +40,16 @@ namespace DbModel
         public string Place { get; set; }
 
         /// <summary>
+        /// Thời gian bắt đầu học phần
+        /// </summary>
+        public string TimeStart { get; set; }
+
+        /// <summary>
+        /// Thời gian kết thúc học phần
+        /// </summary>
+        public string TimeFinish { get; set; }
+
+        /// <summary>
         /// Trạng thái
         /// </summary>
         public byte Status { get; set; } = (byte)StatusModel.NonActive;

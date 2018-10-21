@@ -123,3 +123,5 @@ E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\AdminClient.csproj.CoreCompile
 E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\AdminClient.csproj.CopyComplete
 E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\AdminClient.exe
 E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\AdminClient.pdb
+E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\Controls\TextEntryControl.g.cs
+E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\Controls\TextEntryControl.baml

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:AdminClient"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Background="White">
+    <StackPanel Background="White"
+                local:TextEntryWidthMatcherProperty.Value="true">
 
         <TextBlock Text="Create subject"
                    Margin="15 12"
@@ -15,98 +16,116 @@
                    FontFamily="{StaticResource LatoRegular}"
                    FontSize="25"
                    />
-        
+
         <Grid Height="2"
               Background="Gray"/>
+
+        <!-- Mục nhập tên chuyên ngành -->
+        <local:TextEntryControl DataContext="{Binding Major}"/>
+        
+        <!-- Mục nhập mã học phần -->
+        <local:TextEntryControl DataContext="{Binding ID}"/>
+        
+        <!-- Mục nhập tên học phần -->
+        <local:TextEntryControl DataContext="{Binding Subject}"/>
+        
+        <!-- Mục nhập tên giảng viên -->
+        <local:TextEntryControl DataContext="{Binding Teacher}"/>
+        
+        <!-- Mục nhập phòng học -->
+        <local:TextEntryControl DataContext="{Binding Class}"/>
 
         <Grid>
 
             <Grid.ColumnDefinitions>
 
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
 
             </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
+            <!-- Mục chọn thời gian bắt đầu -->
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
 
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
 
-            </Grid.RowDefinitions>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Major"
-                   Margin="15 12"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   FontFamily="{StaticResource LatoRegular}"
-                   FontSize="15"
-                   />
+                <TextBlock FontFamily="{StaticResource LatoRegular}"
+                           FontSize="{StaticResource FontSizeRegular}"
+                           Text="Start:"
+                           Margin="15 12"
+                           Grid.Column="0"/>
+                
+                <DatePicker VerticalAlignment="Center"
+                            Grid.Column="1"
+                            SelectedDate="{Binding DateStart, Mode=OneWayToSource, Converter={local:DateToStringValueConverter}}"
+                            FontFamily="{StaticResource LatoRegular}"
+                            FontSize="{StaticResource FontSizeRegular}" />
 
-            <TextBox Grid.Column="1"
-                     Grid.Row="0"/>
+                <ComboBox Grid.Column="2"
+                          Margin="10 0 0 0"
+                          Width="{Binding}"
+                          FontFamily="{StaticResource LatoRegular}"
+                          FontSize="{StaticResource FontSizeRegular}"
+                          Background="Transparent"
+                          VerticalAlignment="Center"
+                          IsEditable="True"
+                          Text="{Binding TimeStart}"
+                          ItemsSource="{Binding Items}">
 
-            <TextBlock Text="ID: "
-                       Grid.Row="1"
-                       Grid.Column="0"
-                       Margin="15 12"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       FontFamily="{StaticResource LatoRegular}"
-                       FontSize="15"
-                       />
+                </ComboBox>
 
-            <TextBox Grid.Column="1"
-                     Grid.Row="1"/>
+            </Grid>
 
-            <TextBlock Text="Subject:  "
-                       Grid.Row="2"
-                       Grid.Column="0"
-                       Margin="15 12"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       FontFamily="{StaticResource LatoRegular}"
-                       FontSize="15"
-                       />
+            <!-- Mục chọn thời gian kết thúc -->
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="1"
-                     Grid.Row="2"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
 
-            <TextBlock Text="Teacher: "
-                       Grid.Row="3"
-                       Grid.Column="0"
-                       Margin="15 12"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       FontFamily="{StaticResource LatoRegular}"
-                       FontSize="15"
-                       />
+                </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="1"
-                     Grid.Row="3"/>
+                <TextBlock FontFamily="{StaticResource LatoRegular}"
+                           FontSize="{StaticResource FontSizeRegular}"
+                           Text="End:"
+                           Margin="15 12"
+                           Grid.Column="0"/>
 
-            <TextBlock Text="Class: "
-                       Grid.Row="4"
-                       Grid.Column="0"
-                       Margin="15 12"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       FontFamily="{StaticResource LatoRegular}"
-                       FontSize="15"
-                       />
+                <DatePicker VerticalAlignment="Center"
+                            Grid.Column="1"
+                            IsEnabled="True"
+                            Name="Temp"
+                            SelectedDate="{Binding DateFinish, Mode=OneWayToSource, Converter={local:DateToStringValueConverter}}"
+                            FontFamily="{StaticResource LatoRegular}"
+                            FontSize="{StaticResource FontSizeRegular}" />
 
-            <TextBox Grid.Column="1"
-                     Grid.Row="4"/>
+                <ComboBox Grid.Column="2"
+                          FontFamily="{StaticResource LatoRegular}"
+                          FontSize="{StaticResource FontSizeRegular}"
+                          Background="Transparent"
+                          Margin="10 0"
+                          VerticalAlignment="Center"
+                          ItemsSource="{Binding Items}"
+                          IsEditable="True"
+                          Text="{Binding TimeFinish}">
 
+                </ComboBox>
+
+            </Grid>
 
         </Grid>
 
         <Button Content="Create"
-                HorizontalAlignment="Center"/>
+                HorizontalAlignment="Center"
+                Command="{Binding CreateCommand}"/>
+        
+
 
     </StackPanel>
 </UserControl>

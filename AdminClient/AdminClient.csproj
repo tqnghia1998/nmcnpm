@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="PropertyChanged, Version=2.5.13.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>packages\PropertyChanged.Fody.2.5.13\lib\net452\PropertyChanged.dll</HintPath>
     </Reference>
@@ -60,7 +61,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttchedProperties\BaseAttachedProperty.cs" />
+    <Compile Include="AttchedProperties\TextEntryWidthMatcherProperty.cs" />
+    <Compile Include="Controls\TextEntryControl.xaml.cs">
+      <DependentUpon>TextEntryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValueConverters\BaseValueConverter.cs" />
+    <Compile Include="ValueConverters\DateToStringValueConverter.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\CreateSubjectPageViewModel.cs" />
+    <Compile Include="ViewModel\TextEntryViewModel.cs" />
+    <Page Include="Controls\TextEntryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -135,6 +149,7 @@
     <Resource Include="Font\Lato-SemiboldItalic.ttf" />
     <Resource Include="Font\Lato-Thin.ttf" />
     <Resource Include="Font\Lato-ThinItalic.ttf" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -145,14 +160,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DbModel\DbModel.csproj">
-      <Project>{498a1a32-1d24-4f99-884a-dcb476942cbb}</Project>
+      <Project>{03b9fb71-ed8d-42cd-9396-fd109df258b9}</Project>
       <Name>DbModel</Name>
     </ProjectReference>
   </ItemGroup>

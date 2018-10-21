@@ -23,6 +23,16 @@ namespace AdminClient
         public CreateSubjectPage()
         {
             InitializeComponent();
+
+            DataContext = new CreateSubjectPageViewModel
+            {
+                Major = new TextEntryViewModel { Label = "Major" },
+                ID = new TextEntryViewModel { Label = "ID" },
+                Subject = new TextEntryViewModel { Label = "Subject" },
+                Teacher = new TextEntryViewModel { Label = "Teacher" },
+                Class = new TextEntryViewModel { Label = "Class" },
+            };
+           
         }
     }
 }
