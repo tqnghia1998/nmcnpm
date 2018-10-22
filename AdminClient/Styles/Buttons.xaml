@@ -19,6 +19,8 @@
         <Setter Property="Padding" Value="50 10" />
         <Setter Property="Margin" Value="0 10" />
 
+        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
@@ -31,12 +33,19 @@
 
                         <Grid>
                             <TextBlock Text="{TemplateBinding Content}" 
+                                       Visibility="{TemplateBinding local:IsBusyProperty.Value, Converter={local:BooleanToVisibilityConverter}}"
                                        Focusable="False" 
                                        FontSize="{TemplateBinding FontSize}"
                                        FontFamily="{TemplateBinding FontFamily}"
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                        Margin="{TemplateBinding Padding}"
                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                            <TextBlock Visibility="{TemplateBinding local:IsBusyProperty.Value, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=true}"
+                                       Style="{StaticResource SpinningText}"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Grid>
 

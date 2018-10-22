@@ -21,7 +21,7 @@ namespace AdminClient
         /// <summary>
         /// Kích hoạt khi giá trị thay đổi, dù cho cùng giá trị
         /// </summary>
-        public event Action<DependencyObject, object> ValueUpdated = (sender, e) => { };
+        public event Action<DependencyObject, object> ValueUpdated = (sender, value) => { };
 
         #endregion
 

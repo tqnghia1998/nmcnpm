@@ -122,10 +122,10 @@
         </Grid>
 
         <Button Content="Create"
+                IsDefault="True"
                 HorizontalAlignment="Center"
+                local:IsBusyProperty.Value="{Binding CreateIsRunning}"
                 Command="{Binding CreateCommand}"/>
         
-
-
     </StackPanel>
 </UserControl>

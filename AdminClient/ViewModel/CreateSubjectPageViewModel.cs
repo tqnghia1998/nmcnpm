@@ -1,5 +1,9 @@
 ﻿using DbModel;
+using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AdminClient
@@ -62,24 +66,9 @@ namespace AdminClient
         public ObservableCollection<string> Items { get; set; }
 
         /// <summary>
-        /// True nếu ngày bắt đầu không hợp lệ
+        /// Biểu thị cho hàm create có đang chạy hay không
         /// </summary>
-        public bool ErrorDateStart { get; set; }
-
-        /// <summary>
-        /// True nếu thời gian bắt đầu không hợp lệ
-        /// </summary>
-        public bool ErrorTimeStart { get; set; }
-
-        /// <summary>
-        /// True nếu ngày kết thúc không hợp lệ
-        /// </summary>
-        public bool ErrorDateFinish { get; set; }
-
-        /// <summary>
-        /// True nếu thời gian kết thúc không hợp lệ
-        /// </summary>
-        public bool ErrorTimeFinish { get; set; }
+        public bool CreateIsRunning { get; set; } = false;
 
         #endregion
 
@@ -102,28 +91,103 @@ namespace AdminClient
             Items = GenerateTimeToChoose();
 
             // Set commands
-            CreateCommand = new RelayCommand(Create);
+            CreateCommand = new RelayCommand(async () => await Create());
         }
 
         #endregion
-
 
         #region Command Methods
 
         /// <summary>
         /// Hàm tạo môn học
         /// </summary>
-        public void Create()
+        public async Task Create()
         {
-            SubjectDataModel data = new SubjectDataModel();
+            await RunCommand(() => this.CreateIsRunning, async () =>
+            {
+                SubjectDataModel data = new SubjectDataModel();
 
-            data.Major = this.Major.EditText;
-            data.Id = this.ID.EditText;
-            data.Subject = this.Subject.EditText;
-            data.Teacher = this.Teacher.EditText;
-            data.Place = this.Class.EditText;
-            data.TimeStart = this.DateStart + " " + this.TimeStart;
-            data.TimeFinish = this.DateFinish + " " + this.TimeFinish;
+                data.Major = this.Major.EditText;
+                data.Id = this.ID.EditText;
+                data.Subject = this.Subject.EditText;
+                data.Teacher = this.Teacher.EditText;
+                data.Place = this.Class.EditText;
+                data.TimeStart = this.DateStart + " " + this.TimeStart;
+                data.TimeFinish = this.DateFinish + " " + this.TimeFinish;
+                data.Status = 0;
+
+                DateTime dateStart, dateEnd;
+
+                // Kiểm tra xem ngày và thời gian bắt đầu có hợp lệ không
+                try
+                {
+                    dateStart = DateTime.ParseExact(data.TimeStart, "MM/dd/yyyy hh:mm", CultureInfo.CurrentCulture);
+                }
+                catch
+                {
+                    MessageBox.Show("Ngày bắt đầu hoặc thời gian bắt đầu không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // Đến đây, ngày và thời gian bắt đầu đã hợp lệ.
+                // Tiếp tục kiểm tra xem ngày và thời gian kết thúc có hợp lệ không
+                try
+                {
+                    dateEnd = DateTime.ParseExact(data.TimeFinish, "MM/dd/yyyy hh:mm", CultureInfo.CurrentCulture);
+                }
+                catch
+                {
+                    MessageBox.Show("Ngày kết thúc hoặc thời gian kết thúc không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // Đến đây, ngày và thời gian kết thúc đã hợp lệ
+                // Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có trước ngày và thời gian kết thúc không.
+                // Nếu không thì báo lỗi.
+                if (dateStart >= dateEnd)
+                {
+                    MessageBox.Show("Ngày và thời gian bắt đầu phải trước ngày và thời gian kết thúc.\n Mời bạn kiểm tra lại!", "Thông báo",
+                       MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    return;
+                }
+
+                // Đến đây ngày và thời gian đã hợp lệ là kiểu datetime 
+                // Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có sau ngày và thời gian hiện tại không.
+                // Nếu không thì báo lỗi.
+                if (DateTimeOffset.UtcNow.Date > dateStart)
+                {
+                    MessageBox.Show("Ngày và thời gian bắt đầu phải sau ngày và thời gian hiện tại.\n Mời bạn kiểm tra lại!", "Thông báo",
+                      MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    return;
+                }
+
+                // Đến đây, mọi thứ đều đã hợp lệ.
+                // Tiến hành gửi data cho server lưu xuống database
+                HttpResult result;
+
+                try
+                {
+                    result = await WebRequest<SubjectDataModel>.PostAsync("http://localhost:51197/api/subject", data);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (200 != result.StatusCode)
+                {
+                    MessageBox.Show(result.MessageResponse, "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    return;
+                }
+
+                MessageBox.Show("Tạo môn học thành công", "Thông báo", MessageBoxButton.OK);
+            });
         }
 
         #endregion

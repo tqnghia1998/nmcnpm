@@ -12,3 +12,6 @@ E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.Assembly
 E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.RazorTargetAssemblyInfo.cache
 E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.dll
 E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.pdb
+E:\Project-CNPM\NMCNPM31_10\ServerApp\bin\Debug\netcoreapp2.1\DbModel.dll
+E:\Project-CNPM\NMCNPM31_10\ServerApp\bin\Debug\netcoreapp2.1\DbModel.pdb
+E:\Project-CNPM\NMCNPM31_10\ServerApp\obj\Debug\netcoreapp2.1\ServerApp.csproj.CopyComplete
