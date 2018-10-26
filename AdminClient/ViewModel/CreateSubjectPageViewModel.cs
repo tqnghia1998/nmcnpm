@@ -119,51 +119,51 @@ namespace AdminClient
                 DateTime dateStart, dateEnd;
 
                 // Kiểm tra xem ngày và thời gian bắt đầu có hợp lệ không
-                try
-                {
-                    dateStart = DateTime.ParseExact(data.TimeStart, "MM/dd/yyyy hh:mm", CultureInfo.CurrentCulture);
-                }
-                catch
-                {
-                    MessageBox.Show("Ngày bắt đầu hoặc thời gian bắt đầu không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                //try
+                //{
+                //    dateStart = DateTime.ParseExact(data.TimeStart, "MM/dd/yyyy hh:mm", CultureInfo.CurrentCulture);
+                //}
+                //catch
+                //{
+                //    MessageBox.Show("Ngày bắt đầu hoặc thời gian bắt đầu không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
+                //        MessageBoxButton.OK, MessageBoxImage.Error);
+                //    return;
+                //}
 
-                // Đến đây, ngày và thời gian bắt đầu đã hợp lệ.
-                // Tiếp tục kiểm tra xem ngày và thời gian kết thúc có hợp lệ không
-                try
-                {
-                    dateEnd = DateTime.ParseExact(data.TimeFinish, "MM/dd/yyyy hh:mm", CultureInfo.CurrentCulture);
-                }
-                catch
-                {
-                    MessageBox.Show("Ngày kết thúc hoặc thời gian kết thúc không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                //// Đến đây, ngày và thời gian bắt đầu đã hợp lệ.
+                //// Tiếp tục kiểm tra xem ngày và thời gian kết thúc có hợp lệ không
+                //try
+                //{
+                //    dateEnd = DateTime.ParseExact(data.TimeFinish, "MM/dd/yyyy hh:mm", CultureInfo.CurrentCulture);
+                //}
+                //catch
+                //{
+                //    MessageBox.Show("Ngày kết thúc hoặc thời gian kết thúc không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
+                //        MessageBoxButton.OK, MessageBoxImage.Error);
+                //    return;
+                //}
 
-                // Đến đây, ngày và thời gian kết thúc đã hợp lệ
-                // Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có trước ngày và thời gian kết thúc không.
-                // Nếu không thì báo lỗi.
-                if (dateStart >= dateEnd)
-                {
-                    MessageBox.Show("Ngày và thời gian bắt đầu phải trước ngày và thời gian kết thúc.\n Mời bạn kiểm tra lại!", "Thông báo",
-                       MessageBoxButton.OK, MessageBoxImage.Error);
+                //// Đến đây, ngày và thời gian kết thúc đã hợp lệ
+                //// Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có trước ngày và thời gian kết thúc không.
+                //// Nếu không thì báo lỗi.
+                //if (dateStart >= dateEnd)
+                //{
+                //    MessageBox.Show("Ngày và thời gian bắt đầu phải trước ngày và thời gian kết thúc.\n Mời bạn kiểm tra lại!", "Thông báo",
+                //       MessageBoxButton.OK, MessageBoxImage.Error);
 
-                    return;
-                }
+                //    return;
+                //}
 
-                // Đến đây ngày và thời gian đã hợp lệ là kiểu datetime 
-                // Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có sau ngày và thời gian hiện tại không.
-                // Nếu không thì báo lỗi.
-                if (DateTimeOffset.UtcNow.Date > dateStart)
-                {
-                    MessageBox.Show("Ngày và thời gian bắt đầu phải sau ngày và thời gian hiện tại.\n Mời bạn kiểm tra lại!", "Thông báo",
-                      MessageBoxButton.OK, MessageBoxImage.Error);
+                //// Đến đây ngày và thời gian đã hợp lệ là kiểu datetime 
+                //// Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có sau ngày và thời gian hiện tại không.
+                //// Nếu không thì báo lỗi.
+                //if (DateTimeOffset.UtcNow.Date > dateStart)
+                //{
+                //    MessageBox.Show("Ngày và thời gian bắt đầu phải sau ngày và thời gian hiện tại.\n Mời bạn kiểm tra lại!", "Thông báo",
+                //      MessageBoxButton.OK, MessageBoxImage.Error);
 
-                    return;
-                }
+                //    return;
+                //}
 
                 // Đến đây, mọi thứ đều đã hợp lệ.
                 // Tiến hành gửi data cho server lưu xuống database

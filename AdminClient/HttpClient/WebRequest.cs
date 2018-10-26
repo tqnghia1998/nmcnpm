@@ -25,7 +25,8 @@ namespace AdminClient
         /// <returns></returns>
        public static async Task<HttpResult>  PostAsync(string url, T data)
         {
-            var DATA = JsonConvert.SerializeObject(data);
+            var temp1 = JsonConvert.SerializeObject(data);
+            var DATA = Encoding.UTF8.GetBytes(temp1);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/json";
@@ -33,11 +34,9 @@ namespace AdminClient
 
             using (Stream webStream = request.GetRequestStream())
             {
-                using (StreamWriter requestWriter = new StreamWriter(webStream, Encoding.ASCII))
-                {
-                    requestWriter.Write(DATA);
-                }
+                webStream.Write(DATA, 0, DATA.Length);
             }
+            
 
             HttpResult result = new HttpResult();
 
