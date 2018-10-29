@@ -138,10 +138,18 @@
     <Compile Include="AttchedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttchedProperties\ButtonAttachedProperties.cs" />
     <Compile Include="AttchedProperties\TextEntryWidthMatcherProperty.cs" />
+    <Compile Include="Controls\ListTimeOfClassControl.xaml.cs">
+      <DependentUpon>ListTimeOfClassControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TextEntryControl.xaml.cs">
       <DependentUpon>TextEntryControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TimeOfClassItemControl.xaml.cs">
+      <DependentUpon>TimeOfClassItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Expression\ExpressionHelpers.cs" />
+    <Compile Include="Extension\FunctionHelpersForList.cs" />
+    <Compile Include="Extension\StringHelpers.cs" />
     <Compile Include="HttpClient\HttpResult.cs" />
     <Compile Include="HttpClient\WebRequest.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
@@ -149,8 +157,20 @@
     <Compile Include="ValueConverters\DateToStringValueConverter.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\CreateSubjectPageViewModel.cs" />
+    <Compile Include="ViewModel\TimeOfClass\Design\ListTimeOfClassDesignModel.cs" />
+    <Compile Include="ViewModel\TimeOfClass\Design\TimeOfClassItemDesignModel.cs" />
+    <Compile Include="ViewModel\TimeOfClass\ListTimeOfClassViewModel.cs" />
     <Compile Include="ViewModel\TextEntryViewModel.cs" />
+    <Compile Include="ViewModel\TimeOfClass\TimeOfClassItemViewModel.cs" />
+    <Page Include="Controls\ListTimeOfClassControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\TextEntryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TimeOfClassItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -172,3 +172,7 @@ E:\Project-CNPM\NMCNPM31_10\AdminClient\bin\Debug\System.Interactive.Async.xml
 E:\Project-CNPM\NMCNPM31_10\AdminClient\bin\Debug\System.Memory.xml
 E:\Project-CNPM\NMCNPM31_10\AdminClient\bin\Debug\System.Numerics.Vectors.xml
 E:\Project-CNPM\NMCNPM31_10\AdminClient\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\Controls\ListTimeOfClassControl.g.cs
+E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\Controls\TimeOfClassItemControl.g.cs
+E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\Controls\ListTimeOfClassControl.baml
+E:\Project-CNPM\NMCNPM31_10\AdminClient\obj\Debug\Controls\TimeOfClassItemControl.baml

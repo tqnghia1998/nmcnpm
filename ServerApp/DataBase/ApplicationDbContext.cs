@@ -13,7 +13,15 @@ namespace ServerApp
     {
         #region Public Tables
 
+        /// <summary>
+        /// Bảng môn học
+        /// </summary>
         public DbSet<SubjectDataModel> Subject { get; set; }
+
+        /// <summary>
+        /// Bảng thời khóa biểu của từng môn học
+        /// </summary>
+        public DbSet<ScheduleDataModel> Schedules { get; set; }
 
         #endregion
 
@@ -35,6 +43,9 @@ namespace ServerApp
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Set primary key cho bảng thời khóa biểu của từng môn học
+            modelBuilder.Entity<ScheduleDataModel>().HasKey(c => new { c.Id, c.DayInTheWeek });
         }
 
 

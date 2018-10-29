@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 E:\Project-CNPM\NMCNPM31_10\AdminClient\App.xaml
-7711228931
+9899926081
 
-20-618123762
+28123472340
 147-1921916417
-Controls\TextEntryControl.xaml;MainWindow.xaml;Pages\CreateSubjectPage.xaml;Styles\Buttons.xaml;Styles\Colors.xaml;Styles\Fonts.xaml;Styles\Texts.xaml;
+Controls\ListTimeOfClassControl.xaml;Controls\TextEntryControl.xaml;Controls\TimeOfClassItemControl.xaml;MainWindow.xaml;Pages\CreateSubjectPage.xaml;Styles\Buttons.xaml;Styles\Colors.xaml;Styles\Fonts.xaml;Styles\Texts.xaml;
 
 False
 

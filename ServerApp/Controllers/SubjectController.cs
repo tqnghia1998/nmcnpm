@@ -34,11 +34,11 @@ namespace ServerApp
         #endregion
 
         [HttpPost]
-        public IActionResult PostSubject([FromBody] SubjectDataModel data)
+        public IActionResult PostSubject([FromBody] CreateSubjectCredentialsDataModel data)
         {
             try
             {
-                mContext.Subject.Add(data);
+                mContext.Subject.Add(data.Subject);
                 mContext.SaveChanges();
             }
             
@@ -46,6 +46,10 @@ namespace ServerApp
             {
                 return BadRequest("Tạo môn học thất bại. \nCó thể mã học phần bị trùng hoặc chưa điền đầy đủ các thông tin cần thiết.");
             }
+
+            mContext.Schedules.AddRange(data.Schedule);
+            mContext.SaveChanges();
+            
 
             return Ok();
         }

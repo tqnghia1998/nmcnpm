@@ -22,16 +22,19 @@
 
         <!-- Mục nhập tên chuyên ngành -->
         <local:TextEntryControl DataContext="{Binding Major}"/>
-        
+
         <!-- Mục nhập mã học phần -->
         <local:TextEntryControl DataContext="{Binding ID}"/>
-        
+
         <!-- Mục nhập tên học phần -->
         <local:TextEntryControl DataContext="{Binding Subject}"/>
-        
+
+        <!-- Mục nhập số tín chỉ của học phần -->
+        <local:TextEntryControl DataContext="{Binding Credit}"/>
+
         <!-- Mục nhập tên giảng viên -->
         <local:TextEntryControl DataContext="{Binding Teacher}"/>
-        
+
         <!-- Mục nhập phòng học -->
         <local:TextEntryControl DataContext="{Binding Class}"/>
 
@@ -48,9 +51,8 @@
             <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
 
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
 
                 </Grid.ColumnDefinitions>
 
@@ -59,25 +61,12 @@
                            Text="Start:"
                            Margin="15 12"
                            Grid.Column="0"/>
-                
+
                 <DatePicker VerticalAlignment="Center"
                             Grid.Column="1"
                             SelectedDate="{Binding DateStart, Mode=OneWayToSource, Converter={local:DateToStringValueConverter}}"
                             FontFamily="{StaticResource LatoRegular}"
                             FontSize="{StaticResource FontSizeRegular}" />
-
-                <ComboBox Grid.Column="2"
-                          Margin="10 0 0 0"
-                          Width="{Binding}"
-                          FontFamily="{StaticResource LatoRegular}"
-                          FontSize="{StaticResource FontSizeRegular}"
-                          Background="Transparent"
-                          VerticalAlignment="Center"
-                          IsEditable="True"
-                          Text="{Binding TimeStart}"
-                          ItemsSource="{Binding Items}">
-
-                </ComboBox>
 
             </Grid>
 
@@ -86,7 +75,6 @@
                 <Grid.ColumnDefinitions>
 
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="*"/>
 
                 </Grid.ColumnDefinitions>
@@ -100,32 +88,23 @@
                 <DatePicker VerticalAlignment="Center"
                             Grid.Column="1"
                             IsEnabled="True"
-                            Name="Temp"
                             SelectedDate="{Binding DateFinish, Mode=OneWayToSource, Converter={local:DateToStringValueConverter}}"
                             FontFamily="{StaticResource LatoRegular}"
                             FontSize="{StaticResource FontSizeRegular}" />
 
-                <ComboBox Grid.Column="2"
-                          FontFamily="{StaticResource LatoRegular}"
-                          FontSize="{StaticResource FontSizeRegular}"
-                          Background="Transparent"
-                          Margin="10 0"
-                          VerticalAlignment="Center"
-                          ItemsSource="{Binding Items}"
-                          IsEditable="True"
-                          Text="{Binding TimeFinish}">
-
-                </ComboBox>
-
             </Grid>
 
         </Grid>
+
+        <local:ListTimeOfClassControl DataContext="{Binding SpecificTimeItems}" 
+                                      Margin="20 30"
+                                      HorizontalAlignment="Center"/>
 
         <Button Content="Create"
                 IsDefault="True"
                 HorizontalAlignment="Center"
                 local:IsBusyProperty.Value="{Binding CreateIsRunning}"
                 Command="{Binding CreateCommand}"/>
-        
+
     </StackPanel>
 </UserControl>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AdminClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <local:CreateSubjectPage/>
-    </Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <local:CreateSubjectPage />
+    </ScrollViewer>
 </Window>

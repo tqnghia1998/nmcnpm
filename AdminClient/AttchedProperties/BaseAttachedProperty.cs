@@ -43,23 +43,6 @@ namespace AdminClient
             "Value", typeof(Property),
             typeof(BaseAttachedProperty<Parent, Property>),
             new PropertyMetadata(default(Property), new PropertyChangedCallback(OnValuePropertyChanged), new CoerceValueCallback(OnValuePropertyUpdated)));
-        
-        /// <summary>
-        /// Gọi lại event khi <see cref="ValueProperty"/> thay đổi, dù nó có cùng giá trị cũ
-        /// </summary>
-        /// <param name="d"> UI element mà property của nó thay đổi </param>
-        /// <param name="value"> Các đối số của event </param>
-        /// <returns></returns>
-        private static object OnValuePropertyUpdated(DependencyObject d, object value)
-        {
-            // gọi function của parent
-            (Instance as BaseAttachedProperty<Parent, Property>).OnValueUpdated(d, value);
-
-            // Gọi event listeners
-            (Instance as BaseAttachedProperty<Parent, Property>).ValueUpdated(d, value);
-
-            return value;
-        }
 
         /// <summary>
         ///  Gọi lại event khi <see cref="ValueProperty"/> thay đổi
@@ -69,10 +52,27 @@ namespace AdminClient
         private static void OnValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // Gọi function của parent
-            (Instance as BaseAttachedProperty<Parent, Property>).OnValueChanged(d, e);
+            (Instance as BaseAttachedProperty<Parent, Property>)?.OnValueChanged(d, e);
 
             // Gọi event listeners
-            (Instance as BaseAttachedProperty<Parent, Property>).ValueChanged(d, e);
+            (Instance as BaseAttachedProperty<Parent, Property>)?.ValueChanged(d, e);
+        }
+
+        /// <summary>
+        /// Gọi lại event khi <see cref="ValueProperty"/> thay đổi, dù nó có cùng giá trị cũ
+        /// </summary>
+        /// <param name="d"> UI element mà property của nó thay đổi </param>
+        /// <param name="value"> Các đối số của event </param>
+        /// <returns></returns>
+        private static object OnValuePropertyUpdated(DependencyObject d, object value)
+        {
+            // gọi function của parent
+            (Instance as BaseAttachedProperty<Parent, Property>)?.OnValueUpdated(d, value);
+
+            // Gọi event listeners
+            (Instance as BaseAttachedProperty<Parent, Property>)?.ValueUpdated(d, value);
+
+            return value;
         }
 
         /// <summary>

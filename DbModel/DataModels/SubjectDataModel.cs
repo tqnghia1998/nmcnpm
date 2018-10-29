@@ -30,6 +30,11 @@ namespace DbModel
         public string Subject { get; set; }
 
         /// <summary>
+        /// Số tín chỉ
+        /// </summary>
+        public int Credit { get; set; }
+
+        /// <summary>
         /// Giảng viên phụ trách
         /// </summary>
         public string Teacher { get; set; }
