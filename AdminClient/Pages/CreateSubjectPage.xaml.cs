@@ -19,7 +19,6 @@ namespace AdminClient
                 Subject = new TextEntryViewModel { Label = "Subject" },
                 Credit = new TextEntryViewModel { Label = "Credit"},
                 Teacher = new TextEntryViewModel { Label = "Teacher" },
-                Class = new TextEntryViewModel { Label = "Class" },
             };
 
         }

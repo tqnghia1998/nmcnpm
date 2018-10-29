@@ -35,9 +35,6 @@
         <!-- Mục nhập tên giảng viên -->
         <local:TextEntryControl DataContext="{Binding Teacher}"/>
 
-        <!-- Mục nhập phòng học -->
-        <local:TextEntryControl DataContext="{Binding Class}"/>
-
         <Grid>
 
             <Grid.ColumnDefinitions>

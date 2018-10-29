@@ -23,8 +23,9 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="66"/>
+                <ColumnDefinition Width="130"/>
                 <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
@@ -47,16 +48,23 @@
                        FontSize="{StaticResource FontSizeRegular}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
-                       Text="Period"/>
+                       Text="Room"/>
 
             <TextBlock Grid.Column="3"
                        FontFamily="{StaticResource LatoRegular}"
                        FontSize="{StaticResource FontSizeRegular}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
-                       Text="Time start"/>
+                       Text="Period"/>
 
             <TextBlock Grid.Column="4"
+                       FontFamily="{StaticResource LatoRegular}"
+                       FontSize="{StaticResource FontSizeRegular}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Text="Time start"/>
+
+            <TextBlock Grid.Column="5"
                        FontFamily="{StaticResource LatoRegular}"
                        FontSize="{StaticResource FontSizeRegular}"
                        VerticalAlignment="Center"

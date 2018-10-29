@@ -24,6 +24,11 @@ namespace AdminClient
         public string DayInTheWeek { get; set; }
 
         /// <summary>
+        /// Phòng
+        /// </summary>
+        public string Room { get; set; }
+
+        /// <summary>
         /// Tiết
         /// </summary>
         public string Period { get; set; }

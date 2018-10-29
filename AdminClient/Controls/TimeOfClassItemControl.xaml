@@ -12,22 +12,30 @@
 
         <!-- Tích để chọn -->
         <CheckBox VerticalAlignment="Center"
-                  Margin="20 5 30 5"
+                  Margin="20 0 30 0"
                   IsChecked="{Binding IsChecked}"/>
         <!-- Ngày trong tuần -->
         <TextBlock FontFamily="{StaticResource LatoRegular}"
                    FontSize="{StaticResource FontSizeRegular}"
-                   Margin="20 5 10 5"
-                   Width="70"
+                   Margin="20 0 10 0"
+                   Width="100"
                    VerticalAlignment="Center"
                    Text="{Binding DayInTheWeek, FallbackValue=Monday}"/>
+
+        <!-- Lớp học -->
+        <TextBox FontFamily="{StaticResource LatoRegular}"
+                 FontSize="{StaticResource FontSizeRegular}"
+                 Margin="10 0 10 0"
+                 HorizontalAlignment="Center"
+                 Width="80"
+                 Text="{Binding Room, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!-- Tiết -->
         <TextBox FontFamily="{StaticResource LatoRegular}"
                  FontSize="{StaticResource FontSizeRegular}"
-                 Margin="10 5 10 5"
+                 Margin="10 0 10 0"
                  HorizontalAlignment="Center"
-                 Width="50"
+                 Width="80"
                  Text="{Binding Period, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!-- Mục điền thời gian bắt đầu -->

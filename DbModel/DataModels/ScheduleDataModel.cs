@@ -18,6 +18,11 @@ namespace DbModel
         public string DayInTheWeek { get; set; }
 
         /// <summary>
+        /// Lớp học
+        /// </summary>
+        public string Room { get; set; }
+
+        /// <summary>
         /// Tiết 
         /// </summary>
         public string Period { get; set; }

@@ -43,11 +43,6 @@ namespace AdminClient
         public TextEntryViewModel Teacher { get; set; }
 
         /// <summary>
-        /// View model cho class
-        /// </summary>
-        public TextEntryViewModel Class { get; set; }
-
-        /// <summary>
         /// Ngày bắt đầu
         /// </summary>
         public string DateStart { get; set; }
@@ -157,7 +152,6 @@ namespace AdminClient
                 DataToPost.Subject.Id = this.ID.EditText;
                 DataToPost.Subject.Subject = this.Subject.EditText;
                 DataToPost.Subject.Teacher = this.Teacher.EditText;
-                DataToPost.Subject.Place = this.Class.EditText;
                 DataToPost.Subject.TimeStart = this.DateStart;
                 DataToPost.Subject.TimeFinish = this.DateFinish;
                 DataToPost.Subject.Status = 0;
@@ -196,7 +190,9 @@ namespace AdminClient
                 // Kiểm tra xem ngày và thời gian bắt đầu có hợp lệ không
                 try
                 {
+
                     dateStart = DateTime.ParseExact(DataToPost.Subject.TimeStart, "MM/dd/yyyy", CultureInfo.CurrentCulture);
+
                 }
                 catch
                 {
@@ -283,6 +279,7 @@ namespace AdminClient
                     {
                         Id = this.ID.EditText,
                         DayInTheWeek = item.DayInTheWeek,
+                        Room = item.Room,
                         Period = item.Period,
                         TimeStart = item.TimeStart,
                         TimeFinish = item.TimeFinish
@@ -293,6 +290,7 @@ namespace AdminClient
                 #endregion
 
                 #region Gửi cho server lưu và nhận phản hồi
+
 
                 // Đến đây, mọi thứ đều đã hợp lệ.
                 // Tiến hành gửi data cho server lưu xuống database
