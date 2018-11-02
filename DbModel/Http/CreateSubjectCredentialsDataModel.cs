@@ -8,6 +8,19 @@ namespace DbModel
     /// </summary>
     public class CreateSubjectCredentialsDataModel
     {
+        private SubjectDataModel subjectDataModel;
+        private ScheduleDataModel scheduleDataModel;
+
+        public CreateSubjectCredentialsDataModel()
+        {
+        }
+
+        public CreateSubjectCredentialsDataModel(SubjectDataModel subjectDataModel, ScheduleDataModel scheduleDataModel)
+        {
+            this.subjectDataModel = subjectDataModel;
+            this.scheduleDataModel = scheduleDataModel;
+        }
+
         /// <summary>
         /// Thông tin môn học
         /// </summary>

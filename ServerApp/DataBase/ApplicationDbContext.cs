@@ -36,6 +36,10 @@ namespace ServerApp
 
         }
 
+        public ApplicationDbContext()
+        {
+        }
+
         #endregion
 
         #region Configure Database
@@ -48,8 +52,18 @@ namespace ServerApp
             modelBuilder.Entity<ScheduleDataModel>().HasKey(c => new { c.Id, c.DayInTheWeek });
         }
 
-
-
         #endregion
+
+        public List<CreateSubjectCredentialsDataModel> getSubjectAndSchedule(int i)
+        {
+            List<CreateSubjectCredentialsDataModel> list = new List<CreateSubjectCredentialsDataModel>();
+            List<SubjectDataModel> listSubject = Subject.ToList();
+            List<ScheduleDataModel> listSchedule = Schedules.ToList();
+            for (int j = 0; j < listSubject.Count; j++)
+            {
+                list.Add(new CreateSubjectCredentialsDataModel(listSubject[j], listSchedule[j]));
+            }
+            return list;
+        }
     }
 }

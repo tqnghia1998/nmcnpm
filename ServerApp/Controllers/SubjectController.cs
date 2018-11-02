@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ServerApp
 {
-    [Route("api/subject")]
+    
     public class SubjectController : Controller
     {
         #region Private Members
@@ -33,6 +33,7 @@ namespace ServerApp
 
         #endregion
 
+        [Route("api/subject")]
         [HttpPost]
         public IActionResult PostSubject([FromBody] CreateSubjectCredentialsDataModel data)
         {
@@ -52,6 +53,52 @@ namespace ServerApp
             
 
             return Ok();
+        }
+
+        // Get subjects
+        [Route("api/subject")]
+        [HttpGet]
+        public ActionResult<List<SubjectDataModel>> GetSubjects()
+        {
+            return mContext.Subject.ToList();
+        }
+
+        [HttpGet("api/subject/{id}")]
+        public ActionResult<List<SubjectDataModel>> GetSubjectById(String id, [FromQuery] String field)
+        {
+            List<SubjectDataModel> list = new List<SubjectDataModel>();
+            SubjectDataModel item = mContext.Subject.Find(id);
+            if (item == null)
+            {
+                IQueryable<SubjectDataModel> _list = mContext.Subject;
+                if (field == "major") _list = _list.Where(x => x.Major == id);
+                if (field == "subject") _list = _list.Where(x => x.Subject == id);
+                if (field == "credit") _list = _list.Where(x => x.Credit == int.Parse(id));
+                if (field == "teacher") _list = _list.Where(x => x.Teacher == id);
+                if (field == "timestart") _list = _list.Where(x => x.TimeStart == id);
+                if (field == "timefinish") _list = _list.Where(x => x.TimeFinish == id);
+                if (field == "status") _list = _list.Where(x => x.Status == int.Parse(id));
+                if (_list != mContext.Subject) return _list.ToList();
+            }
+            list.Add(item);
+            return list;
+        }
+
+        // Get schedules
+        [Route("api/subject/schedule")]
+        [HttpGet]
+        public ActionResult<List<ScheduleDataModel>> GetSchedules()
+        {
+            return mContext.Schedules.ToList();
+        }
+
+        [HttpGet("api/subject/schedule/{id}/{day}")]
+        public ActionResult<List<ScheduleDataModel>> GetScheduleById(String id, String day, [FromQuery] String field)
+        {
+            List<ScheduleDataModel> list = new List<ScheduleDataModel>();
+            ScheduleDataModel item = mContext.Schedules.Find(id, day);
+            list.Add(item);
+            return list;
         }
     }
 }
