@@ -1,15 +1,18 @@
-﻿<UserControl x:Class="AdminClient.CreateSubjectPage"
+﻿<local:BasePage x:TypeArguments="local:CreateSubjectPageViewModel" x:Class="AdminClient.CreateSubjectPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AdminClient"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Background="White"
-                local:TextEntryWidthMatcherProperty.Value="true">
+             mc:Ignorable="d">
 
-        <TextBlock Text="Create subject"
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Border Padding="10 0"
+                Background="White">
+
+            <StackPanel local:TextEntryWidthMatcherProperty.Value="true">
+
+                <TextBlock Text="Create subject"
                    Margin="15 12"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"
@@ -17,91 +20,124 @@
                    FontSize="25"
                    />
 
-        <Grid Height="2"
+                <Grid Height="2"
               Background="Gray"/>
 
-        <!-- Mục nhập tên chuyên ngành -->
-        <local:TextEntryControl DataContext="{Binding Major}"/>
+                <!-- Mục nhập tên chuyên ngành -->
+                <local:TextEntryControl DataContext="{Binding Major}"/>
 
-        <!-- Mục nhập mã học phần -->
-        <local:TextEntryControl DataContext="{Binding ID}"/>
+                <!-- Mục nhập mã học phần -->
+                <local:TextEntryControl DataContext="{Binding ID}"/>
 
-        <!-- Mục nhập tên học phần -->
-        <local:TextEntryControl DataContext="{Binding Subject}"/>
+                <!-- Mục nhập tên học phần -->
+                <local:TextEntryControl DataContext="{Binding Subject}"/>
 
-        <!-- Mục nhập số tín chỉ của học phần -->
-        <local:TextEntryControl DataContext="{Binding Credit}"/>
+                <!-- Mục nhập số tín chỉ của học phần -->
+                <local:TextEntryControl DataContext="{Binding Credit}"/>
 
-        <!-- Mục nhập tên giảng viên -->
-        <local:TextEntryControl DataContext="{Binding Teacher}"/>
+                <!-- Mục nhập tên giảng viên -->
+                <local:TextEntryControl DataContext="{Binding Teacher}"/>
 
-        <Grid>
+                <Grid Margin="10 0">
 
-            <Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
 
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
 
-            </Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions>
 
-            <!-- Mục chọn thời gian bắt đầu -->
-            <Grid Grid.Column="0">
-                <Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
 
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
+                    <!-- Fill term -->
+                    <TextBox Grid.Row="0"
+                             Grid.Column="0"
+                             FontFamily="{StaticResource LatoRegular}"
+                             FontSize="{StaticResource FontSizeRegular}"
+                             Margin="0 0 30 0"
+                             TextAlignment="Center"
+                             Tag="Term"
+                             Text="{Binding Term, UpdateSourceTrigger=PropertyChanged}"/>
 
-                </Grid.ColumnDefinitions>
+                    <!-- Fill course-->
+                    <TextBox Grid.Row="0"
+                             Grid.Column="1"
+                             FontFamily="{StaticResource LatoRegular}"
+                             FontSize="{StaticResource FontSizeRegular}"
+                             Margin="30 0 0 0"
+                             TextAlignment="Center"
+                             Tag="Course"
+                             Text="{Binding Course, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock FontFamily="{StaticResource LatoRegular}"
+                    <!-- Mục chọn thời gian bắt đầu -->
+                    <Grid Grid.Column="0"
+                          Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock FontFamily="{StaticResource LatoRegular}"
                            FontSize="{StaticResource FontSizeRegular}"
                            Text="Start:"
                            Margin="15 12"
                            Grid.Column="0"/>
 
-                <DatePicker VerticalAlignment="Center"
+                        <DatePicker VerticalAlignment="Center"
                             Grid.Column="1"
                             SelectedDate="{Binding DateStart, Mode=OneWayToSource, Converter={local:DateToStringValueConverter}}"
                             FontFamily="{StaticResource LatoRegular}"
                             FontSize="{StaticResource FontSizeRegular}" />
 
-            </Grid>
+                    </Grid>
 
-            <!-- Mục chọn thời gian kết thúc -->
-            <Grid Grid.Column="1">
-                <Grid.ColumnDefinitions>
+                    <!-- Mục chọn thời gian kết thúc -->
+                    <Grid Grid.Column="1"
+                          Grid.Row="1">
+                        <Grid.ColumnDefinitions>
 
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
 
-                </Grid.ColumnDefinitions>
+                        </Grid.ColumnDefinitions>
 
-                <TextBlock FontFamily="{StaticResource LatoRegular}"
+                        <TextBlock FontFamily="{StaticResource LatoRegular}"
                            FontSize="{StaticResource FontSizeRegular}"
                            Text="End:"
                            Margin="15 12"
                            Grid.Column="0"/>
 
-                <DatePicker VerticalAlignment="Center"
+                        <DatePicker VerticalAlignment="Center"
                             Grid.Column="1"
                             IsEnabled="True"
                             SelectedDate="{Binding DateFinish, Mode=OneWayToSource, Converter={local:DateToStringValueConverter}}"
                             FontFamily="{StaticResource LatoRegular}"
                             FontSize="{StaticResource FontSizeRegular}" />
 
-            </Grid>
+                    </Grid>
 
-        </Grid>
+                </Grid>
 
-        <local:ListTimeOfClassControl DataContext="{Binding SpecificTimeItems}" 
-                                      Margin="20 30"
+                <local:ListTimeOfClassControl DataContext="{Binding SpecificTimeItems}" 
+                                      Margin="0 30"
                                       HorizontalAlignment="Center"/>
 
-        <Button Content="Create"
+                <Button Content="Create"
                 IsDefault="True"
                 HorizontalAlignment="Center"
                 local:IsBusyProperty.Value="{Binding CreateIsRunning}"
                 Command="{Binding CreateCommand}"/>
 
-    </StackPanel>
-</UserControl>
+            </StackPanel>
+
+        </Border>
+        
+    </ScrollViewer>
+    
+    
+</local:BasePage>

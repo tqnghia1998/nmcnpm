@@ -12,12 +12,12 @@
 
         <!-- Tích để chọn -->
         <CheckBox VerticalAlignment="Center"
-                  Margin="20 0 30 0"
+                  Margin="10 0 10 0"
                   IsChecked="{Binding IsChecked}"/>
         <!-- Ngày trong tuần -->
         <TextBlock FontFamily="{StaticResource LatoRegular}"
                    FontSize="{StaticResource FontSizeRegular}"
-                   Margin="20 0 10 0"
+                   Margin="10 0 10 0"
                    Width="100"
                    VerticalAlignment="Center"
                    Text="{Binding DayInTheWeek, FallbackValue=Monday}"/>
@@ -40,7 +40,7 @@
 
         <!-- Mục điền thời gian bắt đầu -->
         <ComboBox Grid.Column="2"
-                  Margin="35 0"
+                  Margin="10 0"
                   Width="80"
                   FontFamily="{StaticResource LatoRegular}"
                   FontSize="{StaticResource FontSizeRegular}"
@@ -53,7 +53,7 @@
         
         <!-- Mục điền thời gian kết thúc -->
         <ComboBox Grid.Column="2"
-                  Margin="35 0"
+                  Margin="10 0"
                   Width="80"
                   FontFamily="{StaticResource LatoRegular}"
                   FontSize="{StaticResource FontSizeRegular}"

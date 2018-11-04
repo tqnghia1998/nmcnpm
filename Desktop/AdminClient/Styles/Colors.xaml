@@ -47,4 +47,13 @@
     <Color x:Key="WordGreen">#00c541</Color>
     <SolidColorBrush x:Key="WordGreenBrush" Color="{StaticResource WordGreen}" />
 
+    <Color x:Key="WordWeightBlue">#0f1897</Color>
+    <SolidColorBrush x:Key="WordWeightBlueBrush" Color="{StaticResource WordWeightBlue}" />
+
+    <Color x:Key="WordGray">#4c4a4d</Color>
+    <SolidColorBrush x:Key="WordGrayBrush" Color="{StaticResource WordGray}" />
+
+    <Color x:Key="WordLightPurple">#fcf3ff</Color>
+    <SolidColorBrush x:Key="WordLightPurpleBrush" Color="{StaticResource WordLightPurple}" />
+
 </ResourceDictionary>

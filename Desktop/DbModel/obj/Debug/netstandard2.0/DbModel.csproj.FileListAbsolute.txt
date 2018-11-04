@@ -16,3 +16,12 @@ D:\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.AssemblyInfoInputs.cache
 D:\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.AssemblyInfo.cs
 D:\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.dll
 D:\NMCNPM31_10\DbModel\obj\Debug\netstandard2.0\DbModel.pdb
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\bin\Debug\netstandard2.0\DbModel.deps.json
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\bin\Debug\netstandard2.0\DbModel.dll
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\bin\Debug\netstandard2.0\DbModel.pdb
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\obj\Debug\netstandard2.0\DbModel.csprojAssemblyReference.cache
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\obj\Debug\netstandard2.0\DbModel.csproj.CoreCompileInputs.cache
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\obj\Debug\netstandard2.0\DbModel.AssemblyInfoInputs.cache
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\obj\Debug\netstandard2.0\DbModel.AssemblyInfo.cs
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\obj\Debug\netstandard2.0\DbModel.dll
+E:\CNPM\NMCNPM31_10\Desktop\DbModel\obj\Debug\netstandard2.0\DbModel.pdb

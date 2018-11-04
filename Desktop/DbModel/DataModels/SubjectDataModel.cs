@@ -40,6 +40,16 @@ namespace DbModel
         public string Teacher { get; set; }
 
         /// <summary>
+        /// Term of this subject
+        /// </summary>
+        public string Term { get; set; }
+
+        /// <summary>
+        /// Course of this subject
+        /// </summary>
+        public string Course { get; set; }
+
+        /// <summary>
         /// Thời gian bắt đầu học phần
         /// </summary>
         public string TimeStart { get; set; }

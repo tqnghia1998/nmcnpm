@@ -43,6 +43,16 @@ namespace AdminClient
         public TextEntryViewModel Teacher { get; set; }
 
         /// <summary>
+        /// Term of this subject
+        /// </summary>
+        public string Term { get; set; }
+
+        /// <summary>
+        /// Course of this subject
+        /// </summary>
+        public string Course { get; set; }
+
+        /// <summary>
         /// Ngày bắt đầu
         /// </summary>
         public string DateStart { get; set; }
@@ -86,6 +96,13 @@ namespace AdminClient
         public CreateSubjectPageViewModel()
         {
             Items = FunctionHelpersForList.GenerateTimeToChoose();
+
+            Major = new TextEntryViewModel { Label = "Major" };
+            ID = new TextEntryViewModel { Label = "ID" };
+            Subject = new TextEntryViewModel { Label = "Subject" };
+            Credit = new TextEntryViewModel { Label = "Credit" };
+            Teacher = new TextEntryViewModel { Label = "Teacher" };
+
             SpecificTimeItems = new ListTimeOfClassViewModel
             {
                 Items = new ObservableCollection<TimeOfClassItemViewModel>
@@ -152,6 +169,8 @@ namespace AdminClient
                 DataToPost.Subject.Id = this.ID.EditText;
                 DataToPost.Subject.Subject = this.Subject.EditText;
                 DataToPost.Subject.Teacher = this.Teacher.EditText;
+                DataToPost.Subject.Term = Term;
+                DataToPost.Subject.Course = Course;
                 DataToPost.Subject.TimeStart = this.DateStart;
                 DataToPost.Subject.TimeFinish = this.DateFinish;
                 DataToPost.Subject.Status = 0;

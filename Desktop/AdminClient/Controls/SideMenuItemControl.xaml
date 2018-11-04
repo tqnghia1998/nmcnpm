@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="AdminClient.SideMenuItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AdminClient"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style x:Key="ContentStyle" TargetType="{x:Type ContentControl}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContentControl}">
+                        <!-- Content -->
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Icon -->
+                            <TextBlock VerticalAlignment="Center"
+                                       x:Name="icon"
+                                       Margin="30 0"
+                                       HorizontalAlignment="Center"
+                                       FontFamily="{StaticResource FontAwesome}"
+                                       Foreground="{StaticResource ForegroundLightBrush}"
+                                       FontSize="{StaticResource FontSizeXXLarge}"
+                                       Text="{Binding Icon}"/>
+
+                            <TextBlock Grid.Column="1"
+                                       x:Name="text"
+                                       Margin="10"
+                                       VerticalAlignment="Center"
+                                       FontFamily="{StaticResource LatoBold}" 
+                                       FontSize="{StaticResource FontSizeLarge}"
+                                       Foreground="{StaticResource ForegroundLightBrush}"
+                                       Text="{Binding Content}"/>
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Foreground" TargetName="icon" Value="{StaticResource WordOrangeBrush}"/>
+                                <Setter Property="Foreground" TargetName="text" Value="{StaticResource WordOrangeBrush}"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ContentControl Style="{StaticResource ContentStyle}"/>
+
+
+</UserControl>

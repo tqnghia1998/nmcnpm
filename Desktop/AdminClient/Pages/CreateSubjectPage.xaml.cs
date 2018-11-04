@@ -1,26 +1,22 @@
-﻿using System.ComponentModel;
-using System.Windows.Controls;
-
-namespace AdminClient
+﻿namespace AdminClient
 {
     /// <summary>
     /// Interaction logic for CreateSubjectPage.xaml
     /// </summary>
-    public partial class CreateSubjectPage : UserControl
+    public partial class CreateSubjectPage : BasePage<CreateSubjectPageViewModel>
     {
-        public CreateSubjectPage()
+        public CreateSubjectPage(): base()
         {
             InitializeComponent();
+        }
 
-            DataContext = new CreateSubjectPageViewModel()
-            {
-                Major = new TextEntryViewModel { Label = "Major" },
-                ID = new TextEntryViewModel { Label = "ID" },
-                Subject = new TextEntryViewModel { Label = "Subject" },
-                Credit = new TextEntryViewModel { Label = "Credit"},
-                Teacher = new TextEntryViewModel { Label = "Teacher" },
-            };
-
+        /// <summary>
+        /// Constructor with view model
+        /// </summary>
+        /// <param name="specificViewModel">The specific view model to use for this page</param>
+        public CreateSubjectPage(CreateSubjectPageViewModel specificViewModel = null) : base(specificViewModel)
+        {
+            InitializeComponent();
         }
     }
 }
