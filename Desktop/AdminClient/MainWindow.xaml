@@ -125,7 +125,7 @@
                       GlassFrameThickness="0"/>
     </WindowChrome.WindowChrome>
 
-    <Border Background="{StaticResource WordVeryLightBlueBrush}">
+    <Border Background="{StaticResource WordLightBlueBrush}">
         <Grid>
 
             <Grid.ColumnDefinitions>
@@ -140,7 +140,11 @@
                                             Source={x:Static local:ViewModelLocator.Instance}}"/>
 
             <local:SideMenuControl Grid.Column="0"
-                                   Width="300"/>
+                                   Width="300"
+                                   Visibility="{Binding ApplicationViewModel.SideMenuVisible, 
+                                        Source={x:Static local:ViewModelLocator.Instance},
+                                        Converter={local:BooleanToVisibilityConverter},
+                                        ConverterParameter=true}"/>
         </Grid>
 
     </Border>

@@ -18,6 +18,8 @@ namespace AdminClient
             // Find the appropriate page
             switch (page)
             {
+                case ApplicationPage.Login:
+                    return new LoginPage(viewModel as LoginViewModel);
                 case ApplicationPage.CreateSubject:
                     return new CreateSubjectPage(viewModel as CreateSubjectPageViewModel);
                 default:
@@ -34,7 +36,11 @@ namespace AdminClient
         public static ApplicationPage ToApplicationPage(this BasePage page)
         {
             // Find application page that matches the base page
-            if (page is CreateSubjectPage)
+            if (page is LoginPage)
+            {
+                return ApplicationPage.Login;
+            }
+            else if (page is CreateSubjectPage)
             {
                 return ApplicationPage.CreateSubject;
             }

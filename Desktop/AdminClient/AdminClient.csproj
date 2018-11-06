@@ -168,7 +168,10 @@
     </ApplicationDefinition>
     <Compile Include="AttchedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttchedProperties\ButtonAttachedProperties.cs" />
+    <Compile Include="AttchedProperties\PasswordBoxAttachedProperties.cs" />
+    <Compile Include="AttchedProperties\TextAttachedProperties.cs" />
     <Compile Include="AttchedProperties\TextEntryWidthMatcherProperty.cs" />
+    <Compile Include="Base\RelayParameterizedCommand.cs" />
     <Compile Include="Controls\ListTimeOfClassControl.xaml.cs">
       <DependentUpon>ListTimeOfClassControl.xaml</DependentUpon>
     </Compile>
@@ -188,6 +191,7 @@
       <DependentUpon>TimeOfClassItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModel\ApplicationPage.cs" />
+    <Compile Include="DataModel\IHavePassword.cs" />
     <Compile Include="Expression\ExpressionHelpers.cs" />
     <Compile Include="Extension\ApplicationPageHelpers.cs" />
     <Compile Include="Extension\FunctionHelpersForList.cs" />
@@ -196,12 +200,16 @@
     <Compile Include="HttpClient\WebRequest.cs" />
     <Compile Include="IoC\IoContainer.cs" />
     <Compile Include="Pages\BasePage.cs" />
+    <Compile Include="Pages\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DateToStringValueConverter.cs" />
     <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\CreateSubjectPageViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\SideMenuItemViewModel.cs" />
     <Compile Include="ViewModel\SideMenu\Design\SideMenuDesignModel.cs" />
     <Compile Include="ViewModel\SideMenu\SideMenuViewModel.cs" />
@@ -251,6 +259,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\CreateSubjectPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -187,3 +187,5 @@ E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\AdminClient.csproj.CoreCompile
 E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\AdminClient.csproj.CopyComplete
 E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\AdminClient.exe
 E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\AdminClient.pdb
+E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\Pages\LoginPage.g.cs
+E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\Pages\LoginPage.baml

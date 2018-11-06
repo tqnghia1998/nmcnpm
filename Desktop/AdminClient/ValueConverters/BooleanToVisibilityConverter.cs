@@ -17,7 +17,7 @@ namespace AdminClient
             }
             else
             {
-                return (bool)value ? Visibility.Visible : Visibility.Hidden;
+                return (bool)value ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
