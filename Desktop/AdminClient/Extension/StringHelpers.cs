@@ -20,5 +20,19 @@ namespace AdminClient
 
             return true;
         }
+
+        public static bool IsNumber(this string text)
+        {
+            try
+            {
+                int temp = int.Parse(text);
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -68,6 +68,16 @@ namespace AdminClient
         public ObservableCollection<string> Items { get; set; }
 
         /// <summary>
+        /// List item for term
+        /// </summary>
+        public ObservableCollection<string> ListTerm { get; set; }
+
+        /// <summary>
+        /// List item for course
+        /// </summary>
+        public ObservableCollection<string> ListCourse { get; set; }
+
+        /// <summary>
         /// Danh sách các thời gian cụ thể trong tuần
         /// </summary>
         public ListTimeOfClassViewModel SpecificTimeItems { get; set; }
@@ -102,6 +112,9 @@ namespace AdminClient
             Subject = new TextEntryViewModel { Label = "Subject" };
             Credit = new TextEntryViewModel { Label = "Credit" };
             Teacher = new TextEntryViewModel { Label = "Teacher" };
+
+            ListTerm = new ObservableCollection<string>() { "I", "II", "III" };
+            ListCourse = FunctionHelpersForList.GenerateCourse(2018, 2050);
 
             SpecificTimeItems = new ListTimeOfClassViewModel
             {

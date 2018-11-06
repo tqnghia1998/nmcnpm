@@ -27,5 +27,18 @@ namespace AdminClient
 
             return items;
         }
+
+        public static ObservableCollection<string> GenerateCourse(int start, int end)
+        {
+            ObservableCollection<string> items = new ObservableCollection<string>();
+
+            for (int i = start; i < end; ++i)
+            {
+                items.Add($"{i}-{i + 1}");
+
+            }
+
+            return items;
+        }
     }
 }
