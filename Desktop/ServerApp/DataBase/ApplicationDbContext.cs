@@ -23,10 +23,15 @@ namespace ServerApp
         /// </summary>
         public DbSet<ScheduleDataModel> Schedules { get; set; }
 
+        /// <summary>
+        /// Bảng danh sách đăng ký
+        /// </summary>
+        public DbSet<RegisteredDataModel> Registered { get; set; }
+
         #endregion
 
         #region Constructor
-        
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -50,6 +55,8 @@ namespace ServerApp
 
             // Set primary key cho bảng thời khóa biểu của từng môn học
             modelBuilder.Entity<ScheduleDataModel>().HasKey(c => new { c.Id, c.DayInTheWeek });
+
+            modelBuilder.Entity<RegisteredDataModel>().HasKey(c => new { c.Mssv, c.Id, c.DayInTheWeek });
         }
 
         #endregion
