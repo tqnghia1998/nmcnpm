@@ -14,10 +14,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                 RegisterFragment.OnRegisterFragmentListener {
 
+    /* Định nghĩa các URL */
+    static final String urlMajor = "http://10.0.2.2:51197/api/subject";
+
+    /* Danh sách các khoa */
+    ArrayList<String> listMajor = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +36,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // Action bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Button email
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         // Layout chính
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         // Xử lý action bar
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -48,14 +59,38 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         // Xử lý thanh điều hướng
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        /*-----------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------*/
+
+        /* Kết nối server để lấy danh sách tên khoa */
+        Thread threadGetMajor = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONArray arrayJson = JsonHandler.getJsonFromUrl(urlMajor);
+                for (int i=0; i<arrayJson.length(); i++){
+                    try {
+                        listMajor.add(arrayJson.get(i).toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        threadGetMajor.start();
+        try {
+            threadGetMajor.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     // Xử lý nút back
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -94,10 +129,19 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        /* Giao diện đăng ký môn học */
         if (id == R.id.nav_register)
         {
+            /* Tạo bundle chứa danh sách khoa */
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("listMajor", listMajor);
+
+            /* Tạo fragment registerFragment */
             RegisterFragment registerFragment = new RegisterFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            registerFragment.setArguments(bundle);
+
+            /* Hiển thị fagment */
+            FragmentTransaction fragmentTransaction =getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.registerFrame, registerFragment);
             fragmentTransaction.commit();
         }
@@ -122,14 +166,9 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    // Xử lý Register fragment
-    public void onItemPressed(String content){
-
     }
 
 }

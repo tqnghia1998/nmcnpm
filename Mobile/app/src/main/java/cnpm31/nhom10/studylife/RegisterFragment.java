@@ -8,20 +8,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.TextView;
-
-import com.google.gson.JsonParser;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
+
+import cnpm31.nhom10.studylife.DbModel.CreateSubjectCredentialsDataModel;
+import cnpm31.nhom10.studylife.DbModel.SubjectDataModel;
+
+import static cnpm31.nhom10.studylife.MainActivity.urlMajor;
 
 
 /**
@@ -32,25 +36,26 @@ import java.util.List;
  */
 public class RegisterFragment extends android.app.Fragment {
 
-    private OnRegisterFragmentListener mListener;
+    // Tạo danh sách các Full Subject (bao gồm thông tin môn học và các lịch học tương ứng)
+    ArrayList<CreateSubjectCredentialsDataModel> listFullSubject;
 
-    // Control để hiển thị danh sách
-    ExpandableListView expandableListView;
-    CustomExpandableListView customExpandableListView;
+    // Tạo danh sách các tên khoa để hiển thị Spinner
+    List<String> listMajor = new ArrayList<>();
 
-    // Danh sách các khoa
-    List<String> listDataHeader;
-    // Danh sách các môn của khoa
-    HashMap<String, ArrayList<ArrayList<String>>> listDataChild;
+    // Danh sách các đối tượng dùng cho ExpandableRecyclerView
+    List<SubjectTitle> listSubjectTitle = new ArrayList<>();
 
-    Context context;
+    // Tạo danh sách các Full Subject của từng khoa
+    List<CreateSubjectCredentialsDataModel> listSubject = new ArrayList<>();
 
-    // Mảng môn học được lấy từ Web Server
-    ArrayList<SubjectDataModel> listSubject;
+    // Các control
+    Spinner spinner;
+    RecyclerView recyclerView;
 
-    public RegisterFragment() {
-        // Required empty public constructor
-    }
+    // Biến cờ xác định có vừa mới vào fragment hay không
+    int flag = 0;
+
+    public RegisterFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,130 +63,115 @@ public class RegisterFragment extends android.app.Fragment {
         // Inflate view
         View view = inflater.inflate(R.layout.fragment_register, null);
 
-        // Thêm dữ liệu vào Group và Child
-        try {
-            addControl(view);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        // Cài adapter cho control và hiển thị
-        customExpandableListView = new CustomExpandableListView(getActivity(), listDataHeader, listDataChild);
-        expandableListView.setAdapter(customExpandableListView);
-        return view;
-    }
+        // Lấy danh sách khoa truyền từ Activity vào
+        listMajor.add("Select an option");
+        listMajor.addAll(getArguments().getStringArrayList("listMajor"));
 
-    // Thêm dữ liệu
-    public void addControl(View view) throws InterruptedException {
+        // Đưa dữ liệu vào spinner
+        spinner = view.findViewById(R.id.spinnerCourse);
+        final ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(getActivity()
+                , android.R.layout.simple_spinner_item, listMajor);
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spinner.setAdapter(adapterSpinner);
 
-        // Khởi tạo các biến
-        expandableListView = view.findViewById(R.id.expandableListView);
-        listDataHeader = new ArrayList<>();
-        listDataChild = new HashMap<>();
-        context = getActivity();
+        // Thiết lập dữ liệu cho recycler view
+        recyclerView = view.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
 
-        // Tạo thread để kết nối internet và lấy JSON
-        Thread thread = new Thread(new Runnable() {
+        // Xử lý sự kiện chọn khoa
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void run() {
-                String JsonString = new JSON().getJSONStringFromURL("http://10.0.2.2:51197/api/subject");
-                try {
-                    JSONArray array = new JSONArray(JsonString);
-                    listSubject = FromArrayJson(array);
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
+            public void onItemSelected(final AdapterView<?> parent, View view, final int position, long id) {
+
+                // flag = 0 tức vừa với vào fragment
+                if (flag == 0) {
+                    flag++;
+                    return;
                 }
-            }
-        });
-        thread.start();
-        thread.join();
-
-        // Thêm dữ liệu vào Group và Child (Group là major, Child là subject)
-        int index = 0;
-        for (int i = 0; i < listSubject.size(); i++) {
-
-            // Kiểm tra Group title đã có hay chưa
-            boolean addThisMajor = true;
-            String currentMajor = listSubject.get(i).Major;
-
-            for (int k = 0; k < i; k++) {
-                if (currentMajor.equals(listSubject.get(k).Major)) {
-                    addThisMajor = false;
-                    break;
+                // flag = 1 tức người dùng lựa chọn spinner lần đầu tiên
+                if (flag == 1) {
+                    // Xóa lựa chọn "Select an option"
+                    listMajor.remove(0);
+                    // Tăng flag
+                    flag++;
+                    // Vì kích thước listMajor giảm nên vị trí các item thay đổi
+                    // Do đó, lần chọn hiện tại vô dụng, phải chọn tại vị trí position - 1
+                    spinner.setSelection(position - 1);
+                    return;
                 }
-            }
 
-            // Nếu Group title chưa có thì thêm vào
-            if (addThisMajor) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Lấy tên khoa và encode thành UTF-8
+                        String majorName = URLEncoder
+                                .encode(parent.getItemAtPosition(position).toString())
+                                .replace("+", "%20");
 
-                // Thêm Group title vào listDataHeader
-                listDataHeader.add(listSubject.get(i).Major);
+                        // Lấy tài nguyên từ url tương ứng
+                        JSONArray arrayJson = JsonHandler.getJsonFromUrl(urlMajor + "/" + majorName + "/%25/%25");
 
-                // Tạo danh sách Child element cho từng Group
-                ArrayList<ArrayList<String>> allList = new ArrayList<>();
+                        // Chuyển thành danh sách các Full Subject
+                        listSubject = CreateSubjectCredentialsDataModel.fromJson(arrayJson);
+                        listSubjectTitle.clear();
 
-                // Từng Child element lại là một danh sách string
-                ArrayList<String> list = new ArrayList<>();
-                for (int j = 0; j < listSubject.size(); j++) {
-                    if (listSubject.get(j).Major.equals(currentMajor)) {
-                        list.add(listSubject.get(j).Subject);
+                        // Chuyển các Full Subject sang các đối tượng SubjectTitle và SubjectDetail
+                        for(int i = 0; i < listSubject.size(); i++)
+                        {
+                            CreateSubjectCredentialsDataModel fullSubject = listSubject.get(i);
+                            String lichHoc = new String();
+                            List<String> numLichHoc = new ArrayList<>();
+                            for (int j = 0; j < fullSubject.Schedule.size(); j++)
+                            {
+                                lichHoc += "\n\n  + " + fullSubject.Schedule.get(j).DayInTheWeek
+                                        + ", phòng " + fullSubject.Schedule.get(j).Room
+                                        + ", tiết " + fullSubject.Schedule.get(j).Period
+                                        + " (" + fullSubject.Schedule.get(j).TimeStart + "-"
+                                        + fullSubject.Schedule.get(j).TimeFinish + ")";
+                                numLichHoc.add(fullSubject.Schedule.get(j).DayInTheWeek);
+                            }
+                            // 1 SubjectTitle tương ứng với 1 list SubjectDetail (quy định của adapter)
+                            List<SubjectDetail> details = new ArrayList<>();
+                            details.add(new SubjectDetail(
+                                    "- Giảng viên: " + fullSubject.Subject.Teacher + "\n\n"
+                                    + "- Số tín chỉ: " + fullSubject.Subject.Credit + "\n\n"
+                                    + "- Học kỳ: " + fullSubject.Subject.Term + "/" + fullSubject.Subject.Course + "\n\n"
+                                    + "- Thời gian: " + fullSubject.Subject.TimeStart + "-" + fullSubject.Subject.TimeFinish + "\n\n"
+                                    + "- Lịch học: "  + lichHoc, i, numLichHoc));
+
+                            // Thêm vào danh sách đối tượng SubjectTitle (dùng cho ExpandableRecyclerView)
+                            listSubjectTitle.add(new SubjectTitle(listSubject.get(i).Subject.Subject
+                                    , details, false, fullSubject.Subject.Id));
+                        }
                     }
+                });
+                thread.start();
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                allList.add(list);
 
-                // Thêm Child
-                listDataChild.put(listDataHeader.get(index++), allList);
-            }
-        }
-    }
-
-    // Phương thức lấy danh sách Subject và ArrayJson
-    public ArrayList<SubjectDataModel> FromArrayJson(JSONArray response) {
-
-        ArrayList<SubjectDataModel> list = new ArrayList<SubjectDataModel>();
-        int size = response.length();
-        JSONObject json = null;
-
-        // Lấy từng ObjectJson trong ArrayJson
-        for (int i = 0; i < size; ++ i)
-        {
-            try {
-                json = response.getJSONObject(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                // Tạo adapter và đưa vào RecyclerViewAdapter
+                CustomRecyclerViewAdapter adapterRecycler = new CustomRecyclerViewAdapter(listSubjectTitle);
+                recyclerView.setAdapter(adapterRecycler);
             }
 
-            // Và chuyển sang class SubjectDataModel
-            SubjectDataModel data = FromJson(json);
-            list.add(data);
-        }
-        return list;
-    }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
-    // Phương thức lấy một Subject từ ObjectJson
-    public SubjectDataModel FromJson(JSONObject json) {
 
-        SubjectDataModel data = new SubjectDataModel();
-        try {
-            data.Id = json.getString("id");
-            data.Major = json.getString("major");
-            data.Subject = json.getString("subject");
-            data.Credit = Integer.parseInt(json.getString("credit"));
-            data.Teacher = json.getString("teacher");
-            data.TimeStart = json.getString("timestart");
-            data.TimeFinish = json.getString("timefinish");
-            data.Status = Byte.parseByte(json.getString("status"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return data;
+
+        return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnRegisterFragmentListener) {
-            mListener = (OnRegisterFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -191,7 +181,6 @@ public class RegisterFragment extends android.app.Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
     /**
      * This interface must be implemented by activities that contain this
@@ -204,127 +193,5 @@ public class RegisterFragment extends android.app.Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnRegisterFragmentListener {
-        // TODO: Update argument type and name
-        void onItemPressed(String content);
     }
 }
-    // Adapter tự tạo cho ExpandableListView và RecyclerView
-    class CustomExpandableListView extends BaseExpandableListAdapter {
-
-    Context context;
-    List<String> listHeader;
-    HashMap<String, ArrayList<ArrayList<String>>> listChild;
-
-    public CustomExpandableListView(Context context, List<String> listHeader, HashMap<String, ArrayList<ArrayList<String>>> listChild) {
-        this.context = context;
-        this.listHeader = listHeader;
-        this.listChild = listChild;
-    }
-
-    @Override
-    public int getGroupCount() {
-        return listHeader.size();
-    }
-
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        return listChild.get(listHeader.get(groupPosition)).size();
-    }
-
-    @Override
-    public Object getGroup(int groupPosition) {
-        return listHeader.get(groupPosition);
-    }
-
-    @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        return listChild.get(listHeader.get(groupPosition)).get(childPosition);
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.fragment_register_group, null);
-
-        // Lấy text trong các Group để hiển thị
-        TextView txtHeader = convertView.findViewById(R.id.textViewHeader);
-        txtHeader.setText(getGroup(groupPosition).toString());
-        return convertView;
-    }
-
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.fragment_register_child, null);
-
-        // Lấy danh sách của từng Child
-        List<String> list = listChild.get(listHeader.get(groupPosition)).get(childPosition);
-
-        // Đưa vào RecylerView
-        RecyclerView recyclerView = convertView.findViewById(R.id.recyclerView);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-
-        return convertView;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
-
-    // Adapter tự tạo cho RecyclerView
-    public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>{
-
-        private List<String> data;
-
-        public RecyclerViewAdapter(List<String> data) {
-            this.data = data;
-        }
-
-        @Override
-        public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.fragment_register_child_item, parent, false);
-            return new RecyclerViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-            holder.txtItem.setText(data.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return data.size();
-        }
-
-        public class RecyclerViewHolder extends RecyclerView.ViewHolder {
-            TextView txtItem;
-            public RecyclerViewHolder(View itemView) {
-                super(itemView);
-                txtItem = itemView.findViewById(R.id.item);
-            }
-        }
-    }
-
-}
-
