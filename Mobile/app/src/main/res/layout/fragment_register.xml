@@ -9,10 +9,59 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ExpandableListView
-        android:id="@+id/expandableListView"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/ic_back"/>
+        <EditText
+            android:id="@+id/editText"
+            android:layout_margin="5dp"
+            android:hint="Tìm kiếm theo tên môn học"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tìm kiếm"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinnerCourse"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:popupBackground="#dadada"
+            android:layout_height="30dp"
+            android:background="@drawable/spinner_background"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:listSelector="#c7c9c9" />
+        android:background="@drawable/spinner_background"
+        android:layout_margin="10dp">
+
+    </android.support.v7.widget.RecyclerView>
+
 
 </LinearLayout>
