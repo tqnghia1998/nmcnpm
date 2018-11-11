@@ -1,16 +1,26 @@
 package cnpm31.nhom10.studylife;
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,33 +28,19 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.security.cert.CertPathValidatorException;
-import java.security.cert.CertificateEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
 
 import cnpm31.nhom10.studylife.DbModel.RegisteredDataModel;
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
-import cz.msebera.android.httpclient.client.methods.HttpPost;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
-import cz.msebera.android.httpclient.message.BasicNameValuePair;
-import cz.msebera.android.httpclient.protocol.HTTP;
-import cz.msebera.android.httpclient.util.EntityUtils;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -125,37 +121,131 @@ public class JsonHandler {
         return sb.toString();
     }
 
-    // Phương thức gửi dữ liệu đăng ký lên server
-    public static String postRegistered(String sUrl, RegisteredDataModel data, final Context mContext) {
-
-        final String[] result = new String[1];
+    // Phương thức POST dữ liệu đăng ký lên server
+    public static void postRegistered(String sUrl,
+                                      RegisteredDataModel data,
+                                      final Context mContext,
+                                      final CheckBox checkBox,
+                                      final Button button) {
+        // Chuyển dữ liệu sang định dạng json (GSON ALTERNATIVE)
         JSONObject jsonObject = new JSONObject();
-
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        JsonObjectRequest stringRequest = null;
-
         try {
             jsonObject.put("mssv", data.Mssv);
             jsonObject.put("id", data.Id);
             jsonObject.put("dayInTheWeek", data.DayInTheWeek);
             jsonObject.put("subject", data.Subject);
-
-
-            stringRequest = new JsonObjectRequest(Request.Method.POST, sUrl, jsonObject,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) { result[0] = response.toString(); }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) { result[0] = error.getMessage(); }
-            });
-        }
-        catch(JSONException ex){
+        } catch (JSONException ex) {
             ex.printStackTrace();
+            Toast.makeText(mContext, "Đã xảy ra lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
         }
-        queue.add(stringRequest);
 
-        return result[0];
+        // Tạo một RequestQueue để quản lý việc giao tiếp với network
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+       // Tạo một POST request
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, sUrl, jsonObject,
+                new Response.Listener<JSONObject>() {
+
+                    // Nếu thành công thì thông báo
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Toast.makeText(mContext,
+                                    response.getString("response"),
+                                    Toast.LENGTH_SHORT).show();
+
+                            // Bật button và chuyển sang Hủy đăng ký
+                            button.setEnabled(true);
+                            button.setText("Hủy đăng ký");
+                            checkBox.setChecked(true);
+                        } catch (Exception e) {
+                            Toast.makeText(mContext,
+                                    "Đã xảy ra lỗi, vui lòng thử lại",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                // Nếu xảy ra lỗi thì thông báo
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    try {
+                        Toast.makeText(mContext,
+                                "Lỗi " + error.networkResponse.statusCode + " - "
+                                + new String(error.networkResponse.data, "UTF-8"),
+                                Toast.LENGTH_SHORT).show();
+
+                        // Bật lại button Đăng kýs
+                        button.setEnabled(true);
+                    } catch (Exception e) {
+                        Toast.makeText(mContext,
+                                "Đã xảy ra lỗi, vui lòng thử lại",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        });
+        // Thực hiện request
+        queue.add(stringRequest);
+    }
+
+    // Phương thức DELETE dữ liệu đăng ký lên server
+    public static void deleteRegistered(String sUrl,
+                                        RegisteredDataModel data,
+                                        final Context mContext,
+                                        final CheckBox checkBox,
+                                        final Button button) {
+        // Chuyển sUrl sang đúng định dạng với API của server
+        // Vì DELETE request không nhận body, nên đưa các thông tin cần thiết lên url
+        sUrl += "/" + data.Mssv + "/" + data.Id + "/" + data.DayInTheWeek;
+
+        // Tạo một RequestQueue để quản lý việc giao tiếp với network
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        // Tạo một POST request
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.DELETE, sUrl, null,
+                new Response.Listener<JSONObject>() {
+
+                    // Nếu thành công thì thông báo
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Toast.makeText(mContext,
+                                    response.getString("response"),
+                                    Toast.LENGTH_SHORT).show();
+
+                            // Bật button và chuyển Đăng ký
+                            button.setEnabled(true);
+                            button.setText("Đăng ký");
+                            checkBox.setChecked(false);
+                        } catch (Exception e) {
+                            Toast.makeText(mContext,
+                                    "Đã xảy ra lỗi, vui lòng thử lại",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    // Nếu xảy ra lỗi thì thông báo
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+                            Toast.makeText(mContext,
+                                    "Lỗi " + error.networkResponse.statusCode + " - "
+                                            + new String(error.networkResponse.data, "UTF-8"),
+                                    Toast.LENGTH_SHORT).show();
+
+                            // Bật lại button Đăng kýs
+                            button.setEnabled(true);
+                        } catch (Exception e) {
+                            Toast.makeText(mContext,
+                                    "Đã xảy ra lỗi, vui lòng thử lại",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+        });
+        // Thực hiện request
+        queue.add(stringRequest);
     }
 }

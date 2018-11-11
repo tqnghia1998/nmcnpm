@@ -177,15 +177,24 @@ class CustomRecyclerViewAdapter extends ExpandableRecyclerViewAdapter<SubjectTit
                             // Mỗi lịch học POST một lần
                             registeredData.DayInTheWeek = ((SubjectTitle)group).getItems().get(0).dayInTheWeek.get(i);
 
-                            String result = JsonHandler.postRegistered("http://10.0.2.2:51197/api/registered"
-                                    , registeredData, holder.txtDetail.getContext());
-
-                            // Toast.makeText(holder.txtDetail.getContext(), result, Toast.LENGTH_LONG).show();
+                            // Nếu check box đã check, tức muốn hủy đăng ký
+                            if (parentCheckBox.isChecked()) {
+                                JsonHandler.deleteRegistered("http://10.0.2.2:51197/api/registered",
+                                        registeredData,
+                                        holder.txtDetail.getContext(),
+                                        parentCheckBox,
+                                        holder.btnRegister);
+                            }
+                            // Ngược lại muốn đăng ký
+                            else {
+                                JsonHandler.postRegistered("http://10.0.2.2:51197/api/registered",
+                                        registeredData,
+                                        holder.txtDetail.getContext(),
+                                        parentCheckBox,
+                                        holder.btnRegister);
+                            }
                         }
 
-                        // Cập nhật text của button và check box
-                        parentCheckBox.setChecked(!parentCheckBox.isChecked());
-                        holder.btnRegister.setText(parentCheckBox.isChecked() ? "Hủy đăng ký" : "Đăng ký");
                     }
                 });
                 b.show();

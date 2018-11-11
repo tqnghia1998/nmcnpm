@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cnpm31.nhom10.studylife.DTOModel.SubjectDTO;
 import cnpm31.nhom10.studylife.DbModel.CreateSubjectCredentialsDataModel;
 import cnpm31.nhom10.studylife.DbModel.SubjectDataModel;
 
@@ -45,8 +46,6 @@ public class RegisterFragment extends android.app.Fragment {
     // Danh sách các đối tượng dùng cho ExpandableRecyclerView
     List<SubjectTitle> listSubjectTitle = new ArrayList<>();
 
-    // Tạo danh sách các Full Subject của từng khoa
-    List<CreateSubjectCredentialsDataModel> listSubject = new ArrayList<>();
 
     // Các control
     Spinner spinner;
@@ -111,39 +110,24 @@ public class RegisterFragment extends android.app.Fragment {
                                 .replace("+", "%20");
 
                         // Lấy tài nguyên từ url tương ứng
-                        JSONArray arrayJson = JsonHandler.getJsonFromUrl(urlMajor + "/" + majorName + "/%25/%25");
+                        JSONArray arrayJson = JsonHandler.getJsonFromUrl(urlMajor
+                                + "/" + majorName   // Tên khoa
+                                + "/%25/%25"        // Học kỳ và năm học
+                                + "/1612422"         // MSSV
+                                + "/0");             // Trạng thái NonActive
 
-                        // Chuyển thành danh sách các Full Subject
-                        listSubject = CreateSubjectCredentialsDataModel.fromJson(arrayJson);
+                        // Chuyển thành danh sách các DTOJsubject
                         listSubjectTitle.clear();
+                        List<SubjectDTO> listDTOSubject = SubjectDTO.fromJson(arrayJson);
 
-                        // Chuyển các Full Subject sang các đối tượng SubjectTitle và SubjectDetail
-                        for(int i = 0; i < listSubject.size(); i++)
-                        {
-                            CreateSubjectCredentialsDataModel fullSubject = listSubject.get(i);
-                            String lichHoc = new String();
-                            List<String> numLichHoc = new ArrayList<>();
-                            for (int j = 0; j < fullSubject.Schedule.size(); j++)
-                            {
-                                lichHoc += "\n\n  + " + fullSubject.Schedule.get(j).DayInTheWeek
-                                        + ", phòng " + fullSubject.Schedule.get(j).Room
-                                        + ", tiết " + fullSubject.Schedule.get(j).Period
-                                        + " (" + fullSubject.Schedule.get(j).TimeStart + "-"
-                                        + fullSubject.Schedule.get(j).TimeFinish + ")";
-                                numLichHoc.add(fullSubject.Schedule.get(j).DayInTheWeek);
-                            }
-                            // 1 SubjectTitle tương ứng với 1 list SubjectDetail (quy định của adapter)
-                            List<SubjectDetail> details = new ArrayList<>();
-                            details.add(new SubjectDetail(
-                                    "- Giảng viên: " + fullSubject.Subject.Teacher + "\n\n"
-                                    + "- Số tín chỉ: " + fullSubject.Subject.Credit + "\n\n"
-                                    + "- Học kỳ: " + fullSubject.Subject.Term + "/" + fullSubject.Subject.Course + "\n\n"
-                                    + "- Thời gian: " + fullSubject.Subject.TimeStart + "-" + fullSubject.Subject.TimeFinish + "\n\n"
-                                    + "- Lịch học: "  + lichHoc, i, numLichHoc));
 
-                            // Thêm vào danh sách đối tượng SubjectTitle (dùng cho ExpandableRecyclerView)
-                            listSubjectTitle.add(new SubjectTitle(listSubject.get(i).Subject.Subject
-                                    , details, false, fullSubject.Subject.Id));
+                        //DỪNG LẠI Ở CHỖ ĐÂY
+                        // Thêm vào danh sách đối tượng SubjectTitle (dùng cho ExpandableRecyclerView)
+                        for (int i = 0; i< listDTOSubject.size(); i++) {
+                            listSubjectTitle.add(new SubjectTitle(listDTOSubject.get(i).Subject
+                                    , new ArrayList<SubjectDetail>(),
+                                    listDTOSubject.get(i).isRegisterd,
+                                    listDTOSubject.get(i).Id));
                         }
                     }
                 });

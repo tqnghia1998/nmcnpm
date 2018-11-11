@@ -48,7 +48,6 @@ namespace ServerApp
                 mContext.Subject.Add(data.Subject);
                 mContext.SaveChanges();
             }
-            
             catch(Exception ex)
             {
                 return BadRequest("Tạo môn học thất bại." +
@@ -76,14 +75,42 @@ namespace ServerApp
                 mContext.Registered.Add(data);
                 mContext.SaveChanges();
             }
-
             catch (Exception ex)
             {
-                return BadRequest("Đăng ký môn học thất bại.");
-                // return (string)ex.Message;
+                return BadRequest("Đăng ký môn học thất bại");
             }
-            return Ok(new { i = 1, x = 2 });
+            return Ok(new { response = "Đăng ký môn học thành công" });
         }
+
+        /// <summary>
+        /// Gửi yêu cầu xóa dữ liệu đăng ký
+        /// </summary>
+        /// <param name="mssv"></param>
+        /// <param name="id"></param>
+        /// <param name="dayInTheWeek"></param>
+        /// <returns></returns>
+        [Route("api/registered/{mssv}/{id}/{dayInTheWeek}")]
+        [HttpDelete]
+        public IActionResult DeleteRegistered(string mssv, string id, string dayInTheWeek)
+        {
+            try
+            {
+                var db = mContext.Registered.FirstOrDefault(x => x.Mssv == mssv 
+                                                        && x.Id == id 
+                                                        && x.DayInTheWeek == dayInTheWeek);
+                if (db != null)
+                {
+                    mContext.Registered.Remove(db);
+                    mContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Hủy đăng ký môn học thất bại");
+            }
+            return Ok(new { response = "Hủy đăng ký môn học thành công" });
+        }
+
 
         ///----------------------------------------------------------------------------------------///
 
@@ -116,7 +143,7 @@ namespace ServerApp
         /// <param name="field"></param>
         /// <returns></returns>
         [HttpGet("api/subject/{subject}")]
-        public CreateSubjectCredentialsDataModel GetSubjectById(String subject)
+        public CreateSubjectCredentialsDataModel GetSubjectById(string subject)
         {
             var model = new CreateSubjectCredentialsDataModel();
             // FirstOrDefault() có nghĩa: Nếu có thì lấy phần tử đầu, không thì null
@@ -127,30 +154,52 @@ namespace ServerApp
         }
 
         /// <summary>
-        /// Lấy danh sách môn học theo khoa, năm, học kỳ
+        /// Lấy danh sách tên môn học theo các lựa chọn
         /// </summary>
+        /// <param name="major"></param>
         /// <param name="course"></param>
         /// <param name="term"></param>
+        /// <param name="mssv"></param>
+        /// <param name="status"></param>
         /// <returns></returns>
-        [HttpGet("api/subject/{major}/{course}/{term}")]
-        public List<CreateSubjectCredentialsDataModel> GetSubjectByTerm(String major, String course, String term)
+        [HttpGet("api/subject/{major}/{course}/{term}/{mssv}/{status}")]
+        public List<SubjectDTO> GetSubjectDTO(string major
+                                               , string course
+                                                , string term
+                                                 , string mssv
+                                                  , int status)
         {
-            // Tạo danh sách các môn học và lịch học tương ứng (xem class CreateSubjectCredentialsDataModel)
-            var listSubject = new List<CreateSubjectCredentialsDataModel>();
-            // Tạo danh sách các môn học trước
-            List<SubjectDataModel> models = mContext.Subject.Where(x => EF.Functions.Like(x.Major, major)
+            // Tạo danh sách các data transfer object môn học
+            var listSubjectDTO = new List<SubjectDTO>();
+
+            // Lấy danh sách các môn học tương ứng
+            List<SubjectDataModel> subjects = mContext.Subject.Where(x => EF.Functions.Like(x.Major, major)
                                                                      && EF.Functions.Like(x.Course, course)
-                                                                     && EF.Functions.Like(x.Term, term))
-                                                                     .ToList();
-            // Làm tương tự
-            for (int i = 0; i < models.Count(); i++)
+                                                                     && EF.Functions.Like(x.Term, term)
+                                                                     && x.Status == status).ToList()
+;            // Đưa những dữ liệu thực sự cần thiết vào DTO
+            for (int i = 0; i < subjects.Count(); i++)
             {
-                var model = new CreateSubjectCredentialsDataModel();
-                model.Subject = models.ElementAtOrDefault(i);
-                model.Schedule = mContext.Schedules.Where(x => x.Id == model.Subject.Id).ToList();
-                listSubject.Add(model);
+                var model = new SubjectDTO();
+
+                // Lấy tên môn học
+                model.Id = subjects.ElementAtOrDefault(i).Id;
+                model.Subject = subjects.ElementAtOrDefault(i).Subject;
+
+                // Kiểm tra id môn học có trong bảng Registered hay không
+                if (mContext.Registered.Where(x => x.Mssv == mssv
+                                                && x.Id == subjects.ElementAtOrDefault(i).Id).Count() > 0)
+                {
+                    model.isRegistered = true;
+                }
+                else
+                {
+                    model.isRegistered = false;
+                }
+                listSubjectDTO.Add(model);
+               
             }
-            return listSubject;
+            return listSubjectDTO;
         }
     }
 }
