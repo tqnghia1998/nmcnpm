@@ -191,10 +191,13 @@
       <DependentUpon>TimeOfClassItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModel\ApplicationPage.cs" />
+    <Compile Include="DataModel\ClientDataStore.cs" />
     <Compile Include="DataModel\IHavePassword.cs" />
+    <Compile Include="DataModel\IHaveRetypePassword.cs" />
     <Compile Include="Expression\ExpressionHelpers.cs" />
     <Compile Include="Extension\ApplicationPageHelpers.cs" />
     <Compile Include="Extension\FunctionHelpersForList.cs" />
+    <Compile Include="Extension\SecureStringHelpers.cs" />
     <Compile Include="Extension\StringHelpers.cs" />
     <Compile Include="HttpClient\HttpResult.cs" />
     <Compile Include="HttpClient\WebRequest.cs" />
@@ -203,6 +206,9 @@
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\RegisterPage.xaml.cs">
+      <DependentUpon>RegisterPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DateToStringValueConverter.cs" />
@@ -210,6 +216,7 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\CreateSubjectPageViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\RegisterViewModel.cs" />
     <Compile Include="ViewModel\SideMenuItemViewModel.cs" />
     <Compile Include="ViewModel\SideMenu\Design\SideMenuDesignModel.cs" />
     <Compile Include="ViewModel\SideMenu\SideMenuViewModel.cs" />
@@ -263,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\RegisterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

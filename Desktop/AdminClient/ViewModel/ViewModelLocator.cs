@@ -1,4 +1,6 @@
-﻿namespace AdminClient
+﻿using DbModel;
+
+namespace AdminClient
 {
     /// <summary>
     /// Locates view model from IoC for use in binding in Xaml file 

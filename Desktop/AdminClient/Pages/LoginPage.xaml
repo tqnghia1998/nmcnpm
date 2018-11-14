@@ -47,7 +47,7 @@
                             <!-- Password -->
                             <PasswordBox x:Name="PasswordText" Tag="Password" Margin="0 0 0 30" />
 
-                            <!-- Next button -->
+                            <!-- Login button -->
                             <Button Content="Login"
                                     IsDefault="True"
                                     local:IsBusyProperty.Value="{Binding LoginIsRunning}"
@@ -58,6 +58,11 @@
                         </StackPanel>
 
                     </Border>
+
+                    <Button Style="{StaticResource TextButton}" 
+                            Command="{Binding RegisterCommand}"
+                            Content="Or, create a account..." 
+                            HorizontalAlignment="Center" />
 
                 </StackPanel>
             </ScrollViewer>
