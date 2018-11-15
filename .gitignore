@@ -1,8 +1,0 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/.vs
-/Desktop/.vs
-/Desktop/ServerApp/bin/Debug/netcoreapp2.1
-/Desktop/DbModel/bin/Debug/netstandard2.0

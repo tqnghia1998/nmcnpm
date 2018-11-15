@@ -380,3 +380,5 @@ D:\NMCNPM31_10\Desktop\AdminClient\obj\Debug\AdminClient.csproj.CoreCompileInput
 D:\NMCNPM31_10\Desktop\AdminClient\obj\Debug\AdminClient.csproj.CopyComplete
 D:\NMCNPM31_10\Desktop\AdminClient\obj\Debug\AdminClient.exe
 D:\NMCNPM31_10\Desktop\AdminClient\obj\Debug\AdminClient.pdb
+E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\Pages\RegisterPage.g.cs
+E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\Pages\RegisterPage.baml
