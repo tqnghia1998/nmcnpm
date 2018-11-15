@@ -2567,11 +2567,19 @@
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "D:\\SEFinal\\NMCNPM31_10\\Desktop\\DbModel\\DbModel.csproj",
       "projectName": "DbModel",
       "projectPath": "D:\\SEFinal\\NMCNPM31_10\\Desktop\\DbModel\\DbModel.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
       "outputPath": "D:\\SEFinal\\NMCNPM31_10\\Desktop\\DbModel\\obj\\",
+=======
+      "projectUniqueName": "E:\\fix\\NMCNPM31_10\\Desktop\\DbModel\\DbModel.csproj",
+      "projectName": "DbModel",
+      "projectPath": "E:\\fix\\NMCNPM31_10\\Desktop\\DbModel\\DbModel.csproj",
+      "packagesPath": "C:\\Users\\NGHIA\\.nuget\\packages\\",
+      "outputPath": "E:\\fix\\NMCNPM31_10\\Desktop\\DbModel\\obj\\",
+>>>>>>> 3d2902c25d98c2204d543dd2120919a4de715384
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\dotnet\\sdk\\NuGetFallbackFolder"

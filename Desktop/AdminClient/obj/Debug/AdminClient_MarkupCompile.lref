@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿
 FD:\SEFinal\NMCNPM31_10\Desktop\AdminClient\App.xaml;;
 FD:\SEFinal\NMCNPM31_10\Desktop\AdminClient\Controls\ListTimeOfClassControl.xaml;;
@@ -17,4 +18,23 @@ FD:\SEFinal\NMCNPM31_10\Desktop\AdminClient\Styles\Colors.xaml;;
 FD:\SEFinal\NMCNPM31_10\Desktop\AdminClient\Styles\Fonts.xaml;;
 FD:\SEFinal\NMCNPM31_10\Desktop\AdminClient\Styles\Scroll.xaml;;
 FD:\SEFinal\NMCNPM31_10\Desktop\AdminClient\Styles\Texts.xaml;;
+=======
+﻿E:\fix\NMCNPM31_10\Desktop\AdminClient\obj\Debug\GeneratedInternalTypeHelper.g.cs
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\App.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Controls\ListTimeOfClassControl.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Controls\PageHost.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Controls\SideMenuControl.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Controls\SideMenuItemControl.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Controls\TextEntryControl.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Controls\TimeOfClassItemControl.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\MainWindow.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Pages\CreateSubjectPage.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Pages\LoginPage.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Pages\RegisterPage.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Styles\Buttons.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Styles\Colors.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Styles\Fonts.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Styles\Scroll.xaml;;
+FE:\fix\NMCNPM31_10\Desktop\AdminClient\Styles\Texts.xaml;;
+>>>>>>> 3d2902c25d98c2204d543dd2120919a4de715384
 
