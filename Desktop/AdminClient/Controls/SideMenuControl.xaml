@@ -95,7 +95,13 @@
                     <local:SideMenuItemControl DataContext="{Binding CreateSubjectItem}"/>
                 </Grid>
 
-               
+                <Grid>
+                    <Grid.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" 
+                                      Command="{Binding OpenUpdateSubjectPageCommand}"/>
+                    </Grid.InputBindings>
+                    <local:SideMenuItemControl DataContext="{Binding UpdateSubjectItem}"/>
+                </Grid>
 
             </StackPanel>
 

@@ -184,6 +184,9 @@
     <Compile Include="Controls\SideMenuItemControl.xaml.cs">
       <DependentUpon>SideMenuItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SubjectItem.xaml.cs">
+      <DependentUpon>SubjectItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TextEntryControl.xaml.cs">
       <DependentUpon>TextEntryControl.xaml</DependentUpon>
     </Compile>
@@ -203,6 +206,9 @@
     <Compile Include="HttpClient\WebRequest.cs" />
     <Compile Include="IoC\IoContainer.cs" />
     <Compile Include="Pages\BasePage.cs" />
+    <Compile Include="Pages\ListSubjectPage.xaml.cs">
+      <DependentUpon>ListSubjectPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -215,11 +221,13 @@
     <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\CreateSubjectPageViewModel.cs" />
+    <Compile Include="ViewModel\ListSubjectViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\RegisterViewModel.cs" />
     <Compile Include="ViewModel\SideMenuItemViewModel.cs" />
     <Compile Include="ViewModel\SideMenu\Design\SideMenuDesignModel.cs" />
     <Compile Include="ViewModel\SideMenu\SideMenuViewModel.cs" />
+    <Compile Include="ViewModel\SubjectItemViewModel.cs" />
     <Compile Include="ViewModel\TimeOfClass\Design\ListTimeOfClassDesignModel.cs" />
     <Compile Include="ViewModel\TimeOfClass\Design\TimeOfClassItemDesignModel.cs" />
     <Compile Include="ViewModel\TimeOfClass\ListTimeOfClassViewModel.cs" />
@@ -243,6 +251,10 @@
     <Page Include="Controls\SideMenuItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SubjectItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\TextEntryControl.xaml">
       <SubType>Designer</SubType>
@@ -268,6 +280,10 @@
     <Page Include="Pages\CreateSubjectPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ListSubjectPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\LoginPage.xaml">
       <SubType>Designer</SubType>

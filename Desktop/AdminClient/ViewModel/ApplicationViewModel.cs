@@ -10,7 +10,7 @@ namespace AdminClient
         /// <summary>
         /// The current page of the application
         /// </summary>
-        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.Login;
+        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.ListSubject;
 
         /// <summary>
         /// The view model to use for the current page when the CurrentPage changes
@@ -23,7 +23,7 @@ namespace AdminClient
         /// <summary>
         /// True if the side menu should be shown
         /// </summary>
-        public bool SideMenuVisible { get; set; } = false;
+        public bool SideMenuVisible { get; set; } = true;
 
         /// <summary>
         /// Navigates to the specified page
@@ -42,7 +42,7 @@ namespace AdminClient
             OnPropertyChanged(nameof(CurrentPage));
 
             // Show side menu or not
-            SideMenuVisible = page == ApplicationPage.CreateSubject;
+            SideMenuVisible = (page != ApplicationPage.Login || page != ApplicationPage.Register);
         }
 
         /// <summary>

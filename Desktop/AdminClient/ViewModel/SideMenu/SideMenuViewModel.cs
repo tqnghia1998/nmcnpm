@@ -25,7 +25,15 @@ namespace AdminClient
         /// </summary>
         public string Name { get; set; } = "Nguyễn Ngọc Nghĩa";
 
-        public SideMenuItemViewModel CreateSubjectItem { get; set; } = new SideMenuItemViewModel();
+        /// <summary>
+        /// 
+        /// </summary>
+        public SideMenuItemViewModel CreateSubjectItem { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public SideMenuItemViewModel UpdateSubjectItem { get; set; }
 
         #endregion
 
@@ -35,6 +43,11 @@ namespace AdminClient
         /// Go to create subject page
         /// </summary>
         public ICommand OpenCreateSubjectPageCommand { get; set; }
+
+        /// <summary>
+        /// Go to update subject page
+        /// </summary>
+        public ICommand OpenUpdateSubjectPageCommand { get; set; }
 
 
         #endregion
@@ -46,7 +59,20 @@ namespace AdminClient
         /// </summary>
         public SideMenuViewModel()
         {
+            CreateSubjectItem = new SideMenuItemViewModel
+            {
+                Icon = "\uf044",
+                Content = "Create subject"
+            };
+
+            UpdateSubjectItem = new SideMenuItemViewModel
+            {
+                Icon = "\uf044",
+                Content = "Update subject"
+            };
+
             OpenCreateSubjectPageCommand = new RelayCommand(OpenCreateSubjectPage);
+            OpenUpdateSubjectPageCommand = new RelayCommand(OpenUpdateSubjectPage);
         }
 
         #endregion
@@ -56,6 +82,11 @@ namespace AdminClient
         public void OpenCreateSubjectPage()
         {
             IoC.Application.GoToPage(ApplicationPage.CreateSubject);
+        }
+
+        public void OpenUpdateSubjectPage()
+        {
+            IoC.Application.GoToPage(ApplicationPage.ListSubject);
         }
 
         /// <summary>

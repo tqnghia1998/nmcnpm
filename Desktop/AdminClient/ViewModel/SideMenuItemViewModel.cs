@@ -10,12 +10,12 @@
         /// <summary>
         /// Icon for menu item
         /// </summary>
-        public string Icon { get; set; } = "\uf044";
+        public string Icon { get; set; }
 
         /// <summary>
         /// Content of side menu item
         /// </summary>
-        public string Content { get; set; } = "Create subject";
+        public string Content { get; set; }
 
         #endregion
 

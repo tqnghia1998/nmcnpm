@@ -24,6 +24,8 @@ namespace AdminClient
                     return new RegisterPage(viewModel as RegisterViewModel);
                 case ApplicationPage.CreateSubject:
                     return new CreateSubjectPage(viewModel as CreateSubjectPageViewModel);
+                case ApplicationPage.ListSubject:
+                    return new ListSubjectPage(viewModel as ListSubjectViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -49,6 +51,10 @@ namespace AdminClient
             else if (page is CreateSubjectPage)
             {
                 return ApplicationPage.CreateSubject;
+            }
+            else if (page is ListSubjectPage)
+            {
+                return ApplicationPage.ListSubject;
             }
             else
             {

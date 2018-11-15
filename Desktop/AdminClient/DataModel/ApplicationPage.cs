@@ -19,5 +19,7 @@
         /// The main create subject page
         /// </summary>
         CreateSubject = 2,
+
+        ListSubject = 3,
     }
 }
