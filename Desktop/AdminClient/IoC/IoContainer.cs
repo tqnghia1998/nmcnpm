@@ -1,5 +1,4 @@
-﻿using DbModel;
-using Ninject;
+﻿using Ninject;
 
 namespace AdminClient
 {
@@ -20,15 +19,8 @@ namespace AdminClient
         /// </summary>
         public static ApplicationViewModel Application => IoC.Get<ApplicationViewModel>();
 
-
-
         /// <summary>
-        /// A shortcut to access the <see cref="LoginCredentialsDataModel"/>
-        public static ClientDataStore ClientDataStore => IoC.Get<ClientDataStore>();
-
-        /// <summary>
-        /// A shortcut to access the <see cref="SideMenuViewModel"/>
-        public static SideMenuViewModel SideMenu => IoC.Get<SideMenuViewModel>();
+        /// A shortcut to access the <see cref="SettingsViewModel"/>
 
         #endregion
 
@@ -53,12 +45,6 @@ namespace AdminClient
         {
             // Bind a single instance of the application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
-
-            // Bind a single instance of the login credentials data model
-            Kernel.Bind<ClientDataStore>().ToConstant(new ClientDataStore());
-
-            // Bind a single instance of the side menu view model
-            Kernel.Bind<SideMenuViewModel>().ToConstant(new SideMenuViewModel());
         }
 
         #endregion

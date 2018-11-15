@@ -51,20 +51,12 @@ namespace AdminClient
 
         #endregion
 
+
         #region Command Methods
 
         public void OpenCreateSubjectPage()
         {
             IoC.Application.GoToPage(ApplicationPage.CreateSubject);
-        }
-
-        /// <summary>
-        /// Sets the side menu view model properties based on the data in the client data store
-        /// </summary>
-        public void LoadInformation()
-        {
-            var storeData = IoC.ClientDataStore.ApplicationUser;
-            Name = $"{storeData.FirstName} {storeData.LastName}";
         }
 
         #endregion

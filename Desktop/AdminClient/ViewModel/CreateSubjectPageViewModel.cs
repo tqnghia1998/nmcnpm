@@ -324,18 +324,28 @@ namespace AdminClient
                 #region Gửi cho server lưu và nhận phản hồi
 
 
-                // Call the server and attempt to register with credentials
-                // TODO: Move all URLs and API routes to static class in core
-                var result = await WebRequests.PostAsync<ApiResponse<CreateSubjectResultApiModel>>("http://localhost:51197/api/subject",
-                    DataToPost, bearerToken: IoC.ClientDataStore.ApplicationUser.Token);
-                // If the response has an error...
-                if (result.DisplayErrorIfFailed("Create failed"))
+                // Đến đây, mọi thứ đều đã hợp lệ.
+                // Tiến hành gửi data cho server lưu xuống database
+                HttpResult result;
+
+                try
                 {
-                    // We are done
+                    result = await WebRequest<CreateSubjectCredentialsDataModel>.PostAsync("http://localhost:51197/api/subject", DataToPost);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                MessageBox.Show(result.ServerResponse.Response.SuccessfulMessage, "Notify", MessageBoxButton.OK);
+                if (200 != result.StatusCode)
+                {
+                    MessageBox.Show(result.MessageResponse, "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    return;
+                }
+
+                MessageBox.Show("Tạo môn học thành công", "Thông báo", MessageBoxButton.OK);
 
                 #endregion
             });

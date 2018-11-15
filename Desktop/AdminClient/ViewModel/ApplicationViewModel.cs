@@ -1,6 +1,4 @@
-﻿using DbModel;
-
-namespace AdminClient
+﻿namespace AdminClient
 {
     /// <summary>
     /// The application state as a view model
@@ -43,30 +41,6 @@ namespace AdminClient
 
             // Show side menu or not
             SideMenuVisible = page == ApplicationPage.CreateSubject;
-        }
-
-        /// <summary>
-        /// Handle what happen when we have successful logged in
-        /// </summary>
-        /// <param name="userData">The result from the successful login</param>
-        public void HandleSuccessfulLogin(LoginResultApiModel userData)
-        {
-            // Store this in the client data store
-            IoC.ClientDataStore.ApplicationUser = new LoginCredentialsDataModel
-            {
-                Username = userData.Username,
-                FirstName = userData.FirstName,
-                LastName = userData.LastName,
-                Email = userData.Email,
-                Token = userData.Token
-
-            };
-
-            // Load new information
-            IoC.SideMenu.LoadInformation();
-
-            // Go to chat page
-            IoC.Application.GoToPage(ApplicationPage.CreateSubject);
         }
     }
 }

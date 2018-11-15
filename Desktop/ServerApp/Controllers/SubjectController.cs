@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DbModel;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,40 +11,25 @@ namespace ServerApp
     
     public class SubjectController : Controller
     {
-        #region Protected Members
+        #region Private Members
 
         /// <summary>
         /// Database của server
         /// </summary>
-        protected ApplicationDbContext mContext { set; get; }
-
-        /// <summary>
-        /// The manager for handling user creation, deletion, searching, roles etc...
-        /// </summary>
-        protected UserManager<ApplicationUser> mUserManager;
-
-        /// <summary>
-        /// The manager for handling signing in and out for our users
-        /// </summary>
-        protected SignInManager<ApplicationUser> mSignInManager;
+        private ApplicationDbContext mContext { set; get; }
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Default constructor
+        /// Default Constructor
         /// </summary>
-        /// <param name="context">The injected context</param>
-        /// <param name="signInManager">The Identity sign in manager</param>
-        /// <param name="userManager">The Identity user manager</param>
-        public SubjectController(ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+        /// <param name="context"></param>
+        public SubjectController(ApplicationDbContext context)
         {
             mContext = context;
-            mUserManager = userManager;
-            mSignInManager = signInManager;
+            mContext.Database.EnsureCreated();
         }
 
         #endregion
@@ -55,10 +39,9 @@ namespace ServerApp
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        [AuthorizeToken]
         [Route("api/subject")]
         [HttpPost]
-        public ApiResponse<CreateSubjectResultApiModel> PostSubject([FromBody] CreateSubjectCredentialsDataModel data)
+        public IActionResult PostSubject([FromBody] CreateSubjectCredentialsDataModel data)
         {
             try
             {
@@ -67,23 +50,14 @@ namespace ServerApp
             }
             catch(Exception ex)
             {
-                return new ApiResponse<CreateSubjectResultApiModel>
-                {
-                    ErrorMessage = "Tạo môn học thất bại." +
-                        "\nCó thể mã học phần bị trùng hoặc chưa điền đầy đủ các thông tin cần thiết.",
-                };
+                return BadRequest("Tạo môn học thất bại." +
+                    "\nCó thể mã học phần bị trùng hoặc chưa điền đầy đủ các thông tin cần thiết.");
             }
 
             mContext.Schedules.AddRange(data.Schedule);
             mContext.SaveChanges();
-
-            return new ApiResponse<CreateSubjectResultApiModel>
-            {
-                Response = new CreateSubjectResultApiModel
-                {
-                    SuccessfulMessage = "Tạo môn học thành công"
-                }
-            };
+            
+            return Ok();
         }
 
         /// <summary>

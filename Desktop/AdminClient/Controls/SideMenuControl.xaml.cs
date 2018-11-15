@@ -10,7 +10,7 @@ namespace AdminClient
         public SideMenuControl()
         {
             InitializeComponent();
-            DataContext = IoC.SideMenu;
+            DataContext = new SideMenuViewModel();
         }
     }
 }

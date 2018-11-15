@@ -20,8 +20,6 @@ namespace AdminClient
             {
                 case ApplicationPage.Login:
                     return new LoginPage(viewModel as LoginViewModel);
-                case ApplicationPage.Register:
-                    return new RegisterPage(viewModel as RegisterViewModel);
                 case ApplicationPage.CreateSubject:
                     return new CreateSubjectPage(viewModel as CreateSubjectPageViewModel);
                 default:
@@ -41,10 +39,6 @@ namespace AdminClient
             if (page is LoginPage)
             {
                 return ApplicationPage.Login;
-            }
-            else if (page is RegisterPage)
-            {
-                return ApplicationPage.Register;
             }
             else if (page is CreateSubjectPage)
             {

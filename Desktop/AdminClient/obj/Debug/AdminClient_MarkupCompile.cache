@@ -4,17 +4,23 @@
 winexe
 C#
 .cs
-E:\CNPM\NMCNPM31_10\Desktop\AdminClient\obj\Debug\
+D:\NMCNPM31_10\Desktop\AdminClient\obj\Debug\
 AdminClient
 none
 false
 DEBUG;TRACE
-E:\CNPM\NMCNPM31_10\Desktop\AdminClient\App.xaml
-15-1088304812
+D:\NMCNPM31_10\Desktop\AdminClient\App.xaml
+14-48883634
 
+<<<<<<< HEAD
 5779091442
 149-1559606698
 Controls\ListTimeOfClassControl.xaml;Controls\PageHost.xaml;Controls\SideMenuControl.xaml;Controls\SideMenuItemControl.xaml;Controls\TextEntryControl.xaml;Controls\TimeOfClassItemControl.xaml;MainWindow.xaml;Pages\CreateSubjectPage.xaml;Pages\LoginPage.xaml;Pages\RegisterPage.xaml;Styles\Buttons.xaml;Styles\Colors.xaml;Styles\Fonts.xaml;Styles\Scroll.xaml;Styles\Texts.xaml;
+=======
+481604778880
+1491077221472
+Controls\ListTimeOfClassControl.xaml;Controls\PageHost.xaml;Controls\SideMenuControl.xaml;Controls\SideMenuItemControl.xaml;Controls\TextEntryControl.xaml;Controls\TimeOfClassItemControl.xaml;MainWindow.xaml;Pages\CreateSubjectPage.xaml;Pages\LoginPage.xaml;Styles\Buttons.xaml;Styles\Colors.xaml;Styles\Fonts.xaml;Styles\Scroll.xaml;Styles\Texts.xaml;
+>>>>>>> parent of 1facb17... Thêm đăng nhập, đăng ký tài khoản và update chức năng tạo môn học có gửi token để xác thực
 
 True
 
