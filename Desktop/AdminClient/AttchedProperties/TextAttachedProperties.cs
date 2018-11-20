@@ -21,4 +21,25 @@ namespace AdminClient
 
         }
     }
+
+    /// <summary>
+    /// Focus (keyboard focus) this element 
+    /// </summary>
+    public class FocusProperty : BaseAttachedProperty<FocusProperty, bool>
+    {
+        public override void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // If we don't have control, return
+            if (!(d is Control control))
+            {
+                return;
+            }
+
+            if ((bool)e.NewValue)
+            {
+                // Focus this control
+                control.Focus();
+            }
+        }
+    }
 }

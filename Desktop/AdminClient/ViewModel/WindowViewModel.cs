@@ -37,7 +37,7 @@ namespace AdminClient
         /// <summary>
         /// The smallest width the window can go to
         /// </summary>
-        public double WindowMinimumWidth { set; get; } = 800;
+        public double WindowMinimumWidth { set; get; } = 900;
 
         /// <summary>
         /// The smallest height the window can go to

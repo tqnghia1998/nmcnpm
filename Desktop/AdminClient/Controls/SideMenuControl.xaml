@@ -84,26 +84,17 @@
                 </StackPanel>
             </Grid>
 
-            <StackPanel Grid.Row="2"
-                        Orientation="Vertical"
-                        Margin="0 30">
-                <Grid>
-                    <Grid.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding OpenCreateSubjectPageCommand}"/>
-                    </Grid.InputBindings>
-                    <local:SideMenuItemControl DataContext="{Binding CreateSubjectItem}"/>
-                </Grid>
-
-                <Grid>
-                    <Grid.InputBindings>
-                        <MouseBinding MouseAction="LeftClick" 
-                                      Command="{Binding OpenUpdateSubjectPageCommand}"/>
-                    </Grid.InputBindings>
-                    <local:SideMenuItemControl DataContext="{Binding UpdateSubjectItem}"/>
-                </Grid>
-
-            </StackPanel>
+            <ScrollViewer Grid.Row="2"
+                          VerticalScrollBarVisibility="Auto"
+                          Margin="0 30 0 0">
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:SideMenuItemControl/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
 
         </Grid>
 

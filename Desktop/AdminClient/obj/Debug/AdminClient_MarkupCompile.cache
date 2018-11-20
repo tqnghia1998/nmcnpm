@@ -4,30 +4,17 @@
 winexe
 C#
 .cs
-<<<<<<< HEAD
-D:\SEFinal\NMCNPM31_10\Desktop\AdminClient\obj\Debug\
-=======
-E:\fix\NMCNPM31_10\Desktop\AdminClient\obj\Debug\
->>>>>>> 3d2902c25d98c2204d543dd2120919a4de715384
+C:\Users\tdhb6\Downloads\Desktop-20181119T163112Z-001\Desktop\AdminClient\obj\Debug\
 AdminClient
 none
 false
 DEBUG;TRACE
-<<<<<<< HEAD
-D:\SEFinal\NMCNPM31_10\Desktop\AdminClient\App.xaml
+C:\Users\tdhb6\Downloads\Desktop-20181119T163112Z-001\Desktop\AdminClient\App.xaml
 17-308194165
 
-57769294035
-149-1397228198
+552091824992
+149-880693093
 Controls\ListTimeOfClassControl.xaml;Controls\PageHost.xaml;Controls\SideMenuControl.xaml;Controls\SideMenuItemControl.xaml;Controls\SubjectItem.xaml;Controls\TextEntryControl.xaml;Controls\TimeOfClassItemControl.xaml;MainWindow.xaml;Pages\CreateSubjectPage.xaml;Pages\ListSubjectPage.xaml;Pages\LoginPage.xaml;Pages\RegisterPage.xaml;Styles\Buttons.xaml;Styles\Colors.xaml;Styles\Fonts.xaml;Styles\Scroll.xaml;Styles\Texts.xaml;
-=======
-E:\fix\NMCNPM31_10\Desktop\AdminClient\App.xaml
-15-1088304812
-
-53-1108076570
-149159693945
-Controls\ListTimeOfClassControl.xaml;Controls\PageHost.xaml;Controls\SideMenuControl.xaml;Controls\SideMenuItemControl.xaml;Controls\TextEntryControl.xaml;Controls\TimeOfClassItemControl.xaml;MainWindow.xaml;Pages\CreateSubjectPage.xaml;Pages\LoginPage.xaml;Pages\RegisterPage.xaml;Styles\Buttons.xaml;Styles\Colors.xaml;Styles\Fonts.xaml;Styles\Scroll.xaml;Styles\Texts.xaml;
->>>>>>> 3d2902c25d98c2204d543dd2120919a4de715384
 
 False
 

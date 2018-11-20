@@ -20,6 +20,9 @@
         /// </summary>
         CreateSubject = 2,
 
+        /// <summary>
+        /// The main update subject page
+        /// </summary>
         ListSubject = 3,
     }
 }

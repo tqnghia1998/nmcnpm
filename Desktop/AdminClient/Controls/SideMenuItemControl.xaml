@@ -14,6 +14,10 @@
                     <ControlTemplate TargetType="{x:Type ContentControl}">
                         <!-- Content -->
                         <Grid>
+                            <Grid.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" 
+                                              Command="{Binding LeftClickCommand}"/>
+                            </Grid.InputBindings>
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>

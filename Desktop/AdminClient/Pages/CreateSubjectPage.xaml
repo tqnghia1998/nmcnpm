@@ -21,7 +21,7 @@
                    />
 
                 <Grid Height="2"
-              Background="Gray"/>
+                      Background="Gray"/>
 
                 <!-- Mục nhập tên chuyên ngành -->
                 <local:TextEntryControl DataContext="{Binding Major}"/>

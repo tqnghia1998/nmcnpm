@@ -6,33 +6,65 @@
              xmlns:local="clr-namespace:AdminClient"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="Transparent">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0"
                    FontFamily="{StaticResource LatoRegular}"
                    FontSize="{StaticResource FontSizeRegular}"
+                   Margin="20 5 5 5"
                    Text="{Binding Id}"/>
 
         <TextBlock Grid.Column="1"
                    FontFamily="{StaticResource LatoRegular}"
                    FontSize="{StaticResource FontSizeRegular}"
+                   TextWrapping="WrapWithOverflow"
+                   Margin="5"
                    Text="{Binding Name}"/>
 
         <TextBlock Grid.Column="2"
                    FontFamily="{StaticResource LatoRegular}"
                    FontSize="{StaticResource FontSizeRegular}"
-                   Text="{Binding DateStart}"/>
+                   TextAlignment="Center"
+                   Margin="5"
+                   Text="{Binding Term}"/>
 
         <TextBlock Grid.Column="3"
                    FontFamily="{StaticResource LatoRegular}"
                    FontSize="{StaticResource FontSizeRegular}"
+                   Margin="5 0"
+                   TextAlignment="Right"
+                   Text="{Binding DateStart}"/>
+
+        <TextBlock Grid.Column="4"
+                   FontFamily="{StaticResource LatoRegular}"
+                   FontSize="{StaticResource FontSizeRegular}"
+                   Margin="5 5 20 5"
+                   TextAlignment="Right"
                    Text="{Binding DateFinish}"/>
+
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="MouseEnter">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation To="{StaticResource WordVeryVeryLightBlue}" Duration="0:0:0.3" Storyboard.TargetProperty="Background.Color" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="MouseLeave">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation To="Transparent" Duration="0:0:0.3" Storyboard.TargetProperty="Background.Color" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
 
     </Grid>
 </UserControl>
