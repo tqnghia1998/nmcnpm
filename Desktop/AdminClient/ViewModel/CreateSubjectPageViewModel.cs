@@ -158,7 +158,9 @@ namespace AdminClient
             };
 
             // Set commands
-            CreateCommand = new RelayCommand(async () => await Create());
+
+               CreateCommand = new RelayCommand(async() => await Create());
+
         }
 
         #endregion

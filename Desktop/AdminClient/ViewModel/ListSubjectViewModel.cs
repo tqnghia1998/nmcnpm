@@ -44,9 +44,14 @@ namespace AdminClient
         public ObservableCollection<string> ListTerm { get; set; }
 
         /// <summary>
-        /// List course
+        /// List subject
         /// </summary>
         public ObservableCollection<string> ListCourse { get; set; }
+        
+        /// <summary>
+        /// List course
+        /// </summary>
+        public ObservableCollection<string> ListSubjectName { get; set; }
 
         /// <summary>
         /// The text to search for when we do a search
@@ -136,6 +141,7 @@ namespace AdminClient
             ListMajor = new ObservableCollection<string> { "Major" };
             ListTerm = new ObservableCollection<string> { "Term" };
             ListCourse = new ObservableCollection<string> { "Course" };
+            ListSubjectName = new ObservableCollection<string> { "Subject" };
 
             SearchCommand = new RelayCommand(Search);
             OpenSearchCommand = new RelayCommand(OpenSearch);

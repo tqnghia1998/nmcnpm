@@ -7,7 +7,7 @@
                  mc:Ignorable="d"
                  d:DesignWidth="800" d:DesignHeight="800">
 
-    <Border Background="Transparent">
+    <Border Background="{StaticResource WordVeryVeryLightBlueBrush}">
         <Border.Resources>
             <Style x:Key="ItemStyle" TargetType="{x:Type ComboBox}">
                 <Setter Property="ItemTemplate">
@@ -25,6 +25,9 @@
         <Grid>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -120,6 +123,55 @@
                     </TextBox.InputBindings>
 
                 </TextBox>
+            </Grid>
+            <!-- List Subject -->
+            <Grid Height="50"
+                  Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+            <!-- Subject -->
+                <!--<TextBox Grid.Column="0"
+                             Tag="Name"></TextBox>-->
+                <TextBlock Text="Subject Name"
+                       Grid.Column="0"
+                       Margin="15 12"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontSize="25"
+                       FontFamily="{StaticResource LatoRegular}"/>
+            </Grid>
+            <Grid Height="auto"
+                  Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Subject -->
+                <!--<TextBox Grid.Column="0"
+                             Tag="Name"></TextBox>-->
+                <ListView
+                  Margin="15"
+                  HorizontalAlignment="Right" 
+                  VerticalAlignment="Center" 
+                  Width="550" 
+                  Height="400"
+                  TextElement.FontFamily="{StaticResource LatoBold}"
+                  ItemsSource="{Binding ListSubjectName}"
+                ></ListView>
             </Grid>
 
         </Grid>

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ServerApp
 {
-    
+
     public class SubjectController : Controller
     {
         #region Protected Members
@@ -65,7 +65,7 @@ namespace ServerApp
                 mContext.Subject.Add(data.Subject);
                 mContext.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new ApiResponse<CreateSubjectResultApiModel>
                 {
@@ -121,8 +121,8 @@ namespace ServerApp
         {
             try
             {
-                var db = mContext.Registered.FirstOrDefault(x => x.Mssv == mssv 
-                                                        && x.Id == id 
+                var db = mContext.Registered.FirstOrDefault(x => x.Mssv == mssv
+                                                        && x.Id == id
                                                         && x.DayInTheWeek == dayInTheWeek);
                 if (db != null)
                 {
@@ -223,9 +223,48 @@ namespace ServerApp
                     model.isRegistered = false;
                 }
                 listSubjectDTO.Add(model);
-               
+
             }
             return listSubjectDTO;
+        }
+
+        /// <summary>
+        /// Get major, name, term, course of subject
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/subject/listsubject")]
+        [HttpGet]
+        public ApiResponse<ListSubjectResultApiModel> GetListSubject()
+        {
+            List<ListSubjectItemDTO> list;
+
+            try
+            {
+                list = mContext.Subject.Select(item => new ListSubjectItemDTO
+                {
+                    Major = item.Major,
+                    Subject = item.Subject,
+                    Course = item.Course,
+                    Term = item.Term
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                // if have error, return a error message
+                return new ApiResponse<ListSubjectResultApiModel>
+                {
+                    ErrorMessage = ex.Message,
+                };
+            }
+
+            // Otherwise, return successful result
+            return new ApiResponse<ListSubjectResultApiModel>
+            {
+                Response = new ListSubjectResultApiModel
+                {
+                    ListSubject = list,
+                }
+            };
         }
     }
 }

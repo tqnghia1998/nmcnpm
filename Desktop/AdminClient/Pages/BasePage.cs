@@ -44,7 +44,8 @@ namespace AdminClient
                 OnViewModelChanged();
 
                 // Set the data context for this page
-                this.DataContext = value;
+                var temp = value;
+                this.DataContext = temp;
             }
         }
 

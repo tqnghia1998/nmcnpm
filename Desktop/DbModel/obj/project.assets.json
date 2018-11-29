@@ -2618,11 +2618,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tdhb6\\Downloads\\Desktop-20181119T163112Z-001\\Desktop\\DbModel\\DbModel.csproj",
+      "projectUniqueName": "D:\\newnew\\NMCNPM31_10\\Desktop\\DbModel\\DbModel.csproj",
       "projectName": "DbModel",
-      "projectPath": "C:\\Users\\tdhb6\\Downloads\\Desktop-20181119T163112Z-001\\Desktop\\DbModel\\DbModel.csproj",
+      "projectPath": "D:\\newnew\\NMCNPM31_10\\Desktop\\DbModel\\DbModel.csproj",
       "packagesPath": "C:\\Users\\tdhb6\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tdhb6\\Downloads\\Desktop-20181119T163112Z-001\\Desktop\\DbModel\\obj\\",
+      "outputPath": "D:\\newnew\\NMCNPM31_10\\Desktop\\DbModel\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

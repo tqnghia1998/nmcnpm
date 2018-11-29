@@ -12558,11 +12558,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tdhb6\\Downloads\\Desktop-20181119T163112Z-001\\Desktop\\ServerApp\\ServerApp.csproj",
+      "projectUniqueName": "D:\\newnew\\NMCNPM31_10\\Desktop\\ServerApp\\ServerApp.csproj",
       "projectName": "ServerApp",
-      "projectPath": "C:\\Users\\tdhb6\\Downloads\\Desktop-20181119T163112Z-001\\Desktop\\ServerApp\\ServerApp.csproj",
+      "projectPath": "D:\\newnew\\NMCNPM31_10\\Desktop\\ServerApp\\ServerApp.csproj",
       "packagesPath": "C:\\Users\\tdhb6\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tdhb6\\Downloads\\Desktop-20181119T163112Z-001\\Desktop\\ServerApp\\obj\\",
+      "outputPath": "D:\\newnew\\NMCNPM31_10\\Desktop\\ServerApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12581,8 +12581,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\tdhb6\\Downloads\\Desktop-20181119T163112Z-001\\Desktop\\DbModel\\DbModel.csproj": {
-              "projectPath": "C:\\Users\\tdhb6\\Downloads\\Desktop-20181119T163112Z-001\\Desktop\\DbModel\\DbModel.csproj"
+            "D:\\newnew\\NMCNPM31_10\\Desktop\\DbModel\\DbModel.csproj": {
+              "projectPath": "D:\\newnew\\NMCNPM31_10\\Desktop\\DbModel\\DbModel.csproj"
             }
           }
         }

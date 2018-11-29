@@ -10,7 +10,7 @@ namespace AdminClient
         /// <summary>
         /// The current page of the application
         /// </summary>
-        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.ListSubject;
+        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.Login;
 
         /// <summary>
         /// The view model to use for the current page when the CurrentPage changes

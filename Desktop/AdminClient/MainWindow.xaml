@@ -125,7 +125,7 @@
                       GlassFrameThickness="0"/>
     </WindowChrome.WindowChrome>
 
-    <Border Background="{StaticResource WordVeryVeryLightBlueBrush}">
+    <Border Background="{StaticResource WordLightBlueBrush}">
         <Grid>
 
             <Grid.ColumnDefinitions>

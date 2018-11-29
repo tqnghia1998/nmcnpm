@@ -79,10 +79,11 @@ namespace AdminClient
             // Get the frames
             var newPageFrame = (d as PageHost).NewPage;
             var oldPageFrame = (d as PageHost).OldPage;
+            BasePage temp = newPageFrame.Content as BasePage;
 
             // If the current page wasn't changed
             // just update the view model
-            if ((newPageFrame.Content is BasePage page) && page.ToApplicationPage() == currentPage)
+            if ((newPageFrame.Content is BasePage page) && page.ToApplicationPage() == (ApplicationPage)value)
             {
                 if (currentPageViewModel != null)
                 {

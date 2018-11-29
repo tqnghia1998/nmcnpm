@@ -1,6 +1,7 @@
 ﻿using DbModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -40,7 +41,7 @@ namespace AdminClient
         /// </summary>
         public SideMenuViewModel()
         {
-            Items.Add(new SideMenuItemViewModel(async () => await OpenUpdateSubjectPage())
+            Items.Add(new SideMenuItemViewModel(OpenListSubjectPage)
             {
                 Icon = "\uf12d",
                 Content = "List subject"
@@ -70,10 +71,36 @@ namespace AdminClient
         /// <summary>
         /// Go to update subject page
         /// </summary>
-        public async Task OpenUpdateSubjectPage()
+        public async void OpenListSubjectPage()
         {
-            //var result = await WebRequests.GetAsync<List<string>>("http://localhost:51197/api/subject");
-            IoC.Application.GoToPage(ApplicationPage.ListSubject);
+            var result = await WebRequests.GetAsync<ApiResponse<ListSubjectResultApiModel>>("http://localhost:51197/api/subject/listsubject");
+
+            // If the response has an error...
+            if (result.DisplayErrorIfFailed("Get list subject failed"))
+            {
+                // We are done
+                IoC.Application.GoToPage(ApplicationPage.ListSubject);
+                return;
+            }
+
+            ListSubjectViewModel viewmodel = new ListSubjectViewModel();
+            var listSubject = result.ServerResponse.Response.ListSubject;
+
+            var temp = listSubject.GroupBy(item => item.Major).Select(item => item.Key).ToList();
+            viewmodel.ListMajor = new ObservableCollection<string>(temp);
+
+            temp = listSubject.GroupBy(item => item.Term).Select(item => item.Key).ToList();
+            viewmodel.ListTerm = new ObservableCollection<string>(temp);
+
+            temp = listSubject.GroupBy(item => item.Course).Select(item => item.Key).ToList();
+            viewmodel.ListCourse = new ObservableCollection<string>(temp);
+
+            temp = listSubject.GroupBy(item => item.Subject).Select(item => item.Key).ToList();
+            viewmodel.ListSubjectName = new ObservableCollection<string>(temp);
+
+
+
+            IoC.Application.GoToPage(ApplicationPage.ListSubject, viewmodel);
         }
 
         /// <summary>
