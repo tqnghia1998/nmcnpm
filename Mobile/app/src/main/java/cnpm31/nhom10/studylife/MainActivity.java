@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         /*-----------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------*/
 
         /* Kết nối server để lấy danh sách tên khoa */
         Thread threadGetMajor = new Thread(new Runnable() {
@@ -80,11 +79,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         threadGetMajor.start();
-        try {
-            threadGetMajor.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     // Xử lý nút back

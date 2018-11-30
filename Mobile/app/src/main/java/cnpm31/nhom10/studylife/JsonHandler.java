@@ -1,26 +1,17 @@
 package cnpm31.nhom10.studylife;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,18 +22,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 
 import cnpm31.nhom10.studylife.DbModel.RegisteredDataModel;
 
 import static android.support.constraint.Constraints.TAG;
+import static cnpm31.nhom10.studylife.RegisterFragment.adapterRecycler;
+import static cnpm31.nhom10.studylife.RegisterFragment.filterSpinner;
+import static cnpm31.nhom10.studylife.RegisterFragment.isSearching;
+import static cnpm31.nhom10.studylife.RegisterFragment.listSubjectTitle;
+import static cnpm31.nhom10.studylife.RegisterFragment.refresh;
+import static cnpm31.nhom10.studylife.RegisterFragment.updateSumCredit;
 
 public class JsonHandler {
 
@@ -90,6 +83,14 @@ public class JsonHandler {
             arrayJson = new JSONArray(response);
         } catch (JSONException e) {
             e.printStackTrace();
+
+            // Nếu chuyển không được, thì đây có thể là JSON đơn
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                arrayJson.put(jsonObject);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
         }
         return arrayJson;
     }
@@ -142,49 +143,39 @@ public class JsonHandler {
         // Tạo một RequestQueue để quản lý việc giao tiếp với network
         RequestQueue queue = Volley.newRequestQueue(mContext);
 
-       // Tạo một POST request
+        // Tạo một POST request
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, sUrl, jsonObject,
-                new Response.Listener<JSONObject>() {
+                response -> {
+                    try {
+                        Toast.makeText(mContext, response.getString("response"), Toast.LENGTH_SHORT).show();
 
-                    // Nếu thành công thì thông báo
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Toast.makeText(mContext,
-                                    response.getString("response"),
-                                    Toast.LENGTH_SHORT).show();
-
-                            // Bật button và chuyển sang Hủy đăng ký
-                            button.setEnabled(true);
-                            button.setText("Hủy đăng ký");
-                            checkBox.setChecked(true);
-                        } catch (Exception e) {
-                            Toast.makeText(mContext,
-                                    "Đã xảy ra lỗi, vui lòng thử lại",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                        // Bật button và chuyển sang Hủy đăng ký
+                        button.setEnabled(true);
+                        button.setText("Hủy đăng ký");
+                        checkBox.setChecked(true);
+                        refresh();
+                        updateSumCredit();
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
                     }
                 },
-                new Response.ErrorListener() {
-
-                // Nếu xảy ra lỗi thì thông báo
-                @Override
-                public void onErrorResponse(VolleyError error) {
+                error -> {
                     try {
-                        Toast.makeText(mContext,
-                                "Lỗi " + error.networkResponse.statusCode + " - "
-                                + new String(error.networkResponse.data, "UTF-8"),
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "Lỗi " + error.networkResponse.statusCode + " - "
+                                + new String(error.networkResponse.data, "UTF-8"), Toast.LENGTH_SHORT).show();
 
-                        // Bật lại button Đăng kýs
+                        // Bật lại button Đăng ký
                         button.setEnabled(true);
                     } catch (Exception e) {
-                        Toast.makeText(mContext,
-                                "Đã xảy ra lỗi, vui lòng thử lại",
-                                Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
                     }
-                }
-        });
+                });
         // Thực hiện request
         queue.add(stringRequest);
     }
@@ -204,47 +195,37 @@ public class JsonHandler {
 
         // Tạo một POST request
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.DELETE, sUrl, null,
-                new Response.Listener<JSONObject>() {
+                response -> {
+                    try {
+                        Toast.makeText(mContext, response.getString("response"), Toast.LENGTH_SHORT).show();
 
-                    // Nếu thành công thì thông báo
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Toast.makeText(mContext,
-                                    response.getString("response"),
-                                    Toast.LENGTH_SHORT).show();
-
-                            // Bật button và chuyển Đăng ký
-                            button.setEnabled(true);
-                            button.setText("Đăng ký");
-                            checkBox.setChecked(false);
-                        } catch (Exception e) {
-                            Toast.makeText(mContext,
-                                    "Đã xảy ra lỗi, vui lòng thử lại",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                        // Bật button và chuyển Đăng ký
+                        button.setEnabled(true);
+                        button.setText("Đăng ký");
+                        checkBox.setChecked(false);
+                        refresh();
+                        updateSumCredit();
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
                     }
                 },
-                new Response.ErrorListener() {
+                error -> {
+                    try {
+                        Toast.makeText(mContext, "Lỗi " + error.networkResponse.statusCode + " - "
+                                + new String(error.networkResponse.data, "UTF-8"), Toast.LENGTH_SHORT).show();
 
-                    // Nếu xảy ra lỗi thì thông báo
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        try {
-                            Toast.makeText(mContext,
-                                    "Lỗi " + error.networkResponse.statusCode + " - "
-                                            + new String(error.networkResponse.data, "UTF-8"),
-                                    Toast.LENGTH_SHORT).show();
-
-                            // Bật lại button Đăng kýs
-                            button.setEnabled(true);
-                        } catch (Exception e) {
-                            Toast.makeText(mContext,
-                                    "Đã xảy ra lỗi, vui lòng thử lại",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                        // Bật lại button Đăng ký
+                        button.setEnabled(true);
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
                     }
-        });
+                });
         // Thực hiện request
         queue.add(stringRequest);
     }

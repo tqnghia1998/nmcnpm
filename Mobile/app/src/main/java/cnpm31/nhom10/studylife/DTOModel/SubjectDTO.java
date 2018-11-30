@@ -35,6 +35,7 @@ public class SubjectDTO  {
             SubjectDTO dtoSubject = new SubjectDTO();
             try {
                 JSONObject model = arrayJson.getJSONObject(i);
+                dtoSubject.Id = model.getString("id");
                 dtoSubject.Subject = model.getString("subject");
                 dtoSubject.isRegisterd = model.getBoolean("isRegistered");
             } catch (JSONException e) {
@@ -42,9 +43,7 @@ public class SubjectDTO  {
                 return null;
             }
             // Nếu thành công thì thêm vào danh sách
-            if (dtoSubject != null) {
-                listDTOSubject.add(dtoSubject);
-            }
+            listDTOSubject.add(dtoSubject);
         }
         return listDTOSubject;
     }

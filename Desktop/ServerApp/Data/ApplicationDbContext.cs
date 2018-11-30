@@ -53,6 +53,7 @@ namespace ServerApp
             // Set primary key cho bảng thời khóa biểu của từng môn học
             modelBuilder.Entity<ScheduleDataModel>().HasKey(c => new { c.Id, c.DayInTheWeek });
 
+            // Set primary key cho bảng đăng ký môn học
             modelBuilder.Entity<RegisteredDataModel>().HasKey(c => new { c.Mssv, c.Id, c.DayInTheWeek });
         }
 

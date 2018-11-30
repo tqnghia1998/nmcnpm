@@ -3,6 +3,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,29 +14,37 @@ import android.widget.Toast;
 
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
+import com.thoughtbot.expandablerecyclerview.models.ExpandableListPosition;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cnpm31.nhom10.studylife.DbModel.CreateSubjectCredentialsDataModel;
 import cnpm31.nhom10.studylife.DbModel.RegisteredDataModel;
+
+import static cnpm31.nhom10.studylife.MainActivity.urlMajor;
+import static cnpm31.nhom10.studylife.RegisterFragment.adapterRecycler;
+import static cnpm31.nhom10.studylife.RegisterFragment.credit;
+import static cnpm31.nhom10.studylife.RegisterFragment.updateSumCredit;
 
 // Đối tượng lưu giữ tên môn học dùng cho CustomRecyclerViewAdapter
 class SubjectDetail implements Parcelable {
 
-    public List<String> dayInTheWeek;
-    public int parentIndex;
-    public String detail;
+    int parentIndex;
+    CreateSubjectCredentialsDataModel detail;
 
-    public SubjectDetail(String _detail, int _parentIndex, List<String> _dayInTheWeek){
-        detail = _detail;
+    public SubjectDetail(int _parentIndex, CreateSubjectCredentialsDataModel _detail){
         parentIndex = _parentIndex;
-        dayInTheWeek = _dayInTheWeek;
+        detail = _detail;
     }
 
     protected SubjectDetail(Parcel in) {
-        detail = in.readString();
+        detail.Subject.Subject = in.readString();
     }
 
     //region </--Các phương thức mặc định khi implements Parcelable-->
@@ -58,7 +67,7 @@ class SubjectDetail implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(detail);
+        dest.writeString(detail.Subject.Subject);
     }
     //endregion
 }
@@ -68,11 +77,13 @@ class SubjectTitle extends ExpandableGroup<SubjectDetail> {
 
     public boolean isRegistered;
     public String iD;
+    public String maJor;
 
     public SubjectTitle(String title, List<SubjectDetail> items, boolean _isRegistered, String _iD) {
         super(title, items);
         isRegistered = _isRegistered;
         iD = _iD;
+        maJor = items.get(0).detail.Subject.Major;
     }
 }
 
@@ -128,77 +139,112 @@ class CustomRecyclerViewAdapter extends ExpandableRecyclerViewAdapter<SubjectTit
         return new SubjectDetailViewHolder(view);
     }
 
+    @Override public void onGroupExpanded(int positionStart, int itemCount) {
+        if (itemCount > 0) {
+            int groupIndex = expandableList.getUnflattenedPosition(positionStart).groupPos;
+            notifyItemRangeInserted(positionStart, itemCount);
+            for (ExpandableGroup grp : adapterRecycler.getGroups()) {
+                if (grp != adapterRecycler.getGroups().get(groupIndex)) {
+                    if (this.isGroupExpanded(grp)) {
+                        this.toggleGroup(grp);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onBindChildViewHolder(final SubjectDetailViewHolder holder, final int flatPosition
             , final ExpandableGroup group, int childIndex) {
 
         // Hiển thị thông tin chi tiết
         SubjectDetail details = (SubjectDetail)group.getItems().get(childIndex);
-        holder.txtDetail.setText(details.detail);
+        StringBuilder onScreen = new StringBuilder();
+        onScreen.append("- Mã môn học\t: ").append(details.detail.Subject.Id)
+                .append("\n\n- Giảng viên\t\t: ").append(details.detail.Subject.Teacher)
+                .append("\n\n- Số tín chỉ\t\t\t: ").append(details.detail.Subject.Credit)
+                .append("\n\n- Học kỳ\t\t\t\t: ").append(details.detail.Subject.Term)
+                .append("/").append(details.detail.Subject.Course)
+                .append("\n\n- Thời gian\t\t\t: ").append(details.detail.Subject.TimeStart)
+                .append(" đến ").append(details.detail.Subject.TimeFinish)
+                .append("\n\n+ ");
+
+        for (int i = 0; i < details.detail.Schedule.size(); i++) {
+            String dayVietnamese = "Thứ hai";
+            switch (details.detail.Schedule.get(i).DayInTheWeek) {
+                case "Tuesday": dayVietnamese = "Thứ ba"; break;
+                case "Wednesday": dayVietnamese = "Thứ tư"; break;
+                case "Thursday": dayVietnamese = "Thứ năm"; break;
+                case "Friday": dayVietnamese = "Thứ sáu"; break;
+                case "Saturday": dayVietnamese = "Thứ bảy"; break;
+                case "Sunday": dayVietnamese = "Chủ nhật"; break;
+            }
+            onScreen.append(dayVietnamese)
+                    .append(", phòng ")
+                    .append(details.detail.Schedule.get(i).Room)
+                    .append(", tiết ")
+                    .append(details.detail.Schedule.get(i).Period)
+                    .append(" (").append(details.detail.Schedule.get(i).TimeStart)
+                    .append(" - ").append(details.detail.Schedule.get(i).TimeFinish).append(")");
+            if (i < details.detail.Schedule.size() - 1) {
+                onScreen.append("\n\n+ ");
+            }
+        }
+
+
+        holder.txtDetail.setText(onScreen.toString());
 
         // Cập nhật text của button
         final CheckBox parentCheckBox = listCheckBox.get(details.parentIndex);
         holder.btnRegister.setText(parentCheckBox.isChecked() ? "Hủy đăng ký" : "Đăng ký");
 
-        final String[] x = {new String()};
-
         // Xử lý sự kiện ấn button Đăng ký
-        holder.btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
+        holder.btnRegister.setOnClickListener(v -> {
 
-                // Tạo hộp thoại xác nhận đăng ký
-                final AlertDialog.Builder b = new AlertDialog.Builder(v.getContext());
-                b.setTitle("Xác nhận");
-                b.setMessage("Đăng ký môn học này?");
+            // Tạo hộp thoại xác nhận đăng ký
+            final AlertDialog.Builder b = new AlertDialog.Builder(v.getContext());
+            b.setTitle("Xác nhận");
+            b.setMessage((parentCheckBox.isChecked() ? "Hủy đ" : "Đ") + "ăng ký môn học này?");
 
-                // Nếu cancel
-                b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+            // Nếu cancel
+            b.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+
+            // Nếu OK - đồng ý đăng ký
+            b.setPositiveButton("Ok", (dialog, id) -> {
+
+                final RegisteredDataModel registeredData = new RegisteredDataModel();
+
+                // Lấy các thông tin cần thiết
+                registeredData.Mssv = "1612422";
+                registeredData.Id = ((SubjectTitle)group).iD;
+                registeredData.Subject = ((SubjectTitle)group).getTitle();
+
+                // Vì có nhiều lịch học
+                int numDayInTheWeek = ((SubjectTitle)group).getItems().get(0).detail.Schedule.size();
+                for (int i = 0; i < numDayInTheWeek; i++) {
+
+                    // Mỗi lịch học POST một lần
+                    registeredData.DayInTheWeek = ((SubjectTitle)group).getItems().get(0).detail.Schedule.get(i).DayInTheWeek;
+
+                    // Nếu check box đã check, tức muốn hủy đăng ký
+                    if (parentCheckBox.isChecked()) {
+                        JsonHandler.deleteRegistered("http://10.0.2.2:51197/api/registered",
+                                registeredData,
+                                holder.txtDetail.getContext(),
+                                parentCheckBox,
+                                holder.btnRegister);
                     }
-                });
-
-                // Nếu OK - đồng ý đăng ký
-                b.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        final RegisteredDataModel registeredData = new RegisteredDataModel();
-
-                        // Lấy các thông tin cần thiết
-                        registeredData.Mssv = "1612422";
-                        registeredData.Id = ((SubjectTitle)group).iD;
-                        registeredData.Subject = ((SubjectTitle)group).getTitle();
-
-                        // Vì có nhiều lịch học
-                        int numDayInTheWeek = ((SubjectTitle)group).getItems().get(0).dayInTheWeek.size();
-                        for (int i = 0; i < numDayInTheWeek; i++) {
-
-                            // Mỗi lịch học POST một lần
-                            registeredData.DayInTheWeek = ((SubjectTitle)group).getItems().get(0).dayInTheWeek.get(i);
-
-                            // Nếu check box đã check, tức muốn hủy đăng ký
-                            if (parentCheckBox.isChecked()) {
-                                JsonHandler.deleteRegistered("http://10.0.2.2:51197/api/registered",
-                                        registeredData,
-                                        holder.txtDetail.getContext(),
-                                        parentCheckBox,
-                                        holder.btnRegister);
-                            }
-                            // Ngược lại muốn đăng ký
-                            else {
-                                JsonHandler.postRegistered("http://10.0.2.2:51197/api/registered",
-                                        registeredData,
-                                        holder.txtDetail.getContext(),
-                                        parentCheckBox,
-                                        holder.btnRegister);
-                            }
-                        }
-
+                    // Ngược lại muốn đăng ký
+                    else {
+                        JsonHandler.postRegistered("http://10.0.2.2:51197/api/registered",
+                                registeredData,
+                                holder.txtDetail.getContext(),
+                                parentCheckBox,
+                                holder.btnRegister);
                     }
-                });
-                b.show();
-            }
+                }
+            });
+            b.show();
         });
     }
 

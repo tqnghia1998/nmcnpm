@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\newnew\NMCNPM31_10\Desktop\AdminClient\obj\Debug\
+D:\_NMCNPM31_10\Desktop\AdminClient\obj\Debug\
 AdminClient
 none
 false
 DEBUG;TRACE
-D:\newnew\NMCNPM31_10\Desktop\AdminClient\App.xaml
+D:\_NMCNPM31_10\Desktop\AdminClient\App.xaml
 17-308194165
 
 552091824992
-149-924006883
+149-243847851
 Controls\ListTimeOfClassControl.xaml;Controls\PageHost.xaml;Controls\SideMenuControl.xaml;Controls\SideMenuItemControl.xaml;Controls\SubjectItem.xaml;Controls\TextEntryControl.xaml;Controls\TimeOfClassItemControl.xaml;MainWindow.xaml;Pages\CreateSubjectPage.xaml;Pages\ListSubjectPage.xaml;Pages\LoginPage.xaml;Pages\RegisterPage.xaml;Styles\Buttons.xaml;Styles\Colors.xaml;Styles\Fonts.xaml;Styles\Scroll.xaml;Styles\Texts.xaml;
 
 False
