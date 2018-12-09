@@ -95,8 +95,21 @@ namespace AdminClient
             temp = listSubject.GroupBy(item => item.Course).Select(item => item.Key).ToList();
             viewmodel.ListCourse = new ObservableCollection<string>(temp);
 
-            temp = listSubject.GroupBy(item => item.Subject).Select(item => item.Key).ToList();
-            viewmodel.ListSubjectName = new ObservableCollection<string>(temp);
+            viewmodel.ListMajor.Insert(0, "Major");
+            viewmodel.ListTerm.Insert(0, "Term");
+            viewmodel.ListCourse.Insert(0, "Course");
+
+            List<SubjectItemViewModel> list = listSubject.Select(item => new SubjectItemViewModel
+            {
+                Subject =  new TextEntryViewModel { Label = "Subject", EditText = item.Subject},
+                ID = new TextEntryViewModel { Label = "Id", EditText = item.Id },
+                Teacher = new TextEntryViewModel { Label = "Teacher", EditText = item.Teacher },
+                Major = new TextEntryViewModel { Label = "Major", EditText = item.Major},
+                Term = item.Term,
+                Course = item.Course,
+            }).ToList();
+
+            viewmodel.ListSubject = new ObservableCollection<SubjectItemViewModel>(list);
 
 
 

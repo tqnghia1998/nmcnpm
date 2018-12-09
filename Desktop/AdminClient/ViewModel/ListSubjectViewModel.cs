@@ -1,12 +1,35 @@
 ﻿using DbModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AdminClient
 {
     public class ListSubjectViewModel : BaseViewModel
     {
+        #region Private Member
+
+        /// <summary>
+        /// Index item that was selected in Major combobox 
+        /// </summary>
+        private string mLastMajor;
+
+        /// <summary>
+        /// Index item that was selected in Term combobox 
+        /// </summary>
+        private string mLastTerm;
+
+        /// <summary>
+        /// Index item that was selected in Course combobox 
+        /// </summary>
+        private string mLastCourse;
+
+        #endregion
+
         #region Protected Members
 
         /// <summary>
@@ -22,7 +45,12 @@ namespace AdminClient
         /// <summary>
         /// The chat thread items for the list
         /// </summary>
-        protected ObservableCollection<SubjectItem> mItems;
+        protected ObservableCollection<SubjectItemViewModel> mListSubject;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected ObservableCollection<SubjectItemViewModel> mListBeforeFilter;
 
         /// <summary>
         /// A flag indicating if the search dialog is open
@@ -32,6 +60,8 @@ namespace AdminClient
         #endregion
 
         #region Public Properties
+
+        public bool FilterIsRunning { get; set; }
 
         /// <summary>
         /// List major
@@ -51,7 +81,42 @@ namespace AdminClient
         /// <summary>
         /// List course
         /// </summary>
-        public ObservableCollection<string> ListSubjectName { get; set; }
+        public ObservableCollection<SubjectItemViewModel> ListSubject
+        {
+            get => mListSubject;
+
+            set
+            {
+                // Make sure we have not the same list
+                if (mListSubject == value)
+                {
+                    return;
+                }
+
+                mListSubject = value;
+                FilteredSubjects = mListSubject;
+            }
+        }
+
+        /// <summary>
+        /// The subject thread items for the list subject that include any search filtering
+        /// </summary>
+        public ObservableCollection<SubjectItemViewModel> FilteredSubjects { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Major { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Term { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Course { get; set; }
 
         /// <summary>
         /// The text to search for when we do a search
@@ -110,6 +175,11 @@ namespace AdminClient
         #region Public Commands
 
         /// <summary>
+        /// The command for when the user wants to filter
+        /// </summary>
+        public ICommand FilterCommand { get; set; }
+
+        /// <summary>
         /// The command for when the user wants to search
         /// </summary>
         public ICommand SearchCommand { get; set; }
@@ -138,21 +208,21 @@ namespace AdminClient
         /// </summary>
         public ListSubjectViewModel()
         {
-            ListMajor = new ObservableCollection<string> { "Major" };
-            ListTerm = new ObservableCollection<string> { "Term" };
-            ListCourse = new ObservableCollection<string> { "Course" };
-            ListSubjectName = new ObservableCollection<string> { "Subject" };
-
             SearchCommand = new RelayCommand(Search);
             OpenSearchCommand = new RelayCommand(OpenSearch);
             CloseSearchCommand = new RelayCommand(CloseSearch);
             ClearSearchCommand = new RelayCommand(ClearSearch);
+            FilterCommand = new RelayCommand(async () => await FilterAsync());
         }
 
         #endregion
 
         #region Command Methods
 
+        /// <summary>
+        /// Load any needed information for list subject page
+        /// </summary>
+        /// <param name="list"></param>
         public void LoadInformation(List<string> list)
         {
 
@@ -163,7 +233,32 @@ namespace AdminClient
         /// </summary>
         public void Search()
         {
-            
+            // Make sure we don't re-search the same text
+            if ((string.IsNullOrEmpty(mLastSearchText) && string.IsNullOrEmpty(SearchText)) || string.Equals(mLastSearchText, SearchText))
+            {
+                return;
+            }
+
+            // If we have no search text or no items
+            if (string.IsNullOrEmpty(SearchText) || ListSubject == null || ListSubject.Count == 0)
+            {
+                // Make filtered list the same 
+                FilteredSubjects = ListSubject;
+
+                // Set last search text
+                mLastSearchText = SearchText;
+
+                return;
+            }
+
+            // Find all subject that contain the given text
+            // TODO: Make more efficient search
+            FilteredSubjects = new ObservableCollection<SubjectItemViewModel>(
+                ListSubject.Where(item => item.Subject.EditText.ToLower().Contains(SearchText.ToLower()) || 
+                item.Teacher.EditText.ToLower().Contains(SearchText.ToLower())));
+
+            // Set last search text
+            mLastSearchText = SearchText;
         }
 
         /// <summary>
@@ -195,6 +290,56 @@ namespace AdminClient
         /// </summary>
         public void CloseSearch() => SearchIsOpen = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task FilterAsync()
+        {
+            await RunCommand(() => this.FilterIsRunning, async () =>
+               {
+                   await Task.Run(Filter);
+               });
+        }
+
+        /// <summary>
+        /// As name function
+        /// </summary>
+        public Task Filter()
+        {
+            // Make sure we don't re-search the same request
+            if (string.Equals(Major, mLastMajor) && string.Equals(Term, mLastTerm) && string.Equals(Course, mLastCourse))
+            {
+                return Task.FromResult(true);
+            }
+
+            // If we have no items
+            if (ListSubject == null || ListSubject.Count == 0)
+            {
+                // Make filtered list the same 
+                FilteredSubjects = ListSubject;
+
+                // Set last filter
+                mLastMajor = Major;
+                mLastTerm = Term;
+                mLastCourse = Course;
+
+                return Task.FromResult(true);
+            }
+
+
+            FilteredSubjects = new ObservableCollection<SubjectItemViewModel>(
+                ListSubject.Where(item => (string.Equals(Major, "Major") ? true : item.Major.EditText.Contains(Major)) &&
+                    (string.Equals(Term, "Term") ? true : item.Term.Contains(Term)) &&
+                    (string.Equals(Course, "Course") ? true : item.Course.Contains(Course))));
+
+            // Set last filter
+            mLastMajor = Major;
+            mLastTerm = Term;
+            mLastCourse = Course;
+
+            return Task.FromResult(true);
+        }
 
         #endregion
     }

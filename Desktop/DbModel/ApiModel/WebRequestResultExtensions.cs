@@ -39,7 +39,7 @@ namespace DbModel
                 else if (response != null)
                 {
                     // Set message to standard HTTP server response details
-                    message = $"Failed to communicate with server. Status code {response.StatusCode}. {response.StatusDescription}";
+                    message = $"Failed to communicate with server. Status code {(int)response.StatusCode}. {response.StatusDescription}";
                 }
 
                 // Display error

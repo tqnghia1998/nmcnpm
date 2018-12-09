@@ -343,7 +343,7 @@ namespace ServerApp
         }
 
         /// <summary>
-        /// Get major, name, term, course of subject
+        /// Get major, name, term, course of subject, Id, teacher
         /// </summary>
         /// <returns></returns>
         [Route("api/subject/listsubject")]
@@ -357,9 +357,11 @@ namespace ServerApp
                 list = mContext.Subject.Select(item => new ListSubjectItemDTO
                 {
                     Major = item.Major,
+                    Id = item.Id,
                     Subject = item.Subject,
                     Course = item.Course,
-                    Term = item.Term
+                    Term = item.Term,
+                    Teacher = item.Teacher,
                 }).ToList();
             }
             catch (Exception ex)
@@ -379,6 +381,44 @@ namespace ServerApp
                     ListSubject = list,
                 }
             };
+        }
+
+        [Route("api/subject/updatesubject")]
+        [HttpPost]
+        public ApiResponse<int> UpdateSubjectById([FromBody] CreateSubjectCredentialsDataModel data)
+        {
+            try
+            {
+                SubjectDataModel entity = mContext.Subject.Where(item => item.Id.Equals(data.Subject.Id)).FirstOrDefault();
+                mContext.Entry(entity).CurrentValues.SetValues(data.Subject);
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse<int>
+                {
+                    ErrorMessage = ex.Message,
+                };
+            }
+
+            try
+            {
+                mContext.Schedules.UpdateRange(data.Schedule);
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse<int>
+                {
+                    ErrorMessage = ex.Message,
+                };
+            }
+
+            mContext.SaveChanges();
+
+            return new ApiResponse<int>
+            {
+                Response = 200,
+            };
+
         }
     }
 }

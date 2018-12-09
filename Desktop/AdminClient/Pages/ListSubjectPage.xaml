@@ -7,14 +7,15 @@
                  mc:Ignorable="d"
                  d:DesignWidth="800" d:DesignHeight="800">
 
-    <Border Background="{StaticResource WordVeryVeryLightBlueBrush}">
+    <Border Background="White">
         <Border.Resources>
             <Style x:Key="ItemStyle" TargetType="{x:Type ComboBox}">
                 <Setter Property="ItemTemplate">
                     <Setter.Value>
                         <DataTemplate>
                             <TextBlock Text="{Binding}"
-                                       FontSize="{StaticResource FontSizeLarge}"
+                                        TextWrapping="NoWrap"
+                                       FontSize="{StaticResource FontSizeRegular}"
                                        FontFamily="{StaticResource LatoRegular}"/>
                         </DataTemplate>
                     </Setter.Value>
@@ -25,9 +26,6 @@
         <Grid>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -62,29 +60,45 @@
                 <ComboBox VerticalAlignment="Center"
                           Grid.Column="0"
                           Margin="10 0"
-                          SelectedIndex="0"
                           ItemsSource="{Binding ListMajor}"
-                          Style="{StaticResource ItemStyle}">
+                          Style="{StaticResource ItemStyle}"
+                          SelectedIndex="0"
+                          Text="{Binding Major, UpdateSourceTrigger=PropertyChanged}">
                 </ComboBox>
 
                 <ComboBox VerticalAlignment="Center"
                           Grid.Column="1"
                           Margin="10 0"
-                          SelectedIndex="0"
                           ItemsSource="{Binding ListTerm}"
-                          Style="{StaticResource ItemStyle}"/>
+                          Style="{StaticResource ItemStyle}"
+                          SelectedIndex="0"
+                          Text="{Binding Term, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <ComboBox VerticalAlignment="Center"
                           Grid.Column="2"
-                          SelectedIndex="0"
                           ItemsSource="{Binding ListCourse}"
-                          Style="{StaticResource ItemStyle}"/>
+                          Style="{StaticResource ItemStyle}"
+                          SelectedIndex="0"
+                          Text="{Binding Course, UpdateSourceTrigger=PropertyChanged}"/>
                 <!-- Search button -->
-                <Button Grid.Column="3"
+                <StackPanel Grid.Column="3"
+                            Orientation="Horizontal"
+                            Margin=" 10 0 0 0">
+
+                    <Button FontFamily="{StaticResource FontAwesome}"
+                            FontSize="{StaticResource FontSizeRegular}"
+                            Content="Filter"
+                            Padding="5"
+                            local:IsBusyProperty.Value="{Binding FilterIsRunning}"
+                            Command="{Binding FilterCommand}"/>
+
+                    <Button Grid.Column="3"
                         Style="{StaticResource IconGrowButton}" 
                         Content="&#xf002;"
                         Foreground="{StaticResource WordBlueBrush}"
                         Command="{Binding OpenSearchCommand}"/>
+                </StackPanel>
+                
 
             </Grid>
 
@@ -123,56 +137,22 @@
                     </TextBox.InputBindings>
 
                 </TextBox>
-            </Grid>
-            <!-- List Subject -->
-            <Grid Height="50"
-                  Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-            <!-- Subject -->
-                <!--<TextBox Grid.Column="0"
-                             Tag="Name"></TextBox>-->
-                <TextBlock Text="Subject Name"
-                       Grid.Column="0"
-                       Margin="15 12"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       FontSize="25"
-                       FontFamily="{StaticResource LatoRegular}"/>
             </Grid>
-            <Grid Height="auto"
-                  Grid.Row="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <!-- Subject -->
-                <!--<TextBox Grid.Column="0"
-                             Tag="Name"></TextBox>-->
-                <ListView
-                  Margin="15"
-                  HorizontalAlignment="Right" 
-                  VerticalAlignment="Center" 
-                  Width="550" 
-                  Height="400"
-                  TextElement.FontFamily="{StaticResource LatoBold}"
-                  ItemsSource="{Binding ListSubjectName}"
-                ></ListView>
-            </Grid>
+            <ScrollViewer Grid.Row="4"
+                          VerticalScrollBarVisibility="Visible"
+                          Margin="5">
+
+                <ItemsControl ItemsSource="{Binding FilteredSubjects}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:SubjectItem/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </ScrollViewer>
 
         </Grid>
     </Border>

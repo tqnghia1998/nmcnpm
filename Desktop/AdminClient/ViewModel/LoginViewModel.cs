@@ -10,7 +10,6 @@ namespace AdminClient
     /// </summary>
     public class LoginViewModel : BaseViewModel
     {
-
         #region Public Properties
 
         /// <summary>
@@ -95,5 +94,7 @@ namespace AdminClient
             IoC.Application.GoToPage(ApplicationPage.Register);
             await Task.Delay(1);
         }
+
+
     }
 }

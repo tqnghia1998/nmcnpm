@@ -96,6 +96,8 @@ namespace AdminClient
         /// </summary>
         public ICommand CreateCommand { get; set; }
 
+        
+
         #endregion
 
         #region Constructor
@@ -174,154 +176,7 @@ namespace AdminClient
         {
             await RunCommand(() => this.CreateIsRunning, async () => 
             {
-                #region Khởi tạo data để gửi 
-
-                CreateSubjectCredentialsDataModel DataToPost = new CreateSubjectCredentialsDataModel();
-
-                DataToPost.Subject = new SubjectDataModel();
-
-                DataToPost.Subject.Major = this.Major.EditText;
-                DataToPost.Subject.Id = this.ID.EditText;
-                DataToPost.Subject.Subject = this.Subject.EditText;
-                DataToPost.Subject.Teacher = this.Teacher.EditText;
-                DataToPost.Subject.Term = Term;
-                DataToPost.Subject.Course = Course;
-                DataToPost.Subject.TimeStart = this.DateStart;
-                DataToPost.Subject.TimeFinish = this.DateFinish;
-                DataToPost.Subject.Status = 0;
-
-                #endregion
-
-                #region Kiểm tra tín chỉ có phải là số không
-
-                int credit;
-
-                try
-                {
-                    credit = int.Parse(Credit.EditText);
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show($"Credit: {ex.Message}", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                if (credit < 0)
-                {
-                    MessageBox.Show("Credit must be bigger than zero", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                    return;
-                }
-
-                DataToPost.Subject.Credit = credit;
-
-                #endregion
-
-                #region Kiểm tra ngày và thời gian bắt đầu và kết thúc
-
-                DateTime dateStart, dateEnd;
-
-                // Kiểm tra xem ngày và thời gian bắt đầu có hợp lệ không
-                try
-                {
-
-                    dateStart = DateTime.ParseExact(DataToPost.Subject.TimeStart, "MM/dd/yyyy", CultureInfo.CurrentCulture);
-
-                }
-                catch
-                {
-                    MessageBox.Show("Ngày bắt đầu hoặc thời gian bắt đầu không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                // Đến đây, ngày và thời gian bắt đầu đã hợp lệ.
-                // Tiếp tục kiểm tra xem ngày và thời gian kết thúc có hợp lệ không
-                try
-                {
-                    dateEnd = DateTime.ParseExact(DataToPost.Subject.TimeFinish, "MM/dd/yyyy", CultureInfo.CurrentCulture);
-                }
-                catch
-                {
-                    MessageBox.Show("Ngày kết thúc hoặc thời gian kết thúc không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                // Đến đây, ngày và thời gian kết thúc đã hợp lệ
-                // Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có trước ngày và thời gian kết thúc không.
-                // Nếu không thì báo lỗi.
-                if (dateStart >= dateEnd)
-                {
-                    MessageBox.Show("Ngày và thời gian bắt đầu phải trước ngày và thời gian kết thúc.\n Mời bạn kiểm tra lại!", "Thông báo",
-                       MessageBoxButton.OK, MessageBoxImage.Error);
-
-                    return;
-                }
-
-                // Đến đây ngày và thời gian đã hợp lệ là kiểu datetime 
-                // Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có sau ngày và thời gian hiện tại không.
-                // Nếu không thì báo lỗi.
-                if (DateTimeOffset.UtcNow.Date > dateStart)
-                {
-                    MessageBox.Show("Ngày và thời gian bắt đầu phải sau ngày và thời gian hiện tại.\n Mời bạn kiểm tra lại!", "Thông báo",
-                      MessageBoxButton.OK, MessageBoxImage.Error);
-
-                    return;
-                }
-
-                #endregion
-
-                #region Lấy và kiểm tra lịch trong tuần của môn học
-
-                DataToPost.Schedule = new List<ScheduleDataModel>();
-
-                foreach (var item in SpecificTimeItems.Items)
-                {
-                    if (!item.IsChecked)
-                    {
-                        continue;
-                    }
-
-                    #region Kiểm tra thời gian
-
-                    if (!item.TimeStart.IsTime())
-                    {
-                        MessageBox.Show($"Time start of {item.DayInTheWeek} is not in a correct format", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    if (!item.TimeFinish.IsTime())
-                    {
-                        MessageBox.Show($"Time finish of {item.DayInTheWeek} is not in a correct format", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    DateTime start, finish;
-                    start = DateTime.ParseExact(item.TimeStart, "HH:mm", CultureInfo.CurrentCulture);
-                    finish = DateTime.ParseExact(item.TimeFinish, "HH:mm", CultureInfo.CurrentCulture);
-
-                    if (start > finish)
-                    {
-                        MessageBox.Show($"{item.DayInTheWeek}: Time start must be before time finish", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    #endregion
-
-                    DataToPost.Schedule.Add(new ScheduleDataModel
-                    {
-                        Id = this.ID.EditText,
-                        DayInTheWeek = item.DayInTheWeek,
-                        Room = item.Room,
-                        Period = item.Period,
-                        TimeStart = item.TimeStart,
-                        TimeFinish = item.TimeFinish
-                    });
-                }
-
-
-                #endregion
+                CreateSubjectCredentialsDataModel DataToPost = ConvertToCredentailsCreate();
 
                 #region Gửi cho server lưu và nhận phản hồi
 
@@ -341,6 +196,160 @@ namespace AdminClient
 
                 #endregion
             });
+        }
+
+        public CreateSubjectCredentialsDataModel ConvertToCredentailsCreate()
+        {
+            #region Khởi tạo data để gửi 
+
+            CreateSubjectCredentialsDataModel DataToPost = new CreateSubjectCredentialsDataModel();
+
+            DataToPost.Subject = new SubjectDataModel();
+
+            DataToPost.Subject.Major = this.Major.EditText;
+            DataToPost.Subject.Id = this.ID.EditText;
+            DataToPost.Subject.Subject = this.Subject.EditText;
+            DataToPost.Subject.Teacher = this.Teacher.EditText;
+            DataToPost.Subject.Term = Term;
+            DataToPost.Subject.Course = Course;
+            DataToPost.Subject.TimeStart = this.DateStart;
+            DataToPost.Subject.TimeFinish = this.DateFinish;
+            DataToPost.Subject.Status = 0;
+
+            #endregion
+
+            #region Kiểm tra tín chỉ có phải là số không
+
+            int credit;
+
+            try
+            {
+                credit = int.Parse(Credit.EditText);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Credit: {ex.Message}", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+
+            if (credit < 0)
+            {
+                MessageBox.Show("Credit must be bigger than zero", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                return null;
+            }
+
+            DataToPost.Subject.Credit = credit;
+
+            #endregion
+
+            #region Kiểm tra ngày và thời gian bắt đầu và kết thúc
+
+            DateTime dateStart, dateEnd;
+
+            // Kiểm tra xem ngày và thời gian bắt đầu có hợp lệ không
+            try
+            {
+
+                dateStart = DateTime.ParseExact(DataToPost.Subject.TimeStart, "MM/dd/yyyy", CultureInfo.CurrentCulture);
+
+            }
+            catch
+            {
+                MessageBox.Show("Ngày bắt đầu hoặc thời gian bắt đầu không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+
+            // Đến đây, ngày và thời gian bắt đầu đã hợp lệ.
+            // Tiếp tục kiểm tra xem ngày và thời gian kết thúc có hợp lệ không
+            try
+            {
+                dateEnd = DateTime.ParseExact(DataToPost.Subject.TimeFinish, "MM/dd/yyyy", CultureInfo.CurrentCulture);
+            }
+            catch
+            {
+                MessageBox.Show("Ngày kết thúc hoặc thời gian kết thúc không hợp lệ.\n Mời bạn kiểm tra lại!", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+
+            // Đến đây, ngày và thời gian kết thúc đã hợp lệ
+            // Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có trước ngày và thời gian kết thúc không.
+            // Nếu không thì báo lỗi.
+            if (dateStart >= dateEnd)
+            {
+                MessageBox.Show("Ngày và thời gian bắt đầu phải trước ngày và thời gian kết thúc.\n Mời bạn kiểm tra lại!", "Thông báo",
+                   MessageBoxButton.OK, MessageBoxImage.Error);
+
+                return null;
+            }
+
+            // Đến đây ngày và thời gian đã hợp lệ là kiểu datetime 
+            // Tiếp tục kiểm tra xem ngày và thời gian bắt đầu có sau ngày và thời gian hiện tại không.
+            // Nếu không thì báo lỗi.
+            if (DateTimeOffset.UtcNow.Date > dateStart)
+            {
+                MessageBox.Show("Ngày và thời gian bắt đầu phải sau ngày và thời gian hiện tại.\n Mời bạn kiểm tra lại!", "Thông báo",
+                  MessageBoxButton.OK, MessageBoxImage.Error);
+
+                return null;
+            }
+
+            #endregion
+
+            #region Lấy và kiểm tra lịch trong tuần của môn học
+
+            DataToPost.Schedule = new List<ScheduleDataModel>();
+
+            foreach (var item in SpecificTimeItems.Items)
+            {
+                if (!item.IsChecked)
+                {
+                    continue;
+                }
+
+                #region Kiểm tra thời gian
+
+                if (!item.TimeStart.IsTime())
+                {
+                    MessageBox.Show($"Time start of {item.DayInTheWeek} is not in a correct format", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
+                }
+
+                if (!item.TimeFinish.IsTime())
+                {
+                    MessageBox.Show($"Time finish of {item.DayInTheWeek} is not in a correct format", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
+                }
+
+                DateTime start, finish;
+                start = DateTime.ParseExact(item.TimeStart, "HH:mm", CultureInfo.CurrentCulture);
+                finish = DateTime.ParseExact(item.TimeFinish, "HH:mm", CultureInfo.CurrentCulture);
+
+                if (start > finish)
+                {
+                    MessageBox.Show($"{item.DayInTheWeek}: Time start must be before time finish", "Notify", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
+                }
+
+                #endregion
+
+                DataToPost.Schedule.Add(new ScheduleDataModel
+                {
+                    Id = this.ID.EditText,
+                    DayInTheWeek = item.DayInTheWeek,
+                    Room = item.Room,
+                    Period = item.Period,
+                    TimeStart = item.TimeStart,
+                    TimeFinish = item.TimeFinish
+                });
+            }
+
+
+            #endregion
+
+            return DataToPost;
         }
 
         #endregion
