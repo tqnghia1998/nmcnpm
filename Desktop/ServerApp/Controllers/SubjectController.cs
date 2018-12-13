@@ -393,7 +393,7 @@ namespace ServerApp
 
         [Route("api/subject/updatesubject")]
         [HttpPost]
-        public ApiResponse<int> UpdateSubjectById([FromBody] CreateSubjectCredentialsDataModel data)
+        public async Task<ApiResponse<int>> UpdateSubjectById([FromBody] CreateSubjectCredentialsDataModel data)
         {
             try
             {
@@ -410,7 +410,8 @@ namespace ServerApp
 
             try
             {
-                mContext.Schedules.UpdateRange(data.Schedule);
+                await mContext.Database.ExecuteSqlCommandAsync($"delete from Schedules where ID = {data.Subject.Id}");
+                await mContext.Schedules.AddRangeAsync(data.Schedule);
             }
             catch(Exception ex)
             {
