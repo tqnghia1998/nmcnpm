@@ -31,6 +31,11 @@ namespace AdminClient
         /// </summary>
         public bool IsChosen { get; set; }
 
+        /// <summary>
+        /// Amount of student
+        /// </summary>
+        public int TotalStudent { get; set; }
+
         #endregion
 
         #region Public Commands

@@ -28,13 +28,6 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <!--Main Buttons -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <Button Style="{StaticResource IconGrowButton}" 
-                            Content="&#xf060;" 
-                            Foreground="{StaticResource ForegroundLightBrush}"/>
-                </StackPanel>
-
                 <!-- Setting button -->
                 <Button Grid.Column="2" 
                         Foreground="{StaticResource ForegroundLightBrush}" 

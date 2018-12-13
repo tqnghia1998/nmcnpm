@@ -43,7 +43,7 @@ namespace AdminClient
         {
             Items.Add(new SideMenuItemViewModel(OpenListSubjectPage)
             {
-                Icon = "\uf12d",
+                Icon = "\uf022",
                 Content = "List subject"
             });
 
@@ -53,7 +53,13 @@ namespace AdminClient
                 Content = "Create subject"
             });
 
-            
+            Items.Add(new SideMenuItemViewModel(async () => await OpenStatisticPageAsync())
+            {
+                Icon = "\uf0ce",
+                Content = "Statistic"
+            });
+
+
         }
 
         #endregion
@@ -114,6 +120,43 @@ namespace AdminClient
 
 
             IoC.Application.GoToPage(ApplicationPage.ListSubject, viewmodel);
+        }
+
+        /// <summary>
+        /// Go to statistic page
+        /// </summary>
+        /// <returns></returns>
+        public async Task OpenStatisticPageAsync()
+        {
+            // Get data from server
+            var reponse = await WebRequests.GetAsync<ApiResponse<StatisticResultApiModel>>("http://localhost:51197/api/subject/statistic");
+
+            if (reponse.DisplayErrorIfFailed("Statistuc failed"))
+            {
+                //done
+                return;
+            }
+
+            var data = reponse.ServerResponse.Response;
+            StatisticViewModel viewmodel = new StatisticViewModel();
+
+            // Create list major
+            viewmodel.ListMajor = new ObservableCollection<string>(data.ListSubject.GroupBy(item => item.Major).Select(item => item.Key).ToList());
+
+            // Create list subject
+            var temp = data.ListSubject.Select(item => new SubjectItemViewModel
+            {
+                Major = new TextEntryViewModel { EditText = item.Major},
+                Subject = new TextEntryViewModel { EditText = item.Subject },
+                TotalStudent = item.TotalStudent,
+            }).ToList();
+
+            viewmodel.ListSubject = new ObservableCollection<SubjectItemViewModel>(temp);
+
+            // Create list sort text
+            viewmodel.ListSort = new ObservableCollection<string> { "Sort", "Ascending", "Descending" };
+
+            IoC.Application.GoToPage(ApplicationPage.Statistic, viewmodel);
         }
 
         /// <summary>

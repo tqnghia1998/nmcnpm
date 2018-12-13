@@ -11,26 +11,22 @@ namespace AdminClient
 {
     public class ListSubjectViewModel : BaseViewModel
     {
-        #region Private Member
+        #region Protected Members
 
         /// <summary>
         /// Index item that was selected in Major combobox 
         /// </summary>
-        private string mLastMajor;
+        protected string mLastMajor;
 
         /// <summary>
         /// Index item that was selected in Term combobox 
         /// </summary>
-        private string mLastTerm;
+        protected string mLastTerm;
 
         /// <summary>
         /// Index item that was selected in Course combobox 
         /// </summary>
-        private string mLastCourse;
-
-        #endregion
-
-        #region Protected Members
+        protected string mLastCourse;
 
         /// <summary>
         /// The last search text in this list
@@ -45,7 +41,7 @@ namespace AdminClient
         /// <summary>
         /// The chat thread items for the list
         /// </summary>
-        protected ObservableCollection<SubjectItemViewModel> mListSubject;
+        protected  ObservableCollection<SubjectItemViewModel> mListSubject;
 
         /// <summary>
         /// 
@@ -81,7 +77,7 @@ namespace AdminClient
         /// <summary>
         /// List course
         /// </summary>
-        public ObservableCollection<SubjectItemViewModel> ListSubject
+        public virtual ObservableCollection<SubjectItemViewModel> ListSubject
         {
             get => mListSubject;
 
@@ -305,7 +301,7 @@ namespace AdminClient
         /// <summary>
         /// As name function
         /// </summary>
-        public Task Filter()
+        public virtual Task Filter()
         {
             // Make sure we don't re-search the same request
             if (string.Equals(Major, mLastMajor) && string.Equals(Term, mLastTerm) && string.Equals(Course, mLastCourse))

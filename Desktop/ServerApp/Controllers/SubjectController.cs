@@ -420,5 +420,52 @@ namespace ServerApp
             };
 
         }
+
+        [Route("api/subject/statistic")]
+        [HttpGet]
+        public async Task<ApiResponse<StatisticResultApiModel>> StatisticSubject()
+        {
+            string query = "select Major, Id, Subject, (select count(*) from [Subject] S1, (select MSSV, Id from Registered group by MSSV, Id) as [R] where S1.Id = R.Id and S1.Id = S.Id) as total from [Subject] S";
+            List<StatisticSubjectItemDTO> data = new List<StatisticSubjectItemDTO>();
+
+            try
+            {
+                using (var command = mContext.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = query;
+                    command.CommandType = System.Data.CommandType.Text;
+                    await mContext.Database.OpenConnectionAsync();
+
+                    using (var result = await command.ExecuteReaderAsync())
+                    {
+                        while (result.Read())
+                        {
+                            data.Add(new StatisticSubjectItemDTO
+                            {
+                                Major = result.GetString(0),
+                                Id = result.GetString(1),
+                                Subject = result.GetString(2),
+                                TotalStudent = result.GetInt32(3),
+                            });
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse<StatisticResultApiModel>
+                {
+                    ErrorMessage = ex.Message,
+                };
+            }
+
+            return new ApiResponse<StatisticResultApiModel>
+            {
+                Response = new StatisticResultApiModel
+                {
+                    ListSubject = data,
+                }
+            };
+        }
     }
 }

@@ -24,5 +24,10 @@
         /// The main update subject page
         /// </summary>
         ListSubject = 3,
+
+        /// <summary>
+        /// The main statistic page
+        /// </summary>
+        Statistic = 4,
     }
 }

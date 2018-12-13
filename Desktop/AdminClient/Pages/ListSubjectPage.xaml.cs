@@ -21,10 +21,5 @@ namespace AdminClient
         {
             InitializeComponent();
         }
-
-        private void ListCustomers_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
-        {
-
-        }
     }
 }
