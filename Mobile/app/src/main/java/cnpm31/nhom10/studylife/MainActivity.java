@@ -1,5 +1,6 @@
 package cnpm31.nhom10.studylife;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity
 
     /* Định nghĩa các URL */
     static final String urlMajor = "http://10.0.2.2:51197/api/subject";
+    static final String urlExercise = "http://10.0.2.2:51197/api/exercise";
+    public static String mssv = "1612422";
 
     /* Danh sách các khoa */
     ArrayList<String> listMajor = new ArrayList<>();
@@ -130,18 +134,24 @@ public class MainActivity extends AppCompatActivity
             Bundle bundle = new Bundle();
             bundle.putStringArrayList("listMajor", listMajor);
 
-            /* Tạo fragment registerFragment */
+            /* Tạo fragment RegisterFragment */
             RegisterFragment registerFragment = new RegisterFragment();
             registerFragment.setArguments(bundle);
 
-            /* Hiển thị fagment */
+            /* Hiển thị fragment */
             FragmentTransaction fragmentTransaction =getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.registerFrame, registerFragment);
             fragmentTransaction.commit();
         }
         else if (id == R.id.nav_gallery)
         {
+            /* Tạo fragment ExerciseFragment */
+            ExerciseFragment exerciseFragment = new ExerciseFragment();
 
+            /* Hiển thị fragment */
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.registerFrame, exerciseFragment);
+            fragmentTransaction.commit();
         }
         else if (id == R.id.nav_slideshow)
         {

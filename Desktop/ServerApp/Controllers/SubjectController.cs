@@ -94,55 +94,63 @@ namespace ServerApp
         /// <returns></returns>
         [Route("api/registered")]
         [HttpPost]
-        public IActionResult PostRegistered([FromBody] RegisteredDataModel data)
+        public IActionResult PostRegistered([FromBody] List<RegisteredDataModel> data)
         {
             // Lấy số tín của môn học mà sinh viên đang muốn đăng ký
-            int currCredit = mContext.Subject.Where(x => x.Id == data.Id).FirstOrDefault().Credit;
-            if (CountSumCredits(data.Mssv) + currCredit > 22)
+            int currCredit = mContext.Subject.Where(x => x.Id == data[0].Id).FirstOrDefault().Credit;
+            if (CountSumCredits(data[0].Mssv) + currCredit > 22)
             {
                 return BadRequest("Không thể đăng ký hơn 22 tín chỉ");
             }
 
             // Kiểm tra lịch học có bị trùng
-            string timeStart = mContext.Schedules.Where(x => x.Id == data.Id 
-                                                        && x.DayInTheWeek == data.DayInTheWeek)
-                                                        .FirstOrDefault().TimeStart;
-            string timeFinish = mContext.Schedules.Where(x => x.Id == data.Id
-                                                        && x.DayInTheWeek == data.DayInTheWeek)
-                                                        .FirstOrDefault().TimeFinish;
-
-            // Đối chiếu với từng môn học mà sinh viên đã đăng ký
-            var db = mContext.Registered.Where(x => x.Mssv == data.Mssv).ToList();
-            for (int i = 0; i < db.Count; i++)
+            for (int i = 0; i < data.Count; i++)
             {
-                // Nếu khác thứ thì thôi
-                if (!db[i].DayInTheWeek.Equals(data.DayInTheWeek)) continue;
-
-                // Nếu trùng thứ thì kiểm tra giờ
-                string curTimeStart = mContext.Schedules.Where(x => x.Id == db[i].Id
-                                                        && x.DayInTheWeek == db[i].DayInTheWeek)
+                string timeStart = mContext.Schedules.Where(x => x.Id == data[i].Id
+                                                        && x.DayInTheWeek == data[i].DayInTheWeek)
                                                         .FirstOrDefault().TimeStart;
-                string curTimeFinish = mContext.Schedules.Where(x => x.Id == db[i].Id
-                                                        && x.DayInTheWeek == db[i].DayInTheWeek)
-                                                        .FirstOrDefault().TimeFinish;
-                if ((CompareTime(curTimeStart, timeStart) > 0
-                    && CompareTime(timeStart, curTimeFinish) > 0) ||
-                    (CompareTime(curTimeStart, timeFinish) > 0
-                    && CompareTime(timeFinish, curTimeFinish) > 0))
+                string timeFinish = mContext.Schedules.Where(x => x.Id == data[i].Id
+                                                            && x.DayInTheWeek == data[i].DayInTheWeek)
+                                                            .FirstOrDefault().TimeFinish;
+
+                // Đối chiếu với từng môn học mà sinh viên đã đăng ký
+                var db = mContext.Registered.Where(x => x.Mssv == data[i].Mssv).ToList();
+                for (int j = 0; j < db.Count; j++)
                 {
-                    return BadRequest("Lịch học bị trùng " + db[i].Id);
+                    // Nếu khác thứ thì thôi
+                    if (!db[j].DayInTheWeek.Equals(data[i].DayInTheWeek)) continue;
+
+                    // Nếu trùng thứ thì kiểm tra giờ
+                    string curTimeStart = mContext.Schedules.Where(x => x.Id == db[j].Id
+                                                            && x.DayInTheWeek == db[j].DayInTheWeek)
+                                                            .FirstOrDefault().TimeStart;
+                    string curTimeFinish = mContext.Schedules.Where(x => x.Id == db[j].Id
+                                                            && x.DayInTheWeek == db[j].DayInTheWeek)
+                                                            .FirstOrDefault().TimeFinish;
+                    if ((CompareTime(curTimeStart, timeStart) > 0
+                        && CompareTime(timeStart, curTimeFinish) > 0) ||
+                        (CompareTime(curTimeStart, timeFinish) > 0
+                        && CompareTime(timeFinish, curTimeFinish) > 0))
+                    {
+                        string error = "Lịch học bị trùng với môn " + db[j].Subject;
+                        return BadRequest(error);
+                    }
                 }
             }
             try
             {
-                mContext.Registered.Add(data);
+                for (int i = 0; i <data.Count; i++)
+                {
+                    mContext.Registered.Add(data[i]);
+                }
                 mContext.SaveChanges();
             }
             catch (Exception ex)
             {
                 return BadRequest("Đăng ký môn học thất bại");
             }
-            return Ok(new { response = "Đăng ký môn học thành công" });
+            List<string> listResponse = new List<string>() { "Đăng ký môn học thành công" };
+            return Ok(listResponse);
         }
 
         /// <summary>
@@ -214,26 +222,26 @@ namespace ServerApp
         /// <param name="id"></param>
         /// <param name="dayInTheWeek"></param>
         /// <returns></returns>
-        [Route("api/registered/{mssv}/{id}/{dayInTheWeek}")]
+        [Route("api/registered/{mssv}/{id}")]
         [HttpDelete]
-        public IActionResult DeleteRegistered(string mssv, string id, string dayInTheWeek)
+        public IActionResult DeleteRegistered(string mssv, string id)
         {
             try
             {
-                var db = mContext.Registered.FirstOrDefault(x => x.Mssv == mssv
-                                                        && x.Id == id
-                                                        && x.DayInTheWeek == dayInTheWeek);
                 // Kiểm tra môn học đã bắt đầu chưa
-                string timeStart = mContext.Subject.Where(x => x.Id == db.Id).FirstOrDefault().TimeStart;
+                string timeStart = mContext.Subject.Where(x => x.Id == id).FirstOrDefault().TimeStart;
                 DateTime dateStart = DateTime.ParseExact(timeStart, "MM/dd/yyyy", CultureInfo.CurrentCulture);
                 if (dateStart < DateTime.Now)
                 {
                     return BadRequest("Môn học đã được bắt đầu");
                 }
 
+
+                var db = mContext.Registered.Where(x => x.Mssv == mssv
+                                                        && x.Id == id).ToList();
                 if (db != null)
                 {
-                    mContext.Registered.Remove(db);
+                    mContext.Registered.RemoveRange(db);
                     mContext.SaveChanges();
                 }
             }
@@ -269,7 +277,7 @@ namespace ServerApp
             return listMajor;
         }
 
-        /// <summary SỬA Ở ĐÂY>
+        /// <summary>
         /// Gửi yêu cầu lấy thông tin một môn học (theo tên hoặc theo id)
         /// </summary>
         /// <param name="string">Tên hoặc id môn học</param>

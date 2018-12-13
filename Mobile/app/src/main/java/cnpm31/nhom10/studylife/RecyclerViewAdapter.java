@@ -212,36 +212,31 @@ class CustomRecyclerViewAdapter extends ExpandableRecyclerViewAdapter<SubjectTit
             // Nếu OK - đồng ý đăng ký
             b.setPositiveButton("Ok", (dialog, id) -> {
 
-                final RegisteredDataModel registeredData = new RegisteredDataModel();
-
-                // Lấy các thông tin cần thiết
-                registeredData.Mssv = "1612422";
-                registeredData.Id = ((SubjectTitle)group).iD;
-                registeredData.Subject = ((SubjectTitle)group).getTitle();
-
-                // Vì có nhiều lịch học
+                List <RegisteredDataModel> registeredDataModelList = new ArrayList<>();
                 int numDayInTheWeek = ((SubjectTitle)group).getItems().get(0).detail.Schedule.size();
                 for (int i = 0; i < numDayInTheWeek; i++) {
-
-                    // Mỗi lịch học POST một lần
+                    RegisteredDataModel registeredData = new RegisteredDataModel();
+                    registeredData.Mssv = "1612422";
+                    registeredData.Id = ((SubjectTitle)group).iD;
+                    registeredData.Subject = group.getTitle();
                     registeredData.DayInTheWeek = ((SubjectTitle)group).getItems().get(0).detail.Schedule.get(i).DayInTheWeek;
+                    registeredDataModelList.add(registeredData);
+                }
 
-                    // Nếu check box đã check, tức muốn hủy đăng ký
-                    if (parentCheckBox.isChecked()) {
-                        JsonHandler.deleteRegistered("http://10.0.2.2:51197/api/registered",
-                                registeredData,
-                                holder.txtDetail.getContext(),
-                                parentCheckBox,
-                                holder.btnRegister);
-                    }
-                    // Ngược lại muốn đăng ký
-                    else {
-                        JsonHandler.postRegistered("http://10.0.2.2:51197/api/registered",
-                                registeredData,
-                                holder.txtDetail.getContext(),
-                                parentCheckBox,
-                                holder.btnRegister);
-                    }
+                // Nếu checkbox chưa check, tức muốn đăng ký
+                if (!parentCheckBox.isChecked()) {
+                    JsonHandler.postRegistered("http://10.0.2.2:51197/api/registered",
+                            registeredDataModelList,
+                            holder.txtDetail.getContext(),
+                            parentCheckBox,
+                            holder.btnRegister);
+                }
+                else {
+                    JsonHandler.deleteRegistered("http://10.0.2.2:51197/api/registered",
+                            registeredDataModelList.get(0),
+                            holder.txtDetail.getContext(),
+                            parentCheckBox,
+                            holder.btnRegister);
                 }
             });
             b.show();

@@ -25,6 +25,11 @@ namespace ServerApp
         /// </summary>
         public DbSet<RegisteredDataModel> Registered { get; set; }
 
+        /// <summary>
+        /// Bảng các bài tập
+        /// </summary>
+        public DbSet<ExerciseDataModel> Exercise { get; set; }
+
         #endregion
 
         #region Constructor
@@ -55,6 +60,10 @@ namespace ServerApp
 
             // Set primary key cho bảng đăng ký môn học
             modelBuilder.Entity<RegisteredDataModel>().HasKey(c => new { c.Mssv, c.Id, c.DayInTheWeek });
+
+            // Set primary key cho bảng bài tập
+            modelBuilder.Entity<ExerciseDataModel>().HasKey(c => new { c.Mssv, c.Id });
+            modelBuilder.Entity<ExerciseDataModel>().HasIndex(c => c.Name).IsUnique();
         }
 
         #endregion

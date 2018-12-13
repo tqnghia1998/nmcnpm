@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExerciseFragment"
+    android:layout_below="@+id/toolbar"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/btnBackFromExercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/ic_back"/>
+        <EditText
+            android:id="@+id/editExerciseSearch"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:layout_margin="5dp"
+            android:hint="Tìm kiếm theo tên/mã bài tập"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btnExerciseSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tìm kiếm"
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:text="Môn       :"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            tools:ignore="HardcodedText"
+            android:layout_gravity="center_vertical"/>
+        <Spinner
+            android:id="@+id/spinnerExerciseSubjectFilter"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:popupBackground="#dadada"
+            android:layout_height="30dp"
+            android:background="@drawable/spinner_background"
+            android:layout_weight="11"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:text="Sắp xếp:"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            tools:ignore="HardcodedText"
+            android:layout_gravity="center_vertical"/>
+        <Spinner
+            android:id="@+id/spinnerExerciseFilter"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:popupBackground="#dadada"
+            android:layout_height="30dp"
+            android:background="@drawable/spinner_background"
+            android:layout_weight="11"/>
+        <Button
+            android:id="@+id/btnAddExercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thêm bài tập"
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/exerciseRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/spinner_background"
+            android:layout_margin="10dp">
+
+        </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:id="@+id/emptyExercise"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Không có bài tập nào"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</LinearLayout>

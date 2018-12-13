@@ -8,8 +8,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -26,14 +25,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import cnpm31.nhom10.studylife.DbModel.ExerciseDataModel;
 import cnpm31.nhom10.studylife.DbModel.RegisteredDataModel;
 
 import static android.support.constraint.Constraints.TAG;
-import static cnpm31.nhom10.studylife.RegisterFragment.adapterRecycler;
-import static cnpm31.nhom10.studylife.RegisterFragment.filterSpinner;
-import static cnpm31.nhom10.studylife.RegisterFragment.isSearching;
-import static cnpm31.nhom10.studylife.RegisterFragment.listSubjectTitle;
+import static cnpm31.nhom10.studylife.ExerciseFragment.refreshExercise;
 import static cnpm31.nhom10.studylife.RegisterFragment.refresh;
 import static cnpm31.nhom10.studylife.RegisterFragment.updateSumCredit;
 
@@ -124,30 +123,39 @@ public class JsonHandler {
 
     // Phương thức POST dữ liệu đăng ký lên server
     public static void postRegistered(String sUrl,
-                                      RegisteredDataModel data,
+                                      List<RegisteredDataModel> data,
                                       final Context mContext,
                                       final CheckBox checkBox,
                                       final Button button) {
         // Chuyển dữ liệu sang định dạng json (GSON ALTERNATIVE)
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("mssv", data.Mssv);
-            jsonObject.put("id", data.Id);
-            jsonObject.put("dayInTheWeek", data.DayInTheWeek);
-            jsonObject.put("subject", data.Subject);
-        } catch (JSONException ex) {
-            ex.printStackTrace();
-            Toast.makeText(mContext, "Đã xảy ra lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < data.size(); i++) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("mssv", data.get(i).Mssv);
+                jsonObject.put("id",  data.get(i).Id);
+                jsonObject.put("dayInTheWeek",  data.get(i).DayInTheWeek);
+                jsonObject.put("subject",  data.get(i).Subject);
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+                Toast.makeText(mContext, "Đã xảy ra lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+            }
+            finally {
+                jsonArray.put(jsonObject);
+            }
         }
 
         // Tạo một RequestQueue để quản lý việc giao tiếp với network
         RequestQueue queue = Volley.newRequestQueue(mContext);
 
         // Tạo một POST request
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, sUrl, jsonObject,
+        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.POST, sUrl, jsonArray,
                 response -> {
                     try {
-                        Toast.makeText(mContext, response.getString("response"), Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage(response.getString(0));
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
 
                         // Bật button và chuyển sang Hủy đăng ký
                         button.setEnabled(true);
@@ -164,11 +172,15 @@ public class JsonHandler {
                 },
                 error -> {
                     try {
-                        Toast.makeText(mContext, "Lỗi " + error.networkResponse.statusCode + " - "
-                                + new String(error.networkResponse.data, "UTF-8"), Toast.LENGTH_SHORT).show();
+                        if (error.networkResponse != null) {
+                            AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                            b.setTitle("Lỗi " + error.networkResponse.statusCode);
+                            b.setMessage(new String(error.networkResponse.data, "UTF-8"));
+                            b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
 
-                        // Bật lại button Đăng ký
-                        button.setEnabled(true);
+                            // Bật lại button Đăng ký
+                            button.setEnabled(true);
+                        }
                     } catch (Exception e) {
                         AlertDialog.Builder b = new AlertDialog.Builder(mContext);
                         b.setTitle("Thông báo");
@@ -188,7 +200,7 @@ public class JsonHandler {
                                         final Button button) {
         // Chuyển sUrl sang đúng định dạng với API của server
         // Vì DELETE request không nhận body, nên đưa các thông tin cần thiết lên url
-        sUrl += "/" + data.Mssv + "/" + data.Id + "/" + data.DayInTheWeek;
+        sUrl += "/" + data.Mssv + "/" + data.Id;
 
         // Tạo một RequestQueue để quản lý việc giao tiếp với network
         RequestQueue queue = Volley.newRequestQueue(mContext);
@@ -197,7 +209,10 @@ public class JsonHandler {
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.DELETE, sUrl, null,
                 response -> {
                     try {
-                        Toast.makeText(mContext, response.getString("response"), Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage(response.getString("response"));
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
 
                         // Bật button và chuyển Đăng ký
                         button.setEnabled(true);
@@ -214,11 +229,175 @@ public class JsonHandler {
                 },
                 error -> {
                     try {
-                        Toast.makeText(mContext, "Lỗi " + error.networkResponse.statusCode + " - "
-                                + new String(error.networkResponse.data, "UTF-8"), Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Lỗi " + error.networkResponse.statusCode);
+                        b.setMessage(new String(error.networkResponse.data, "UTF-8"));
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
 
                         // Bật lại button Đăng ký
                         button.setEnabled(true);
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
+                    }
+                });
+        // Thực hiện request
+        queue.add(stringRequest);
+    }
+
+    // Phương thức UPDATE dữ liệu bài tập lên server
+    public static void updateExercise(String sUrl,
+                                      ExerciseDataModel data,
+                                      final Context mContext) {
+        AtomicBoolean result = new AtomicBoolean(false);
+        // Chuyển dữ liệu sang định dạng json (GSON ALTERNATIVE)
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("mssv", data.Mssv);
+            jsonObject.put("id", data.Id);
+            jsonObject.put("name", data.Name);
+            jsonObject.put("subject", data.Subject);
+            jsonObject.put("deadline", data.Deadline);
+            jsonObject.put("progress", data.Progress);
+            jsonObject.put("content", data.Content);
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            final AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+            b.setTitle("Thông báo");
+            b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel());
+            b.setMessage("Đã xảy ra lỗi, vui lòng thử lại").show();
+        }
+
+        // Tạo một RequestQueue để quản lý việc giao tiếp với network
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        // Tạo một POST request
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, sUrl, jsonObject,
+                response -> {
+                    try {
+                        final AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel());
+                        b.setMessage(response.getString("response")).show();
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
+                    }
+                },
+                error -> {
+                    try {
+                        final AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel());
+                        b.setMessage("Lỗi " + error.networkResponse.statusCode + " - "
+                                + new String(error.networkResponse.data, "UTF-8")).show();
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
+                    }
+                });
+        // Thực hiện request
+        queue.add(stringRequest);
+    }
+    // Phương thức POST dữ liệu bài tập lên server
+    public static void postExercise(String sUrl,
+                                    ExerciseDataModel data,
+                                    final Context mContext) {
+        // Chuyển dữ liệu sang định dạng json (GSON ALTERNATIVE)
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("mssv", data.Mssv);
+            jsonObject.put("id", data.Id);
+            jsonObject.put("name", data.Name);
+            jsonObject.put("subject", data.Subject);
+            jsonObject.put("deadline", data.Deadline);
+            jsonObject.put("progress", data.Progress);
+            jsonObject.put("content", data.Content);
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            final AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+            b.setTitle("Thông báo");
+            b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel());
+            b.setMessage("Đã xảy ra lỗi, vui lòng thử lại").show();
+        }
+
+        // Tạo một RequestQueue để quản lý việc giao tiếp với network
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        // Tạo một POST request
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, sUrl, jsonObject,
+                response -> {
+                    try {
+                        final AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel());
+                        b.setMessage(response.getString("response")).show();
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
+                    }
+                },
+                error -> {
+                    try {
+                        final AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel());
+                        b.setMessage("Lỗi " + error.networkResponse.statusCode + " - "
+                                + new String(error.networkResponse.data, "UTF-8")).show();
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
+                    }
+                });
+        // Thực hiện request
+        queue.add(stringRequest);
+    }
+
+    // Phương thức DELETE dữ liệu bài tập lên server
+    public static void deleteExercise(String sUrl,
+                                      String idExercise,
+                                      final Context mContext) {
+        // Chuyển sUrl sang đúng định dạng với API của server
+        // Vì DELETE request không nhận body, nên đưa các thông tin cần thiết lên url
+        sUrl += "/" + idExercise;
+
+        // Tạo một RequestQueue để quản lý việc giao tiếp với network
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        // Tạo một POST request
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.DELETE, sUrl, null,
+                response -> {
+                    try {
+                        final AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel());
+                        b.setMessage(response.getString("response")).show();
+
+                        refreshExercise();
+                    } catch (Exception e) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setMessage("Không thể kết nối đến server");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel()).show();
+                    }
+                },
+                error -> {
+                    try {
+                        final AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                        b.setTitle("Thông báo");
+                        b.setNegativeButton("Ok", (dialog, which) -> dialog.cancel());
+                        b.setMessage("Lỗi " + error.networkResponse.statusCode + " - "
+                                + new String(error.networkResponse.data, "UTF-8")).show();
                     } catch (Exception e) {
                         AlertDialog.Builder b = new AlertDialog.Builder(mContext);
                         b.setTitle("Thông báo");
