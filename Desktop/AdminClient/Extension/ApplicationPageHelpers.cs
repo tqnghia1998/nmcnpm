@@ -26,6 +26,8 @@ namespace AdminClient
                     return new CreateSubjectPage(viewModel as CreateSubjectPageViewModel);
                 case ApplicationPage.ListSubject:
                     return new ListSubjectPage(viewModel as ListSubjectViewModel);
+                case ApplicationPage.Statistic:
+                    return new StatisticPage(viewModel as StatisticViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -55,6 +57,10 @@ namespace AdminClient
             else if (page is ListSubjectPage)
             {
                 return ApplicationPage.ListSubject;
+            }
+            else if (page is StatisticPage)
+            {
+                return ApplicationPage.Statistic;
             }
             else
             {

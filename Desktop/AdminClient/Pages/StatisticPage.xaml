@@ -1,0 +1,108 @@
+﻿<local:BasePage x:TypeArguments="local:StatisticViewModel" x:Class="AdminClient.StatisticPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AdminClient"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Border Background="White">
+        <Border.Resources>
+            <Style x:Key="ItemStyle" TargetType="{x:Type ComboBox}">
+                <Setter Property="ItemTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"
+                                        TextWrapping="NoWrap"
+                                       FontSize="{StaticResource FontSizeRegular}"
+                                       FontFamily="{StaticResource LatoRegular}"/>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Border.Resources>
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title page -->
+            <TextBlock Text="Statistic"
+                       Grid.Row="0"
+                       Margin="15 12"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontSize="25"
+                       FontFamily="{StaticResource LatoRegular}"/>
+
+            <Grid Height="2"
+                  Grid.Row="1"
+                  Background="Gray"
+                  Margin="0 0 0 5"/>
+
+            <!-- Title bar -->
+            <Grid Height="50"
+                  Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox VerticalAlignment="Center"
+                          Grid.Column="0"
+                          Margin="10 0"
+                          ItemsSource="{Binding ListMajor}"
+                          Style="{StaticResource ItemStyle}"
+                          SelectedIndex="0"
+                          Text="{Binding Major, UpdateSourceTrigger=PropertyChanged}">
+                </ComboBox>
+
+                <ComboBox VerticalAlignment="Center"
+                          Grid.Column="1"
+                          Margin="10 0"
+                          ItemsSource="{Binding ListSort}"
+                          Style="{StaticResource ItemStyle}"
+                          SelectedIndex="0"
+                          Text="{Binding Term, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- Search button -->
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            Margin="10 0">
+
+                    <Button FontFamily="{StaticResource FontAwesome}"
+                            FontSize="{StaticResource FontSizeRegular}"
+                            Content="Filter"
+                            Padding="5"
+                            local:IsBusyProperty.Value="{Binding FilterIsRunning}"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="3"
+                  Background="Black"
+                  Margin="5 5 5 0"
+                  Height="1"/>
+
+            <ScrollViewer Grid.Row="4"
+                          Margin="5 0"
+                          VerticalScrollBarVisibility="Visible">
+                <ItemsControl ItemsSource="{Binding FilteredSubjects}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:StatisticSubjectItem/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </ScrollViewer>
+
+        </Grid>
+    </Border>
+</local:BasePage>

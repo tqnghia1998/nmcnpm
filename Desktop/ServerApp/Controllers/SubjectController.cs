@@ -351,7 +351,7 @@ namespace ServerApp
         }
 
         /// <summary>
-        /// Get major, name, term, course of subject
+        /// Get major, name, term, course of subject, Id, teacher
         /// </summary>
         /// <returns></returns>
         [Route("api/subject/listsubject")]
@@ -365,9 +365,11 @@ namespace ServerApp
                 list = mContext.Subject.Select(item => new ListSubjectItemDTO
                 {
                     Major = item.Major,
+                    Id = item.Id,
                     Subject = item.Subject,
                     Course = item.Course,
-                    Term = item.Term
+                    Term = item.Term,
+                    Teacher = item.Teacher,
                 }).ToList();
             }
             catch (Exception ex)
@@ -385,6 +387,91 @@ namespace ServerApp
                 Response = new ListSubjectResultApiModel
                 {
                     ListSubject = list,
+                }
+            };
+        }
+
+        [Route("api/subject/updatesubject")]
+        [HttpPost]
+        public ApiResponse<int> UpdateSubjectById([FromBody] CreateSubjectCredentialsDataModel data)
+        {
+            try
+            {
+                SubjectDataModel entity = mContext.Subject.Where(item => item.Id.Equals(data.Subject.Id)).FirstOrDefault();
+                mContext.Entry(entity).CurrentValues.SetValues(data.Subject);
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse<int>
+                {
+                    ErrorMessage = ex.Message,
+                };
+            }
+
+            try
+            {
+                mContext.Schedules.UpdateRange(data.Schedule);
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse<int>
+                {
+                    ErrorMessage = ex.Message,
+                };
+            }
+
+            mContext.SaveChanges();
+
+            return new ApiResponse<int>
+            {
+                Response = 200,
+            };
+
+        }
+
+        [Route("api/subject/statistic")]
+        [HttpGet]
+        public async Task<ApiResponse<StatisticResultApiModel>> StatisticSubject()
+        {
+            string query = "select Major, Id, Subject, (select count(*) from [Subject] S1, (select MSSV, Id from Registered group by MSSV, Id) as [R] where S1.Id = R.Id and S1.Id = S.Id) as total from [Subject] S";
+            List<StatisticSubjectItemDTO> data = new List<StatisticSubjectItemDTO>();
+
+            try
+            {
+                using (var command = mContext.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = query;
+                    command.CommandType = System.Data.CommandType.Text;
+                    await mContext.Database.OpenConnectionAsync();
+
+                    using (var result = await command.ExecuteReaderAsync())
+                    {
+                        while (result.Read())
+                        {
+                            data.Add(new StatisticSubjectItemDTO
+                            {
+                                Major = result.GetString(0),
+                                Id = result.GetString(1),
+                                Subject = result.GetString(2),
+                                TotalStudent = result.GetInt32(3),
+                            });
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse<StatisticResultApiModel>
+                {
+                    ErrorMessage = ex.Message,
+                };
+            }
+
+            return new ApiResponse<StatisticResultApiModel>
+            {
+                Response = new StatisticResultApiModel
+                {
+                    ListSubject = data,
                 }
             };
         }

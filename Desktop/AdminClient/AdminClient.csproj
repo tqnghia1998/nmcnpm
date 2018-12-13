@@ -184,6 +184,9 @@
     <Compile Include="Controls\SideMenuItemControl.xaml.cs">
       <DependentUpon>SideMenuItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StatisticSubjectItem.xaml.cs">
+      <DependentUpon>StatisticSubjectItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SubjectItem.xaml.cs">
       <DependentUpon>SubjectItem.xaml</DependentUpon>
     </Compile>
@@ -213,6 +216,9 @@
     <Compile Include="Pages\RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\StatisticPage.xaml.cs">
+      <DependentUpon>StatisticPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DateToStringValueConverter.cs" />
@@ -225,6 +231,7 @@
     <Compile Include="ViewModel\SideMenuItemViewModel.cs" />
     <Compile Include="ViewModel\SideMenu\Design\SideMenuDesignModel.cs" />
     <Compile Include="ViewModel\SideMenu\SideMenuViewModel.cs" />
+    <Compile Include="ViewModel\StatisticViewModel.cs" />
     <Compile Include="ViewModel\SubjectItemViewModel.cs" />
     <Compile Include="ViewModel\TimeOfClass\Design\ListTimeOfClassDesignModel.cs" />
     <Compile Include="ViewModel\TimeOfClass\Design\TimeOfClassItemDesignModel.cs" />
@@ -247,6 +254,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SideMenuItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StatisticSubjectItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -288,6 +299,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\RegisterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\StatisticPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -333,7 +348,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="Fonts\fontawesome-webfont.ttf" />
     <Resource Include="Fonts\Lato-Black.ttf" />
     <Resource Include="Fonts\Lato-BlackItalic.ttf" />
     <Resource Include="Fonts\Lato-Bold.ttf" />
@@ -353,6 +367,7 @@
     <Resource Include="Fonts\Lato-Thin.ttf" />
     <Resource Include="Fonts\Lato-ThinItalic.ttf" />
     <None Include="app.manifest" />
+    <Resource Include="Fonts\fontawesome-webfont.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

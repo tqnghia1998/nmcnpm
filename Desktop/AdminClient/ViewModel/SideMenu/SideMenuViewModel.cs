@@ -43,7 +43,7 @@ namespace AdminClient
         {
             Items.Add(new SideMenuItemViewModel(OpenListSubjectPage)
             {
-                Icon = "\uf12d",
+                Icon = "\uf022",
                 Content = "List subject"
             });
 
@@ -53,7 +53,13 @@ namespace AdminClient
                 Content = "Create subject"
             });
 
-            
+            Items.Add(new SideMenuItemViewModel(async () => await OpenStatisticPageAsync())
+            {
+                Icon = "\uf0ce",
+                Content = "Statistic"
+            });
+
+
         }
 
         #endregion
@@ -95,12 +101,62 @@ namespace AdminClient
             temp = listSubject.GroupBy(item => item.Course).Select(item => item.Key).ToList();
             viewmodel.ListCourse = new ObservableCollection<string>(temp);
 
-            temp = listSubject.GroupBy(item => item.Subject).Select(item => item.Key).ToList();
-            viewmodel.ListSubjectName = new ObservableCollection<string>(temp);
+            viewmodel.ListMajor.Insert(0, "Major");
+            viewmodel.ListTerm.Insert(0, "Term");
+            viewmodel.ListCourse.Insert(0, "Course");
+
+            List<SubjectItemViewModel> list = listSubject.Select(item => new SubjectItemViewModel
+            {
+                Subject =  new TextEntryViewModel { Label = "Subject", EditText = item.Subject},
+                ID = new TextEntryViewModel { Label = "Id", EditText = item.Id },
+                Teacher = new TextEntryViewModel { Label = "Teacher", EditText = item.Teacher },
+                Major = new TextEntryViewModel { Label = "Major", EditText = item.Major},
+                Term = item.Term,
+                Course = item.Course,
+            }).ToList();
+
+            viewmodel.ListSubject = new ObservableCollection<SubjectItemViewModel>(list);
 
 
 
             IoC.Application.GoToPage(ApplicationPage.ListSubject, viewmodel);
+        }
+
+        /// <summary>
+        /// Go to statistic page
+        /// </summary>
+        /// <returns></returns>
+        public async Task OpenStatisticPageAsync()
+        {
+            // Get data from server
+            var reponse = await WebRequests.GetAsync<ApiResponse<StatisticResultApiModel>>("http://localhost:51197/api/subject/statistic");
+
+            if (reponse.DisplayErrorIfFailed("Statistuc failed"))
+            {
+                //done
+                return;
+            }
+
+            var data = reponse.ServerResponse.Response;
+            StatisticViewModel viewmodel = new StatisticViewModel();
+
+            // Create list major
+            viewmodel.ListMajor = new ObservableCollection<string>(data.ListSubject.GroupBy(item => item.Major).Select(item => item.Key).ToList());
+
+            // Create list subject
+            var temp = data.ListSubject.Select(item => new SubjectItemViewModel
+            {
+                Major = new TextEntryViewModel { EditText = item.Major},
+                Subject = new TextEntryViewModel { EditText = item.Subject },
+                TotalStudent = item.TotalStudent,
+            }).ToList();
+
+            viewmodel.ListSubject = new ObservableCollection<SubjectItemViewModel>(temp);
+
+            // Create list sort text
+            viewmodel.ListSort = new ObservableCollection<string> { "Sort", "Ascending", "Descending" };
+
+            IoC.Application.GoToPage(ApplicationPage.Statistic, viewmodel);
         }
 
         /// <summary>

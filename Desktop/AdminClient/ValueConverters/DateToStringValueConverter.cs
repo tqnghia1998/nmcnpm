@@ -11,7 +11,14 @@ namespace AdminClient
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return null;
+            string datetimeString = (string)value;
+
+            if (string.IsNullOrEmpty(datetimeString))
+            {
+                return null;
+            }
+
+            return DateTime.ParseExact(datetimeString, "MM/dd/yyyy", CultureInfo.CurrentCulture);
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
