@@ -434,7 +434,7 @@ namespace ServerApp
         [HttpGet]
         public async Task<ApiResponse<StatisticResultApiModel>> StatisticSubject()
         {
-            string query = "select Major, Id, Subject, (select count(*) from [Subject] S1, (select MSSV, Id from Registered group by MSSV, Id) as [R] where S1.Id = R.Id and S1.Id = S.Id) as total from [Subject] S";
+            string query = "select Major, Id, Subject, (select count(*) from (select MSSV, Id from Registered group by MSSV, Id) as [R] where S.Id = R.Id) as total from [Subject] S";
             List<StatisticSubjectItemDTO> data = new List<StatisticSubjectItemDTO>();
 
             try

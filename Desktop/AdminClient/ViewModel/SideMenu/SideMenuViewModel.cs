@@ -142,6 +142,7 @@ namespace AdminClient
 
             // Create list major
             viewmodel.ListMajor = new ObservableCollection<string>(data.ListSubject.GroupBy(item => item.Major).Select(item => item.Key).ToList());
+            viewmodel.ListMajor.Insert(0, "Major");
 
             // Create list subject
             var temp = data.ListSubject.Select(item => new SubjectItemViewModel

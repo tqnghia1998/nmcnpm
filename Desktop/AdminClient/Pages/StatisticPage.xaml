@@ -70,7 +70,7 @@
                           ItemsSource="{Binding ListSort}"
                           Style="{StaticResource ItemStyle}"
                           SelectedIndex="0"
-                          Text="{Binding Term, UpdateSourceTrigger=PropertyChanged}"/>
+                          Text="{Binding SortText, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <!-- Search button -->
                 <StackPanel Grid.Column="2"
@@ -81,7 +81,8 @@
                             FontSize="{StaticResource FontSizeRegular}"
                             Content="Filter"
                             Padding="5"
-                            local:IsBusyProperty.Value="{Binding FilterIsRunning}"/>
+                            local:IsBusyProperty.Value="{Binding FilterIsRunning}"
+                            Command="{Binding FilterCommand}"/>
                 </StackPanel>
             </Grid>
 
