@@ -42,7 +42,7 @@ namespace AdminClient
             OnPropertyChanged(nameof(CurrentPage));
 
             // Show side menu or not
-            SideMenuVisible = (page != ApplicationPage.Login || page != ApplicationPage.Register);
+            SideMenuVisible = (page != ApplicationPage.Login && page != ApplicationPage.Register);
         }
 
         /// <summary>

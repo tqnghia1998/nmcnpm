@@ -60,9 +60,9 @@
                 <ComboBox VerticalAlignment="Center"
                           Grid.Column="0"
                           Margin="10 0"
+                          SelectedIndex="0"
                           ItemsSource="{Binding ListMajor}"
                           Style="{StaticResource ItemStyle}"
-                          SelectedIndex="0"
                           Text="{Binding Major, UpdateSourceTrigger=PropertyChanged}">
                 </ComboBox>
 

@@ -72,7 +72,7 @@ namespace AdminClient
         /// </summary>
         protected virtual void OnViewModelChanged()
         {
-
+            
         }
     }
 

@@ -50,6 +50,11 @@ namespace AdminClient
 
         public override Task Filter()
         {
+            if (string.IsNullOrEmpty(Major) || string.IsNullOrEmpty(SortText))
+            {
+                return Task.FromResult(true);
+            }
+
             // Make sure we don't re-search the same request
             if (string.Equals(Major, mLastMajor) && string.Equals(SortText, mLastSort))
             {

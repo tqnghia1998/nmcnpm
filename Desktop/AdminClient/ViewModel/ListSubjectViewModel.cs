@@ -303,6 +303,11 @@ namespace AdminClient
         /// </summary>
         public virtual Task Filter()
         {
+            if (string.IsNullOrEmpty(Major) || string.IsNullOrEmpty(Term) || string.IsNullOrEmpty(Course))
+            {
+                return Task.FromResult(true);
+            }
+
             // Make sure we don't re-search the same request
             if (string.Equals(Major, mLastMajor) && string.Equals(Term, mLastTerm) && string.Equals(Course, mLastCourse))
             {
