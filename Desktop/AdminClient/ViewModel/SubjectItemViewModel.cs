@@ -1,5 +1,6 @@
 ﻿using DbModel;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,7 +10,19 @@ namespace AdminClient
 {
     public class SubjectItemViewModel: CreateSubjectPageViewModel
     {
+        #region Private Member
+
+        private ListSubjectViewModel mContainer;
+
+
+        #endregion
+
         #region Public Properties
+
+        /// <summary>
+        /// A flag to ignore delete command when it is running
+        /// </summary>
+        public bool DeleteIsRunning { get; set; }
 
         /// <summary>
         /// A flag to ignore click command when it is running
@@ -41,6 +54,11 @@ namespace AdminClient
         #region Public Commands
 
         /// <summary>
+        /// Delete command to delete a subject
+        /// </summary>
+        public ICommand DeleteCommand { get; set; }
+
+        /// <summary>
         /// Click command to show credentials of this subject
         /// </summary>
         public ICommand ClickCommand { get; set; }
@@ -55,12 +73,25 @@ namespace AdminClient
         #region Constructor
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="container"></param>
+        public SubjectItemViewModel(ListSubjectViewModel container)
+        {
+            mContainer = container;
+            ClickCommand = new RelayCommand(async () => await Click());
+            UpdateCommand = new RelayParameterizedCommand(async (parameter) => await Update(parameter));
+            DeleteCommand = new RelayCommand(async () => await DeleteAsync());
+        }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
-        public SubjectItemViewModel(): base()
+        public SubjectItemViewModel() : base()
         {
             ClickCommand = new RelayCommand(async () => await Click());
             UpdateCommand = new RelayParameterizedCommand(async (parameter) => await Update(parameter));
+            DeleteCommand = new RelayCommand(async () => await DeleteAsync());
         }
 
 
@@ -143,6 +174,46 @@ namespace AdminClient
 
                    MessageBox.Show("Update subject succeed", "Notify", MessageBoxButton.OK);
                });
+        }
+
+        public async Task DeleteAsync()
+        {
+            await RunCommand(() => this.DeleteIsRunning, async () =>
+            {
+                DateTime dateStart;
+                
+                try
+                {
+                    dateStart = DateTime.ParseExact(DateStart, "MM/dd/yyyy", CultureInfo.CurrentCulture);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Delete failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (DateTimeOffset.UtcNow.Date >= dateStart)
+                {
+                    MessageBox.Show("Cannot delete a subject which had been started !", "Delete Failed",
+                      MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    return;
+                }
+
+
+                var response = await WebRequests.PostAsync<ApiResponse<string>>("http://localhost:51197/api/subject/delete", ID.EditText);
+
+                if (response.DisplayErrorIfFailed("Delete failed"))
+                {
+                    return;
+                }
+
+                MessageBox.Show(response.ServerResponse.Response, "Notify", MessageBoxButton.OK);
+                mContainer.DeleteSubject(this);
+
+            });
+
+            
         }
 
         #endregion

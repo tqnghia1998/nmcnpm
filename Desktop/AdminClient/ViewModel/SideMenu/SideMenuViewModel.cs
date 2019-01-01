@@ -105,7 +105,7 @@ namespace AdminClient
             viewmodel.ListTerm.Insert(0, "Term");
             viewmodel.ListCourse.Insert(0, "Course");
 
-            List<SubjectItemViewModel> list = listSubject.Select(item => new SubjectItemViewModel
+            List<SubjectItemViewModel> list = listSubject.Select(item => new SubjectItemViewModel(viewmodel)
             {
                 Subject =  new TextEntryViewModel { Label = "Subject", EditText = item.Subject},
                 ID = new TextEntryViewModel { Label = "Id", EditText = item.Id },
@@ -146,6 +146,7 @@ namespace AdminClient
 
             // Create list subject
             var temp = data.ListSubject.Select(item => new SubjectItemViewModel
+            
             {
                 Major = new TextEntryViewModel { EditText = item.Major},
                 Subject = new TextEntryViewModel { EditText = item.Subject },

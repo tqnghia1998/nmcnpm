@@ -182,7 +182,9 @@
                         HorizontalAlignment="Center"
                         FontFamily="{StaticResource LatoRegular}"
                         FontSize="{StaticResource FontSizeRegular}"
-                        Content="Delete"/>
+                        Content="Delete"
+                        local:IsBusyProperty.Value="{Binding DeleteIsRunning}"
+                        Command="{Binding DeleteCommand}"/>
             </StackPanel>
 
         </StackPanel>

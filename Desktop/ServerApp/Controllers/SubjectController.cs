@@ -476,5 +476,28 @@ namespace ServerApp
                 }
             };
         }
+
+        [Route("api/subject/delete")]
+        [HttpPost]
+        public async Task<ApiResponse<string>> DeleteSubject([FromBody] string id)
+        {
+            try
+            {
+                await mContext.Database.ExecuteSqlCommandAsync($"delete from Schedules where Id = {id}");
+                await mContext.Database.ExecuteSqlCommandAsync($"delete from Subject where Id = {id}");
+            }
+            catch(Exception ex)
+            {
+                return new ApiResponse<string>
+                {
+                    ErrorMessage = ex.Message,
+                };
+            }
+
+            return new ApiResponse<string>
+            {
+                Response = "Delete success",
+            };
+        }
     }
 }

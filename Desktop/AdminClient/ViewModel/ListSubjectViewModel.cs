@@ -44,11 +44,6 @@ namespace AdminClient
         protected  ObservableCollection<SubjectItemViewModel> mListSubject;
 
         /// <summary>
-        /// 
-        /// </summary>
-        protected ObservableCollection<SubjectItemViewModel> mListBeforeFilter;
-
-        /// <summary>
         /// A flag indicating if the search dialog is open
         /// </summary>
         protected bool mSearchIsOpen = false;
@@ -340,6 +335,11 @@ namespace AdminClient
             mLastCourse = Course;
 
             return Task.FromResult(true);
+        }
+
+        public void DeleteSubject(SubjectItemViewModel item)
+        {
+            ListSubject.Remove(item);
         }
 
         #endregion
