@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Đăng ký môn học" />
         <item
+            android:id="@+id/nav_viewschedule"
+            android:icon="@drawable/ic_viewschedule"
+            android:title="Xem lịch học" />
+        <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Gallery" />

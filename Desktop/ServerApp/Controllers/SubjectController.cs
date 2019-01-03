@@ -499,5 +499,59 @@ namespace ServerApp
                 Response = "Delete success",
             };
         }
+
+        /// <summary>
+        /// Get list subject detail registered 
+        /// </summary>
+        /// <param name="mssv">Mã số sinh viên</param>
+        /// <returns></returns>
+        [Route("api/listSubReg/{mssv}")]
+        [HttpGet]
+        public List<ListSubRegDTO> GetSubjectRegistered(string mssv)
+        {
+            //Danh sách chi tiết các môn học đã đăng kí
+            var listSubReg = new List<ListSubRegDTO>();
+
+            // Lấy tất cả môn học mà sinh viên này đã đăng ký
+            var db = mContext.Registered.Where(x => x.Mssv == mssv).ToList();
+
+            //Đưa tất cả dữ liệu của môn học vào DTO
+            for (int i = 0; i < db.Count; i++)
+            {
+                //Lấy lịch học của id môn học tương ứng
+                var schedule = mContext.Schedules.Where(x => x.Id == db.ElementAtOrDefault(i).Id).FirstOrDefault();
+
+                //Lấy thông tin môn học của id tương ứng
+                var subject = mContext.Subject.Where(x => x.Id == db.ElementAtOrDefault(i).Id).FirstOrDefault();
+
+                //Tạo một môn học với tất cả thông tin chi tiết
+                var model = new ListSubRegDTO();
+
+                //Lấy id, tên môn học, ngày học từ môn học mà sinh viên đăng kí
+                model.Id = db.ElementAtOrDefault(i).Id;
+                model.Subject = db.ElementAtOrDefault(i).Subject;
+                model.DayInTheWeek = db.ElementAtOrDefault(i).DayInTheWeek;
+
+                //Lấy tiết, phòng, thời gian bắt đầu, kết thúc từ schedule
+                model.Period = schedule.Period;
+                model.Room = schedule.Room;
+                model.TimeStart = schedule.TimeStart;
+                model.TimeFinish = schedule.TimeFinish;
+
+                //Lấy ngành, giáo viên dạy, tín chỉ, kì, năm học, thời gian bắt đầu và kết thúc khóa học từ subject
+                model.Major = subject.Major;
+                model.Teacher = subject.Teacher;
+                model.Credit = subject.Credit;
+                model.Term = subject.Term;
+                model.Course = subject.Course;
+                model.StartOfCourse = subject.TimeStart;
+                model.FinishOfCourse = subject.TimeFinish;
+
+                //Thêm môn học đã tạo vào list
+                listSubReg.Add(model);
+            }
+
+            return listSubReg;
+        }
     }
 }

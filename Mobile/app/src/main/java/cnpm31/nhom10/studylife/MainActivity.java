@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity
 
     /* Định nghĩa các URL */
     static final String urlMajor = "http://10.0.2.2:51197/api/subject";
+    static final String urlRegistered = "http://10.0.2.2:51197/api/listSubReg";
     static final String urlExercise = "http://10.0.2.2:51197/api/exercise";
     public static String mssv = "1612422";
 
@@ -141,6 +142,16 @@ public class MainActivity extends AppCompatActivity
             /* Hiển thị fragment */
             FragmentTransaction fragmentTransaction =getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.registerFrame, registerFragment);
+            fragmentTransaction.commit();
+        }
+        else if (id == R.id.nav_viewschedule)
+        {
+            /*Tao fragment ViewSchedule*/
+            ViewScheduleFragment viewSchedulesFragment = new ViewScheduleFragment();
+
+            /*Hiển thị fragment*/
+            FragmentTransaction fragmentTransaction =getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.registerFrame, viewSchedulesFragment);
             fragmentTransaction.commit();
         }
         else if (id == R.id.nav_gallery)
