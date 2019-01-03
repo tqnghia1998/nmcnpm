@@ -72,6 +72,17 @@ public class ViewScheduleFragment extends android.app.Fragment {
     //Thông tin cần thiết môn học để hiển thị
     public ArrayList<SubjectData> weekDatas;
 
+    //Button
+    Button btnSunday;
+    Button btnMonday;
+    Button btnTuesday;
+    Button btnWedday;
+    Button btnThuday;
+    Button btnFriday;
+    Button btnSatday;
+
+    public  ArrayList<Button> listButton = new ArrayList<Button>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -130,6 +141,42 @@ public class ViewScheduleFragment extends android.app.Fragment {
         //Sụ kiện Previou Week
         btnPrevWeek = view.findViewById(R.id.btnPrevWeek);
         btnPrevWeek.setOnClickListener(v -> {
+
+            for (int j = 0; j < listButton.size(); j++) {
+                //Lấy id của button
+                int buttonID = listButton.get(j).getId();
+                String day = listSubReg.get(buttonID).DayInTheWeek;
+
+                switch (day)
+                {
+                    case "Monday":
+                        relativeLayoutMonDay.removeView(listButton.get(j));
+                        break;
+                    case "Tuesday":
+                        relativeLayoutTueDay.removeView(listButton.get(j));
+                        break;
+                    case "Wednesday":
+                        relativeLayoutWedDay.removeView(listButton.get(j));
+                        break;
+                    case "Thursday":
+                        relativeLayoutThuDay.removeView(listButton.get(j));
+                        break;
+                    case "Friday":
+                        relativeLayoutFriDay.removeView(listButton.get(j));
+                        break;
+                    case "Saturday":
+                        relativeLayoutSatDay.removeView(listButton.get(j));
+                        break;
+                    case "Sunday":
+                        relativeLayoutSunday.removeView(listButton.get(j));
+                        break;
+
+                    default:
+                        break;
+
+                }
+            }
+
             //Lấy các ngày tuần trước đó
             weekDays = getWeekDayPrev();
             //Hiển thị ngày và môn học trong tuần đó
@@ -139,6 +186,42 @@ public class ViewScheduleFragment extends android.app.Fragment {
         //Sụ kiện Next Week
         btnNextWeek = view.findViewById(R.id.btnNextWeek);
         btnNextWeek.setOnClickListener(v -> {
+
+            for (int j = 0; j < listButton.size(); j++) {
+                //Lấy id của button
+                int buttonID = listButton.get(j).getId();
+                String day = listSubReg.get(buttonID).DayInTheWeek;
+
+                switch (day)
+                {
+                    case "Monday":
+                        relativeLayoutMonDay.removeView(listButton.get(j));
+                        break;
+                    case "Tuesday":
+                        relativeLayoutTueDay.removeView(listButton.get(j));
+                        break;
+                    case "Wednesday":
+                        relativeLayoutWedDay.removeView(listButton.get(j));
+                        break;
+                    case "Thursday":
+                        relativeLayoutThuDay.removeView(listButton.get(j));
+                        break;
+                    case "Friday":
+                        relativeLayoutFriDay.removeView(listButton.get(j));
+                        break;
+                    case "Saturday":
+                        relativeLayoutSatDay.removeView(listButton.get(j));
+                        break;
+                    case "Sunday":
+                        relativeLayoutSunday.removeView(listButton.get(j));
+                        break;
+
+                        default:
+                            break;
+
+                }
+            }
+
             //Lấy các ngày tuần sau đó
             weekDays = getWeekDayNext();
             //Hiển thị ngày và môn học trong tuần đó
@@ -453,7 +536,7 @@ public class ViewScheduleFragment extends android.app.Fragment {
             Log.getStackTraceString(e);
         }
 
-        return topMargin;
+        return topMargin*2;
     }
 
     //Lấy chiều cao button dựa vào thời gian bắt đầu và kết thúc
@@ -474,11 +557,11 @@ public class ViewScheduleFragment extends android.app.Fragment {
             Log.getStackTraceString(e);
         }
 
-        return hight;
+        return hight*2;
     }
 
     //Hiển thị môn học lên view
-    public class loadSubjectToView extends AsyncTask<String, Void, String> {
+    public class loadSubjectToView extends AsyncTask<String, Void, String>  {
 
         @Override
         protected String doInBackground(String... params) {
@@ -487,15 +570,32 @@ public class ViewScheduleFragment extends android.app.Fragment {
                 int topMargin;
                 int buttonHight;
 
+                //Ngày đầu tuần và cuối tuần
+                SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                Date fisrtWeek = yyyyMMdd.parse(weekDays[0]);
+                Date lastWeek = yyyyMMdd.parse(weekDays[6]);
+
                 for (int i = 0; i < listSubReg.size(); i++) {
 
-                    topMargin = getTopMargin(listSubReg.get(i).TimeStart);
-                    buttonHight = getHightOfButton(listSubReg.get(i).TimeStart, listSubReg.get(i).TimeFinish);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+                    Date startDay = dateFormat.parse(listSubReg.get(i).StartOfCourse);
+                    Date finishDay = dateFormat.parse(listSubReg.get(i).FinishOfCourse);
 
-                    //Thêm các thông tin cần thiết một môn học từ list subject registered lấy về
-                    weekDatas.add(setDataSubject(listSubReg.get(i).DayInTheWeek,i,
-                            listSubReg.get(i).Subject + "\n\n" + listSubReg.get(i).Room, topMargin, buttonHight));
+                    int first_start = fisrtWeek.compareTo(startDay);
+                    int last_start = lastWeek.compareTo(startDay);
+                    int first_finish = fisrtWeek.compareTo(finishDay);
+                    int last_finish = lastWeek.compareTo(finishDay);
 
+                    if ((first_start <= 0 && last_start >= 0 ) || (first_finish <= 0 && last_finish >=0)
+                            || (first_start >= 0 && last_finish <= 0)) {
+
+                        topMargin = getTopMargin(listSubReg.get(i).TimeStart);
+                        buttonHight = getHightOfButton(listSubReg.get(i).TimeStart, listSubReg.get(i).TimeFinish);
+
+                        //Thêm các thông tin cần thiết một môn học từ list subject registered lấy về
+                        weekDatas.add(setDataSubject(listSubReg.get(i).DayInTheWeek, i,
+                                listSubReg.get(i).Subject + "\n\n" + listSubReg.get(i).Room, topMargin, buttonHight));
+                    }
                 }
 
             } catch (Exception e) {
@@ -524,61 +624,76 @@ public class ViewScheduleFragment extends android.app.Fragment {
                         switch (day) {
 
                             case "Sunday":
-                                relativeLayoutSunday
-                                        .addView(getButtonToLayout(
-                                                subjectToDay.buttonHight,
-                                                subjectToDay.topMargin,
-                                                subjectToDay.subjectTitle,
-                                                subjectToDay.subjectID,"#CCCCCC"));
+
+                                btnSunday = getButtonToLayout(
+                                        subjectToDay.buttonHight,
+                                        subjectToDay.topMargin,
+                                        subjectToDay.subjectTitle,
+                                        subjectToDay.subjectID,"#CCCCCC");
+                                relativeLayoutSunday.addView(btnSunday);
+                                listButton.add(btnSunday);
                                 break;
 
                             case "Monday":
-                                relativeLayoutMonDay
-                                        .addView(getButtonToLayout(
-                                                subjectToDay.buttonHight,
-                                                subjectToDay.topMargin,
-                                                subjectToDay.subjectTitle,
-                                                subjectToDay.subjectID,"#999966"));
+
+                                btnMonday = getButtonToLayout(
+                                        subjectToDay.buttonHight,
+                                        subjectToDay.topMargin,
+                                        subjectToDay.subjectTitle,
+                                        subjectToDay.subjectID,"#999966");
+                                relativeLayoutMonDay.addView(btnMonday);
+                                listButton.add(btnMonday);
                                 break;
+
                             case "Tuesday":
-                                relativeLayoutTueDay
-                                        .addView(getButtonToLayout(
-                                                subjectToDay.buttonHight,
-                                                subjectToDay.topMargin,
-                                                subjectToDay.subjectTitle,
-                                                subjectToDay.subjectID,"#FFFF66"));
+
+                                btnTuesday = getButtonToLayout(
+                                        subjectToDay.buttonHight,
+                                        subjectToDay.topMargin,
+                                        subjectToDay.subjectTitle,
+                                        subjectToDay.subjectID,"#FFFF66");
+                                relativeLayoutTueDay.addView(btnTuesday);
+                                listButton.add(btnTuesday);
                                 break;
+
                             case "Wednesday":
-                                relativeLayoutWedDay
-                                        .addView(getButtonToLayout(
-                                                subjectToDay.buttonHight,
-                                                subjectToDay.topMargin,
-                                                subjectToDay.subjectTitle,
-                                                subjectToDay.subjectID,"#66CC66"));
+                                btnWedday = getButtonToLayout(
+                                        subjectToDay.buttonHight,
+                                        subjectToDay.topMargin,
+                                        subjectToDay.subjectTitle,
+                                        subjectToDay.subjectID,"#66CC66");
+                                relativeLayoutWedDay.addView(btnWedday);
+                                listButton.add(btnWedday);
                                 break;
+
                             case "Thursday":
-                                relativeLayoutThuDay
-                                        .addView(getButtonToLayout(
-                                                subjectToDay.buttonHight,
-                                                subjectToDay.topMargin,
-                                                subjectToDay.subjectTitle,
-                                                subjectToDay.subjectID,"#FF9966"));
+                                btnThuday = getButtonToLayout(
+                                        subjectToDay.buttonHight,
+                                        subjectToDay.topMargin,
+                                        subjectToDay.subjectTitle,
+                                        subjectToDay.subjectID,"#FF9966");
+                                relativeLayoutThuDay.addView(btnThuday);
+                                listButton.add(btnThuday);
                                 break;
+
                             case "Friday":
-                                relativeLayoutFriDay
-                                        .addView(getButtonToLayout(
-                                                subjectToDay.buttonHight,
-                                                subjectToDay.topMargin,
-                                                subjectToDay.subjectTitle,
-                                                subjectToDay.subjectID,"#CC66CC"));
+                                btnFriday = getButtonToLayout(
+                                        subjectToDay.buttonHight,
+                                        subjectToDay.topMargin,
+                                        subjectToDay.subjectTitle,
+                                        subjectToDay.subjectID,"#CC66CC");
+                                relativeLayoutFriDay.addView(btnFriday);
+                                listButton.add(btnFriday);
                                 break;
+
                             case "Saturday":
-                                relativeLayoutSatDay
-                                        .addView(getButtonToLayout(
-                                                subjectToDay.buttonHight,
-                                                subjectToDay.topMargin,
-                                                subjectToDay.subjectTitle,
-                                                subjectToDay.subjectID,"#3366FF"));
+                                btnSatday = getButtonToLayout(
+                                        subjectToDay.buttonHight,
+                                        subjectToDay.topMargin,
+                                        subjectToDay.subjectTitle,
+                                        subjectToDay.subjectID,"#3366FF");
+                                relativeLayoutSatDay.addView(btnSatday);
+                                listButton.add(btnSatday);
                                 break;
 
                             default:
