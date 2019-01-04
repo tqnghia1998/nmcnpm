@@ -61,7 +61,12 @@ namespace ServerApp.Controllers
             if (data.Id.Equals("auto"))
             {
                 int count = mContext.Exercise.Where(x => x.Id.Contains(data.Mssv)).ToList().Count() + 1;
-                data.Id = data.Mssv + "_" + count;
+                while (true)
+                {
+                    data.Id = data.Mssv + "_" + count;
+                    if (mContext.Exercise.Find(data.Mssv, data.Id) == null) break;
+                    count++;
+                }
             }
             try
             {
@@ -88,11 +93,11 @@ namespace ServerApp.Controllers
             try
             {
                 mContext.Entry(data).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                mContext.SaveChangesAsync();
+                mContext.SaveChanges();
             }
             catch (Exception ex)
             {
-                return BadRequest("Không thể sửa bài tập này");
+                return BadRequest("Tên bài tập đã bị trùng");
             }
 
             return Ok(new { response = "Sửa bài tập thành công" });
