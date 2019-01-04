@@ -164,22 +164,6 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.registerFrame, exerciseFragment);
             fragmentTransaction.commit();
         }
-        else if (id == R.id.nav_slideshow)
-        {
-
-        }
-        else if (id == R.id.nav_manage)
-        {
-
-        }
-        else if (id == R.id.nav_share)
-        {
-
-        }
-        else if (id == R.id.nav_send)
-        {
-
-        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

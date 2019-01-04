@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import cnpm31.nhom10.studylife.DTOModel.SubjectRegisteredDTO;
 
+import static cnpm31.nhom10.studylife.ViewScheduleFragment.isBackFromDetail;
+
 public class ViewScheduleDetailsFragment extends android.app.Fragment {
 
     //Thông tin chi tiết một môn học
@@ -36,8 +38,10 @@ public class ViewScheduleDetailsFragment extends android.app.Fragment {
         // Sự kiện thoát khỏi fragment view detail
         btnBackFromViewDetails = view.findViewById(R.id.btnBackFromSubjectDetail);
         btnBackFromViewDetails.setOnClickListener(v -> {
+            isBackFromDetail = true;
             getFragmentManager().beginTransaction().remove(ViewScheduleDetailsFragment.this).commit();
             getFragmentManager().popBackStack();
+
         });
 
         //Ánh xạ các text view

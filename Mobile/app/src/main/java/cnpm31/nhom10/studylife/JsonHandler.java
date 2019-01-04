@@ -274,7 +274,7 @@ public class JsonHandler {
         RequestQueue queue = Volley.newRequestQueue(mContext);
 
         // Tạo một POST request
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, sUrl, jsonObject,
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.PUT, sUrl, jsonObject,
                 response -> {
                     try {
                         final AlertDialog.Builder b = new AlertDialog.Builder(mContext);

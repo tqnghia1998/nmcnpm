@@ -5,24 +5,18 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -32,7 +26,6 @@ import java.util.List;
 
 import cnpm31.nhom10.studylife.DTOModel.SubjectDTO;
 import cnpm31.nhom10.studylife.DbModel.ExerciseDataModel;
-import cz.msebera.android.httpclient.client.cache.Resource;
 
 import static cnpm31.nhom10.studylife.ExerciseFragment.refreshExercise;
 import static cnpm31.nhom10.studylife.MainActivity.urlExercise;
@@ -76,7 +69,7 @@ public class CreateExerciseFragment extends android.app.Fragment {
                     + "/%25"           // Tất cả các khoa
                     + "/%25/%25"       // Học kỳ và năm học
                     + "/1612422"       // MSSV
-                    + "/1");           // Trạng thái Active (đang học)
+                    + "/0");           // Trạng thái Active (đang học)
             List<SubjectDTO> listDTOSubject = SubjectDTO.fromJson(arrayJson);
             for (int i = 0; i < listDTOSubject.size(); i++) {
                 if (listDTOSubject.get(i).isRegisterd) {

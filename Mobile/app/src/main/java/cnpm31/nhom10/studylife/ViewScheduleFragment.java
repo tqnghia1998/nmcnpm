@@ -83,6 +83,8 @@ public class ViewScheduleFragment extends android.app.Fragment {
 
     public  ArrayList<Button> listButton = new ArrayList<Button>();
 
+    public static boolean isBackFromDetail = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -128,8 +130,16 @@ public class ViewScheduleFragment extends android.app.Fragment {
         relativeLayoutSatDay = (RelativeLayout) view.findViewById(R.id.relativeLayoutSatDay);
         relativeLayoutSunday = (RelativeLayout) view.findViewById(R.id.relativeLayoutSunday);
 
-        //Lấy chính xác các ngày trong tuần lưu thành mảng các chuỗi
-        weekDays = getDayOfWeek();
+        /*//Lấy chính xác các ngày trong tuần lưu thành mảng các chuỗi
+        weekDays = getDayOfWeek();*/
+
+        if (isBackFromDetail) {
+            isBackFromDetail = false;
+        }
+        else {
+            //Lấy chính xác các ngày trong tuần lưu thành mảng các chuỗi
+            weekDays = getDayOfWeek();
+        }
 
         //Lấy ngày hiện tại để Set background đỏ
         Calendar now = Calendar.getInstance(Locale.GERMANY);

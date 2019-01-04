@@ -16,29 +16,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import cnpm31.nhom10.studylife.DTOModel.SubjectDTO;
-import cnpm31.nhom10.studylife.DbModel.CreateSubjectCredentialsDataModel;
 import cnpm31.nhom10.studylife.DbModel.ExerciseDataModel;
 
 import static cnpm31.nhom10.studylife.MainActivity.mssv;
 import static cnpm31.nhom10.studylife.MainActivity.urlExercise;
-import static cnpm31.nhom10.studylife.MainActivity.urlMajor;
 
 
 /**
@@ -66,9 +59,14 @@ public class ExerciseFragment extends android.app.Fragment {
     static List<String> listSubjectName = new ArrayList<>();
 
     // Các control khác
-    Button btnExerciseSearch;
     ImageButton btnBackFromExercise;
     Button btnAddExercise;
+
+    // Các biến cho việc tìm kiếm
+    static TextView emptyExercise;
+    static Button btnExerciseSearch;
+    static EditText editExerciseSearch;
+    static boolean isExerciseSearch = false;
 
     public ExerciseFragment() {}
 
@@ -77,6 +75,7 @@ public class ExerciseFragment extends android.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate view
         View view = inflater.inflate(R.layout.fragment_exercise, null);
+        emptyExercise = view.findViewById(R.id.emptyExercise);
 
         // Khởi tạo spinner lọc theo môn
         listSubjectName.add("Tất cả");
@@ -137,6 +136,14 @@ public class ExerciseFragment extends android.app.Fragment {
         });
 
 
+        // Sự kiện tìm kiếm
+        editExerciseSearch = view.findViewById(R.id.editExerciseSearch);
+        btnExerciseSearch = view.findViewById(R.id.btnExerciseSearch);
+        btnExerciseSearch.setOnClickListener(v -> {
+            isExerciseSearch = true;
+            spinnerExerciseSubjectFilter.setSelection(0);
+            refreshExercise();
+        });
         return view;
     }
 
@@ -199,6 +206,16 @@ public class ExerciseFragment extends android.app.Fragment {
         // Đưa danh sách bài tập vào Recycler View
         for (int i = 0, j = 0; i < exerciseDataModels.size(); i++) {
 
+            // Nếu đang tìm kiếm
+            if (isExerciseSearch) {
+                if (editExerciseSearch.getText().toString().equals("")) break;
+                if (exerciseDataModels.get(i).Name.toLowerCase()
+                        .contains(editExerciseSearch.getText().toString().toLowerCase())
+                        || exerciseDataModels.get(i).Id.equals(editExerciseSearch.getText().toString())) {
+                }
+                else continue;
+            }
+
             // Lọc môn
             if (!exerciseDataModels.get(i).Subject
                     .equals(spinnerExerciseSubjectFilter.getSelectedItem().toString())
@@ -213,6 +230,20 @@ public class ExerciseFragment extends android.app.Fragment {
                     , exerciseDataModels.get(i).Progress
                     , GetCountDown(exerciseDataModels.get(i).Deadline, false)));
         }
+        emptyExercise.setVisibility(listExerciseTitle.size() == 0 ? View.VISIBLE : View.INVISIBLE);
+
+        // Nếu vừa tìm kiếm xong
+        if (isExerciseSearch){
+            editExerciseSearch.setFocusableInTouchMode(false);
+            editExerciseSearch.setFocusable(false);
+            editExerciseSearch.setFocusableInTouchMode(true);
+            editExerciseSearch.setFocusable(true);
+            InputMethodManager imm = (InputMethodManager) editExerciseSearch.getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(editExerciseSearch.getWindowToken(), 0);
+            isExerciseSearch = false;
+        }
+
+        // Đưa vào Recycler View
         adapterExerciseRecycler = new ExerciseCustomRecyclerViewAdapter(listExerciseTitle);
         exerciseRecyclerView.setAdapter(adapterExerciseRecycler);
     }

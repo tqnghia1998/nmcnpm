@@ -1,14 +1,12 @@
 package cnpm31.nhom10.studylife;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -32,10 +30,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import cnpm31.nhom10.studylife.DTOModel.SubjectDTO;
 import cnpm31.nhom10.studylife.DbModel.CreateSubjectCredentialsDataModel;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static android.media.CamcorderProfile.get;
-import static android.support.v4.content.ContextCompat.getSystemService;
-import static android.support.v4.content.ContextCompat.getSystemServiceName;
 import static cnpm31.nhom10.studylife.MainActivity.urlMajor;
 
 
@@ -277,7 +271,7 @@ public class RegisterFragment extends android.app.Fragment {
                             , subjectDetails,
                             listDTOSubject.get(i).isRegisterd,
                             listDTOSubject.get(i).Id));
-                    if (isSearching) break;
+                    // if (isSearching) break;
                 }
             }
         });
